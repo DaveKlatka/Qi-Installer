@@ -1,4 +1,12 @@
 
+Install-Module AutomateAPI -force
+Import-Module AutomateAPI
+
+Connect-AutomateAPI -credential $Credential -Server Automate.QualityIP.com -TwoFactorToken $token
+
+((get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object {$_.ScriptExtra1 -eq 'dklatka'}).id
+
+<#
 Switch ($AuthTextbox.Text) {
     'nadkins' { $Script:LocationID = '458'; $Script:Techname = 'Adkins, Nick' }
     'fballard' { $Script:LocationID = '587'; $Script:Techname = 'Ballard, Frankie' }
@@ -52,3 +60,4 @@ Switch ($AuthTextbox.Text) {
     }
 }
 
+#>
