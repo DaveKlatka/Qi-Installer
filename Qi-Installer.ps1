@@ -1,7 +1,3 @@
-
-
-#https://github.com/gavsto/AutomateAPI
-
 $AuthServer = 'Automate.QualityIP.com'
 
 if (!($PSScriptRoot -match $env:SystemDrive)) {

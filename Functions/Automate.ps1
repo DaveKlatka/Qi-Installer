@@ -2,7 +2,7 @@ $LTPoSH = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoS
 
 Function Invoke-Install_Automate {
     param (
-        [int] $LocationID
+        [string] $LocationID
     )
     #Install Command
     $RunLog = "$ScriptPath\logs\Automate_Install.txt"
@@ -47,7 +47,7 @@ Function Invoke-Install_Automate {
 }
 Function Invoke-ReInstall_Automate {
     param (
-        [int] $LocationID
+        [string] $LocationID
     )
     #Re-Install Command
     $RunLog = "$ScriptPath\logs\Automate_Re-Install.txt"

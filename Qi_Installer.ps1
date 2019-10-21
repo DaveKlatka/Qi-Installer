@@ -8,6 +8,8 @@ $Close_Click = {
 
 #Authenticator
 $AuthSubmit_Click = {
+    #https://github.com/gavsto/AutomateAPI
+    
     Try {
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
