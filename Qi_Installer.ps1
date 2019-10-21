@@ -6,12 +6,18 @@ $Close_Click = {
 
 #Authenticator
 $AuthSubmit_Click = {
-    #. (Join-Path $PSScriptRoot 'Functions/Authenticator.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAuthenticator%2Eps1/raw?ref=master') | Invoke-Expression; 
-    if (!($null -eq $Script:LocationID)) {
+
+    $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
+    $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
+    Connect-AutomateAPI -credential $Credential -Server $authServer -TwoFactorToken $2FAAuth.Text
+
+    $Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
+    $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
+    write-host $location
+
+    if (!($null -eq $Location.ID)) {
         $AuthPanel.Visible = $false
     }
-    $TechInstaller.Text = [System.String]"Tech Installer ($($TechName))"
 }
 #Authenticator Cancel
 $AuthCancel_Click = {
@@ -34,7 +40,7 @@ $AlphaButton_Click = {
 $ReInstall_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
     (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
-    Invoke-ReInstall_Automate
+    Invoke-ReInstall_Automate -LocationID $Location.ID
 }
 $UnInstall_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
@@ -44,7 +50,7 @@ $UnInstall_Automate_Click = {
 $Install_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
     (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
-    Invoke-Install_Automate
+    Invoke-Install_Automate -LocationID $Location.ID
 }
 
 $dotnet35_Click = {
