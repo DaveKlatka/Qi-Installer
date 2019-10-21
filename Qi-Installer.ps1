@@ -2,8 +2,6 @@
 
 #https://github.com/gavsto/AutomateAPI
 
-Install-Module AutomateAPI -force
-Import-Module AutomateAPI
 $AuthServer = 'Automate.QualityIP.com'
 
 if (!($PSScriptRoot -match $env:SystemDrive)) {

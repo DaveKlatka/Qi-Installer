@@ -44,6 +44,9 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
 [System.Windows.Forms.Panel]$AuthPanel = $null
 [System.Windows.Forms.GroupBox]$GroupBox6 = $null
+[System.Windows.Forms.Label]$Label4 = $null
+[System.Windows.Forms.Label]$Label3 = $null
+[System.Windows.Forms.Label]$Label2 = $null
 [System.Windows.Forms.TextBox]$2FAAuth = $null
 [System.Windows.Forms.TextBox]$AuthPass = $null
 [System.Windows.Forms.Button]$AuthCancel = $null
@@ -105,6 +108,9 @@ $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthPass = (New-Object -TypeName System.Windows.Forms.TextBox)
 $2FAAuth = (New-Object -TypeName System.Windows.Forms.TextBox)
+$Label2 = (New-Object -TypeName System.Windows.Forms.Label)
+$Label3 = (New-Object -TypeName System.Windows.Forms.Label)
+$Label4 = (New-Object -TypeName System.Windows.Forms.Label)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -648,6 +654,9 @@ $AuthPanel.TabIndex = [System.Int32]5
 #
 #GroupBox6
 #
+$GroupBox6.Controls.Add($Label4)
+$GroupBox6.Controls.Add($Label3)
+$GroupBox6.Controls.Add($Label2)
 $GroupBox6.Controls.Add($2FAAuth)
 $GroupBox6.Controls.Add($AuthPass)
 $GroupBox6.Controls.Add($AuthCancel)
@@ -688,35 +697,35 @@ $AuthSubmit.add_Click($AuthSubmit_Click)
 #AuthError
 #
 $AuthError.ForeColor = [System.Drawing.Color]::Red
-$AuthError.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]22,[System.Int32]180))
+$AuthError.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]194))
 $AuthError.Name = [System.String]'AuthError'
-$AuthError.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]32))
+$AuthError.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]211,[System.Int32]18))
 $AuthError.TabIndex = [System.Int32]2
-$AuthError.Text = [System.String]'No user by the name XXXXXXXX exists.'
+$AuthError.Text = [System.String]'Invalid credentials, please try again.'
 $AuthError.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $AuthError.UseCompatibleTextRendering = $true
 $AuthError.Visible = $false
 #
 #AuthUser
 #
-$AuthUser.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]22,[System.Int32]42))
+$AuthUser.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]77))
 $AuthUser.Name = [System.String]'AuthUser'
 $AuthUser.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]21))
 $AuthUser.TabIndex = [System.Int32]1
 #
 #Label1
 #
-$Label1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]16))
+$Label1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]22))
 $Label1.Name = [System.String]'Label1'
 $Label1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]211,[System.Int32]23))
 $Label1.TabIndex = [System.Int32]0
-$Label1.Text = [System.String]'Enter Your Automate Username'
+$Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
 #
 #AuthPass
 #
-$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]22,[System.Int32]69))
+$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]124))
 $AuthPass.Name = [System.String]'AuthPass'
 $AuthPass.PasswordChar = [System.Char]'*'
 $AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]21))
@@ -724,11 +733,41 @@ $AuthPass.TabIndex = [System.Int32]2
 #
 #2FAAuth
 #
-$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]23,[System.Int32]96))
+$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]168))
 $2FAAuth.Name = [System.String]'2FAAuth'
 $2FAAuth.PasswordChar = [System.Char]'*'
 $2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]175,[System.Int32]21))
 $2FAAuth.TabIndex = [System.Int32]3
+#
+#Label2
+#
+$Label2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]148))
+$Label2.Name = [System.String]'Label2'
+$Label2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
+$Label2.TabIndex = [System.Int32]6
+$Label2.Text = [System.String]'Token:'
+$Label2.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label2.UseCompatibleTextRendering = $true
+#
+#Label3
+#
+$Label3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]101))
+$Label3.Name = [System.String]'Label3'
+$Label3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]20))
+$Label3.TabIndex = [System.Int32]7
+$Label3.Text = [System.String]'Password:'
+$Label3.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label3.UseCompatibleTextRendering = $true
+#
+#Label4
+#
+$Label4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]57))
+$Label4.Name = [System.String]'Label4'
+$Label4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
+$Label4.TabIndex = [System.Int32]8
+$Label4.Text = [System.String]'Username:'
+$Label4.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label4.UseCompatibleTextRendering = $true
 #
 #TechInstaller
 #
@@ -815,6 +854,9 @@ Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -Me
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox6 -Value $GroupBox6 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label4 -Value $Label4 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label3 -Value $Label3 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label2 -Value $Label2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name 2FAAuth -Value $2FAAuth -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthPass -Value $AuthPass -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthCancel -Value $AuthCancel -MemberType NoteProperty

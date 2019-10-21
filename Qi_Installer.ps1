@@ -1,4 +1,6 @@
 $TechInstaller_Load = {
+    Install-Module AutomateAPI -force
+    Import-Module AutomateAPI
 }
 $Close_Click = {
     $TechInstaller.Close()
@@ -6,23 +8,23 @@ $Close_Click = {
 
 #Authenticator
 $AuthSubmit_Click = {
-Try {
-    $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
-    $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
-    Connect-AutomateAPI -credential $Credential -Server $authServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
+    Try {
+        $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
+        $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
+        Connect-AutomateAPI -credential $Credential -Server $authServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
 
-    $Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
-    $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name)) $($Location.ID)"
-    write-host $location
+        $Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
+        $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name)) $($Location.ID)"
+        write-host $location
 
-    if (!($null -eq $Location.ID)) {
-        $AuthPanel.Visible = $false
+        if (!($null -eq $Location.ID)) {
+            $AuthPanel.Visible = $false
+        }
     }
-}
-catch {
-    $AuthError.Text = 'Failed to login with supplied credentials.'
-    $AuthError.Visible = $true
-}
+    catch {
+        $AuthError.Text = 'Failed to login with supplied credentials.'
+        $AuthError.Visible = $true
+    }
 
 }
 #Authenticator Cancel
