@@ -21,7 +21,7 @@ Try {
 }
 catch {
     $AuthError.Text = 'Failed to login with supplied credentials.'
-    $AuthError.Visible = $false
+    $AuthError.Visible = $true
 }
 
 }
