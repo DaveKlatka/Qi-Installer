@@ -15,7 +15,7 @@ $AuthSubmit_Click = {
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
         Connect-AutomateAPI -credential $Credential -Server $authServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
 
-        $Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
+        $Script:Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
         $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name)) $($Location.ID)"
         write-host $location
 
