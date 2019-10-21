@@ -4,9 +4,9 @@ $TechInstaller_Load = {
         Import-Module AutomateAPI
     }
     catch{
-        Import-Module BitsTransfer
+        Import-Module BitsTransfer --use-system-powershell
         Start-BitsTransfer -Source "https://raw.githubusercontent.com/gavsto/AutomateAPI/master/AutomateAPI.psm1" -Destination "$($ScriptPath)\AutomateAPI.psm1"
-        Import-Module "$($ScriptPath)\AutomateAPI.psm1"
+        Import-Module "$($ScriptPath)\AutomateAPI.psm1" --use-system-powershell
     }
 }
 $Close_Click = {
