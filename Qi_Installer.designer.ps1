@@ -668,7 +668,7 @@ $GroupBox6.UseCompatibleTextRendering = $true
 $AuthCancel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]114,[System.Int32]215))
 $AuthCancel.Name = [System.String]'AuthCancel'
 $AuthCancel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$AuthCancel.TabIndex = [System.Int32]4
+$AuthCancel.TabIndex = [System.Int32]5
 $AuthCancel.Text = [System.String]'Cancel'
 $AuthCancel.UseCompatibleTextRendering = $true
 $AuthCancel.UseVisualStyleBackColor = $true
@@ -679,7 +679,7 @@ $AuthCancel.add_Click($AuthCancel_Click)
 $AuthSubmit.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]33,[System.Int32]215))
 $AuthSubmit.Name = [System.String]'AuthSubmit'
 $AuthSubmit.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$AuthSubmit.TabIndex = [System.Int32]3
+$AuthSubmit.TabIndex = [System.Int32]4
 $AuthSubmit.Text = [System.String]'Submit'
 $AuthSubmit.UseCompatibleTextRendering = $true
 $AuthSubmit.UseVisualStyleBackColor = $true
@@ -720,7 +720,7 @@ $AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @(
 $AuthPass.Name = [System.String]'AuthPass'
 $AuthPass.PasswordChar = [System.Char]'*'
 $AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]21))
-$AuthPass.TabIndex = [System.Int32]5
+$AuthPass.TabIndex = [System.Int32]2
 #
 #2FAAuth
 #
@@ -728,7 +728,7 @@ $2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([
 $2FAAuth.Name = [System.String]'2FAAuth'
 $2FAAuth.PasswordChar = [System.Char]'*'
 $2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]175,[System.Int32]21))
-$2FAAuth.TabIndex = [System.Int32]6
+$2FAAuth.TabIndex = [System.Int32]3
 #
 #TechInstaller
 #

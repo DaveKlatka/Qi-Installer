@@ -2,10 +2,14 @@
 Install-Module AutomateAPI -force
 Import-Module AutomateAPI
 
-Connect-AutomateAPI -credential $Credential -Server Automate.QualityIP.com -TwoFactorToken $token
+$secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
+$Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
 
-((get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object {$_.ScriptExtra1 -eq 'dklatka'}).id
+Connect-AutomateAPI -credential $Credential -Server Automate.QualityIP.com -TwoFactorToken $2FAAuth.Text
 
+$Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object {$_.ScriptExtra1 -eq $AuthUser.text}
+$location.ID
+$Location.name
 <#
 Switch ($AuthTextbox.Text) {
     'nadkins' { $Script:LocationID = '458'; $Script:Techname = 'Adkins, Nick' }
