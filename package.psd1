@@ -4,7 +4,7 @@
         Package = @{
             Enabled = $true
             Obfuscate = $false
-            HideConsoleWindow = $true
+            HideConsoleWindow = $false
             DotNetVersion = 'v4.7'
             FileVersion = '1.0.0'
             FileDescription = 'QiInstaller is a technician installer to be useed by Qi Technicians'

@@ -7,7 +7,7 @@ $Close_Click = {
 #Authenticator
 $AuthSubmit_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Authenticator.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://qi-host.nyc3.digitaloceanspaces.com/Standalone_Installer/Tech_Installer/Functions/Authenticator.ps1') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Qi-Installer%2FFunctions%2FAuthenticator%2Eps1/raw?ref=master') | Invoke-Expression; 
     if (!($null -eq $Script:LocationID)) {
         $AuthPanel.Visible = $false
     }

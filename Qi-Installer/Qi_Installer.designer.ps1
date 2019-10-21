@@ -151,7 +151,7 @@ $365ComboBox.FormattingEnabled = $true
 $365ComboBox.Items.AddRange([System.Object[]]@([System.String]'--Select--',[System.String]'Office 365 Business',[System.String]'Office 365 ProPlus',[System.String]'Office 2019 Standard'))
 $365ComboBox.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]219))
 $365ComboBox.Name = [System.String]'365ComboBox'
-$365ComboBox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]185,[System.Int32]25))
+$365ComboBox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]185,[System.Int32]21))
 $365ComboBox.TabIndex = [System.Int32]2
 $365ComboBox.Text = [System.String]'--Select--'
 #
@@ -162,7 +162,7 @@ $SoftwareList.FormattingEnabled = $true
 $SoftwareList.Items.AddRange([System.Object[]]@([System.String]'7Zip',[System.String]'AdobeReader',[System.String]'CrystalDiskInfo',[System.String]'FileZilla',[System.String]'FireFox',[System.String]'GoogleChrome',[System.String]'NotePadPlusPlus',[System.String]'Putty',[System.String]'SysInternals',[System.String]'TreeSizeFree',[System.String]'Wireshark'))
 $SoftwareList.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]15))
 $SoftwareList.Name = [System.String]'SoftwareList'
-$SoftwareList.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]183,[System.Int32]175))
+$SoftwareList.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]183,[System.Int32]164))
 $SoftwareList.TabIndex = [System.Int32]0
 $SoftwareList.UseCompatibleTextRendering = $true
 #
@@ -356,11 +356,11 @@ $TabControl1.TabIndex = [System.Int32]20
 #TabPage1
 #
 $TabPage1.Controls.Add($GroupBox2)
-$TabPage1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]26))
+$TabPage1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage1.Name = [System.String]'TabPage1'
 $TabPage1.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
 $TabPage1.RightToLeft = [System.Windows.Forms.RightToLeft]::No
-$TabPage1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]431))
+$TabPage1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
 $TabPage1.TabIndex = [System.Int32]0
 $TabPage1.Text = [System.String]'Automate'
 $TabPage1.UseVisualStyleBackColor = $true
@@ -369,10 +369,10 @@ $TabPage1.UseVisualStyleBackColor = $true
 #
 $TabPage2.Controls.Add($InstallSoftware)
 $TabPage2.Controls.Add($GroupBox1)
-$TabPage2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]25))
+$TabPage2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage2.Name = [System.String]'TabPage2'
 $TabPage2.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
-$TabPage2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]432))
+$TabPage2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
 $TabPage2.TabIndex = [System.Int32]1
 $TabPage2.Text = [System.String]'Software'
 $TabPage2.UseVisualStyleBackColor = $true
@@ -391,9 +391,9 @@ $InstallSoftware.add_Click($InstallSoftware_Click)
 #TabPage3
 #
 $TabPage3.Controls.Add($GroupBox3)
-$TabPage3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]26))
+$TabPage3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage3.Name = [System.String]'TabPage3'
-$TabPage3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]431))
+$TabPage3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
 $TabPage3.TabIndex = [System.Int32]2
 $TabPage3.Text = [System.String]'System'
 $TabPage3.UseVisualStyleBackColor = $true
@@ -402,9 +402,9 @@ $TabPage3.Visible = $false
 #TabPage4
 #
 $TabPage4.Controls.Add($TabControl2)
-$TabPage4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]25))
+$TabPage4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage4.Name = [System.String]'TabPage4'
-$TabPage4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]432))
+$TabPage4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
 $TabPage4.TabIndex = [System.Int32]3
 $TabPage4.Text = [System.String]'Migration'
 $TabPage4.UseVisualStyleBackColor = $true
@@ -429,10 +429,10 @@ $TabPage5.Controls.Add($SaveDestination)
 $TabPage5.Controls.Add($GroupBox5)
 $TabPage5.Controls.Add($GroupBox4)
 $TabPage5.Controls.Add($Profiles)
-$TabPage5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]26))
+$TabPage5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage5.Name = [System.String]'TabPage5'
 $TabPage5.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
-$TabPage5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]409))
+$TabPage5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
 $TabPage5.TabIndex = [System.Int32]0
 $TabPage5.Text = [System.String]'Export'
 $TabPage5.UseVisualStyleBackColor = $true
@@ -489,7 +489,7 @@ $ExportLocationButton.add_Click($ExportLocationButton_Click)
 $ExportLocation.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
 $ExportLocation.Name = [System.String]'ExportLocation'
 $ExportLocation.ReadOnly = $true
-$ExportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]188,[System.Int32]24))
+$ExportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]188,[System.Int32]21))
 $ExportLocation.TabIndex = [System.Int32]4
 #
 #GroupBox5
@@ -565,7 +565,7 @@ $USMTCheckList.Items.AddRange([System.Object[]]@([System.String]'AppData',[Syste
 $USMTCheckList.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
 $USMTCheckList.MultiColumn = $true
 $USMTCheckList.Name = [System.String]'USMTCheckList'
-$USMTCheckList.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]99))
+$USMTCheckList.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]84))
 $USMTCheckList.TabIndex = [System.Int32]1
 $USMTCheckList.UseCompatibleTextRendering = $true
 #
@@ -582,19 +582,19 @@ $Profiles.add_Click($Profiles_Click)
 #
 #TabPage6
 #
-$TabPage6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]25))
+$TabPage6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage6.Name = [System.String]'TabPage6'
 $TabPage6.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
-$TabPage6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]410))
+$TabPage6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
 $TabPage6.TabIndex = [System.Int32]1
 $TabPage6.Text = [System.String]'Import'
 $TabPage6.UseVisualStyleBackColor = $true
 #
 #TabPage7
 #
-$TabPage7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]25))
+$TabPage7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage7.Name = [System.String]'TabPage7'
-$TabPage7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]410))
+$TabPage7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
 $TabPage7.TabIndex = [System.Int32]2
 $TabPage7.Text = [System.String]'Network Migration'
 $TabPage7.UseVisualStyleBackColor = $true
@@ -637,7 +637,7 @@ $TotalProgress.Visible = $false
 #
 $AuthPanel.BackColor = [System.Drawing.Color]::Transparent
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]753,[System.Int32]470))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]4))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]5
@@ -695,7 +695,7 @@ $AuthError.Visible = $false
 #
 $AuthTextbox.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]22,[System.Int32]59))
 $AuthTextbox.Name = [System.String]'AuthTextbox'
-$AuthTextbox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]24))
+$AuthTextbox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]21))
 $AuthTextbox.TabIndex = [System.Int32]1
 #
 #Label1
