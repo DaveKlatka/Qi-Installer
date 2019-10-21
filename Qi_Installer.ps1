@@ -9,7 +9,7 @@ $Close_Click = {
 #Authenticator
 $AuthSubmit_Click = {
     #https://github.com/gavsto/AutomateAPI
-    
+
     Try {
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
@@ -50,7 +50,7 @@ $AlphaButton_Click = {
 $ReInstall_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
     (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
-    Invoke-ReInstall_Automate -LocationID $Location.ID
+    Invoke-ReInstall_Automate -TechID $Location.ID
 }
 $UnInstall_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
@@ -60,7 +60,7 @@ $UnInstall_Automate_Click = {
 $Install_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
     (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
-    Invoke-Install_Automate -LocationID $Location.ID
+    Invoke-Install_Automate -TechID $Location.ID
 }
 
 $dotnet35_Click = {
