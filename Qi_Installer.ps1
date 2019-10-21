@@ -1,6 +1,13 @@
 $TechInstaller_Load = {
-    Install-Module AutomateAPI -force
-    Import-Module AutomateAPI
+    try{
+        Install-Module AutomateAPI -force
+        Import-Module AutomateAPI
+    }
+    catch{
+        Import-Module BitsTransfer
+        Start-BitsTransfer -Source "https://raw.githubusercontent.com/gavsto/AutomateAPI/master/AutomateAPI.psm1" -Destination "$($ScriptPath)\AutomateAPI.psm1"
+        Import-Module "$($ScriptPath)\AutomateAPI.psm1"
+    }
 }
 $Close_Click = {
     $TechInstaller.Close()
@@ -31,14 +38,6 @@ $AuthSubmit_Click = {
 #Authenticator Cancel
 $AuthCancel_Click = {
     $TechInstaller.Close()
-}
-
-#Set Default Path
-if ($null -eq $ScriptPath -or $ScriptPath -match '\\users\\') {
-    $ScriptPath = "$env:systemDrive\QiInstaller"
-}
-if (!(Test-Path $ScriptPath\logs)) {
-    New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
 }
 
 $AlphaButton_Click = {

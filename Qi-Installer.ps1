@@ -1,10 +1,15 @@
 $AuthServer = 'Automate.QualityIP.com'
 
+#Set Default Path
 if (!($PSScriptRoot -match $env:SystemDrive)) {
     $ScriptPath = $PSScriptRoot
 } else {
     $ScriptPath = "$env:systemDrive\QiInstaller"
 }
+if (!(Test-Path $ScriptPath\logs)) {
+    New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
+}
+
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Qi_Installer%2Eps1/raw?ref=master') | Invoke-Expression;
 
