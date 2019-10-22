@@ -1,5 +1,37 @@
 $AuthServer = 'Automate.QualityIP.com'
 
+#Set Default Path
+if (!($PSScriptRoot -match $env:SystemDrive)) {
+    $ScriptPath = $PSScriptRoot
+}
+else {
+    $ScriptPath = "$env:systemDrive\QiInstaller"
+}
+if (!(Test-Path $ScriptPath\logs)) {
+    New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
+}
+
+try {
+    Find-Package nuget -force -erroraction stop | out-null
+    Find-Package AutomateAPI -force -ErrorAction stop | out-null
+    Import-Module AutomateAPI -ErrorAction stop
+}
+catch {
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
+    function Get-ConditionsStacked {
+        param (
+            [Parameter()]
+            [string[]]$ArrayOfConditions
+        )
+    
+        $FinalString = ($ArrayOfConditions) -join " And "
+        Return $FinalString
+      
+    }
+}
+
 IF ([Net.SecurityProtocolType]::Tls) { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls }
 IF ([Net.SecurityProtocolType]::Tls11) { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 }
 IF ([Net.SecurityProtocolType]::Tls12) { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12 }
