@@ -4,9 +4,19 @@ $TechInstaller_Load = {
         Import-Module AutomateAPI
     }
     catch{
-        Import-Module BitsTransfer --use-system-powershell
-        Start-BitsTransfer -Source "https://raw.githubusercontent.com/gavsto/AutomateAPI/master/AutomateAPI.psm1" -Destination "$($ScriptPath)\AutomateAPI.psm1"
-        Import-Module "$($ScriptPath)\AutomateAPI.psm1" --use-system-powershell
+        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
+        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
+        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
+        function Get-ConditionsStacked {
+            param (
+                [Parameter()]
+                [string[]]$ArrayOfConditions
+            )
+        
+            $FinalString = ($ArrayOfConditions) -join " And "
+            Return $FinalString
+          
+        }
     }
 }
 $Close_Click = {
