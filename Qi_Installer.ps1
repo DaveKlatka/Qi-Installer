@@ -20,6 +20,7 @@ $AuthSubmit_Click = {
 
     Try {
         try {
+            Find-Package nuget -force -erroraction stop | out-null
             Install-Module AutomateAPI -force -ErrorAction stop
             Import-Module AutomateAPI -ErrorAction stop
         }
