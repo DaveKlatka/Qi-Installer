@@ -150,7 +150,7 @@ function Start-Extract {
         }
     }
     update-Textbox "Extracting $file to $ExtractTo"
-    $ArgumentList = '&' + $7zip + ' x ''' + $file + ''' -aoa -o"' + $ExtractTo + '"'
+    $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
     if ((Get-Host).Version.Major -gt 3){
         $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
