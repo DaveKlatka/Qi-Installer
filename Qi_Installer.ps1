@@ -1,23 +1,5 @@
 $TechInstaller_Load = {
-    try {
-        Install-Module AutomateAPI -force -ErrorAction stop
-        Import-Module AutomateAPI -ErrorAction stop
-    }
-    catch {
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
-        function Get-ConditionsStacked {
-            param (
-                [Parameter()]
-                [string[]]$ArrayOfConditions
-            )
-        
-            $FinalString = ($ArrayOfConditions) -join " And "
-            Return $FinalString
-          
-        }
-    }
+
 }
 $Close_Click = {
     $TechInstaller.Close()
@@ -28,6 +10,26 @@ $AuthSubmit_Click = {
     #https://github.com/gavsto/AutomateAPI
 
     Try {
+        try {
+            Install-Module AutomateAPI -force -ErrorAction stop
+            Import-Module AutomateAPI -ErrorAction stop
+        }
+        catch {
+            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
+            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
+            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
+            function Get-ConditionsStacked {
+                param (
+                    [Parameter()]
+                    [string[]]$ArrayOfConditions
+                )
+            
+                $FinalString = ($ArrayOfConditions) -join " And "
+                Return $FinalString
+              
+            }
+        }
+
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
         Connect-AutomateAPI -credential $Credential -Server $authServer -TwoFactorToken $2FAAuth.Text # -ErrorAction stop
