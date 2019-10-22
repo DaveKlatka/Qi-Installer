@@ -1,9 +1,20 @@
 $TechInstaller_Load = {
-    IF([Net.SecurityProtocolType]::Tls) {[Net.ServicePointManager]::SecurityProtocol=[Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls}
-    IF([Net.SecurityProtocolType]::Tls11) {[Net.ServicePointManager]::SecurityProtocol=[Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11}
-    IF([Net.SecurityProtocolType]::Tls12) {[Net.ServicePointManager]::SecurityProtocol=[Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12}
+    IF ([Net.SecurityProtocolType]::Tls) { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls }
+    IF ([Net.SecurityProtocolType]::Tls11) { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 }
+    IF ([Net.SecurityProtocolType]::Tls12) { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12 }
     
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
+
+    #Set Default Path
+    if (!($PSScriptRoot -match $env:SystemDrive)) {
+        $ScriptPath = $PSScriptRoot
+    }
+    else {
+        $ScriptPath = "$env:systemDrive\QiInstaller"
+    }
+    if (!(Test-Path $ScriptPath\logs)) {
+        New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
+    }
 }
 $Close_Click = {
     $TechInstaller.Close()
@@ -36,8 +47,8 @@ $AuthSubmit_Click = {
 
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
-        Connect-AutomateAPI -credential $Credential -Server $authServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
-        if ($AuthUser -eq 'dklatkaadm'){
+        Connect-AutomateAPI -credential $Credential -Server 'Automate.QualityIP.com' -TwoFactorToken $2FAAuth.Text -ErrorAction stop
+        if ($AuthUser -eq 'dklatkaadm') {
             $Script:Location = (get-automateclient -clientname "QualityIP").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
         }
         else {
