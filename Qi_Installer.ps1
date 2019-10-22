@@ -1,45 +1,47 @@
 $TechInstaller_Load = {
-    #Set Default Path
-    if (!($PSScriptRoot -match $env:SystemDrive)) {
-        $ScriptPath = $PSScriptRoot
-    }
-    else {
-        $ScriptPath = "$env:systemDrive\QiInstaller"
-    }
-    if (!(Test-Path $ScriptPath\logs)) {
-        New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
-    }
+
 }
 $Close_Click = {
     $TechInstaller.Close()
 }
 
+#Set Default Path
+if (!($PSScriptRoot -match $env:SystemDrive)) {
+    $ScriptPath = $PSScriptRoot
+}
+else {
+    $ScriptPath = "$env:systemDrive\QiInstaller"
+}
+if (!(Test-Path $ScriptPath\logs)) {
+    New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
+}
+
+try {
+    Find-Package nuget -force -erroraction stop | out-null
+    Find-Package AutomateAPI -force -ErrorAction stop | out-null
+    Import-Module AutomateAPI -ErrorAction stop
+}
+catch {
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
+    function Get-ConditionsStacked {
+        param (
+            [Parameter()]
+            [string[]]$ArrayOfConditions
+        )
+    
+        $FinalString = ($ArrayOfConditions) -join " And "
+        Return $FinalString
+      
+    }
+}
 #Authenticator
 $AuthSubmit_Click = {
     #https://github.com/gavsto/AutomateAPI
 
     Try {
-        try {
-            Find-Package nuget -force -erroraction stop | out-null
-            Find-Package AutomateAPI -force -ErrorAction stop | out-null
-            Import-Module AutomateAPI -ErrorAction stop
-        }
-        catch {
-            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
-            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
-            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
-            function Get-ConditionsStacked {
-                param (
-                    [Parameter()]
-                    [string[]]$ArrayOfConditions
-                )
-            
-                $FinalString = ($ArrayOfConditions) -join " And "
-                Return $FinalString
-              
-            }
-        }
-
+        
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
         Connect-AutomateAPI -credential $Credential -Server $AuthServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop

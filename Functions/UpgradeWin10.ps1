@@ -53,7 +53,7 @@ if (((Get-Host).version).major -gt 2) {
             if (Test-Path ((Split-Path -path $Destination) + "\setup.exe")) {
                 Set-RestorePoint
                 update-Textbox "Upgrading to Win10 $($Version)"
-                $ArgumentList = "/auto upgrade /Compat IgnoreWarning /copylogs $env:SystemDrive\wti\Windows10UpgradeLogs /migratedrivers all"
+                $ArgumentList = "/auto upgrade /Compat IgnoreWarning /DynamicUpdate disable /copylogs $env:SystemDrive\wti\Windows10UpgradeLogs /migratedrivers all"
                 Start-Process -FilePath ((Split-Path -path $Destination) + "\setup.exe") -ArgumentList $ArgumentList
                 Start-Sleep -Seconds 5
 
