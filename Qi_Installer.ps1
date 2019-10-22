@@ -161,10 +161,10 @@ if (!(Test-Path $Images)) {
     New-Item -ItemType Directory -Path $Images | Out-Null
 }
 if (!(Test-Path -path $png)) {
-    Start-BitsTransfer -Source 'https://gitlab.com/api/v4/projects/14874591/repository/files/Images%2Fquality-ip-logo-HIRES%2Epng/raw?ref=master' -Destination $png
+    Start-BitsTransfer -Source 'https://qi-host.nyc3.digitaloceanspaces.com/Images/quality-ip-logo-HIRES.png' -Destination $png
 }
 if (!(Test-Path -path $ico)) {
-    Start-BitsTransfer -Source 'https://gitlab.com/api/v4/projects/14874591/repository/files/Images%2Fqip_logo_25x25_300dpi_49b_icon%2Eico/raw?ref=master' -Destination $ico
+    Start-BitsTransfer -Source 'https://qi-host.nyc3.digitaloceanspaces.com/Images/qip_logo_25x25_300dpi_49b_icon.ico' -Destination $ico
 }
 
 #GUI interactions
