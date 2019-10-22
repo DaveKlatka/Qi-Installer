@@ -63,28 +63,7 @@ Test-Compatibility
 
 if ($ReturnValue) {
     if (((Get-WmiObject win32_OperatingSystem).Caption) -match 'Windows 7') {
-        if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
-            $msu = "$($ScriptPath)\Win7AndW2K8R2-KB3191566-x64.msu"
-            Get-Files -Source "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Windows/PoSH/Win7AndW2K8R2-KB3191566-x64.msu" -Destination $msu -NumberOfFiles 1 -Software "Powershell 5"
-        }
-        else {
-            $msu = "$($ScriptPath)\Win7-KB3191566-x86.msu"
-            Get-Files -Source "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Windows/PoSH/Win7-KB3191566-x86.msu" -Destination $msu -NumberOfFiles 1 -Software "Powershell 5"
-        } 
-        $wusaExe = "$env:windir\system32\wusa.exe"
-        $wusaParameters = @("`"{0}`"" -f $msu)
-        $wusaParameters += @("/quiet", "/norestart")
-        $wusaParameterString = $wusaParameters -join " "
-        net.exe stop wuauserv
-        $RunLog = "$ScriptPath\logs\Powershell.txt"
-        update-Textbox "Installing powershell 5"
-        $Process = (Start-Process -FilePath $wusaExe -ArgumentList $wusaParameterString -PassThru)
-        start-sleep 1
-        Get-ProgressBar -RunLog $RunLog -ProcessID $Process.Id
-
-        Add-Type -AssemblyName PresentationFramework
-        $msgBoxInput = [System.Windows.MessageBox]::Show('A reboot is required to finish Powershell 5 install. Would you like to restart now?', 'Reboot Required', 'YesNo', 'Warning')
-
+        Install-Software -Application 'Powershell'
         switch ($msgBoxInput) {
             'Yes' {
                 shutdown.exe -r -t 30
