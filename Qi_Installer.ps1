@@ -1,7 +1,7 @@
 $TechInstaller_Load = {
     try{
         Install-Module AutomateAPI -force
-        Import-Module AutomateAPI
+        Import-Module AutomateAPI -ErrorAction stop
     }
     catch{
         (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
