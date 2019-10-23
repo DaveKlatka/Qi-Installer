@@ -4,10 +4,7 @@ $Close_Click = {
     $TechInstaller.Close()
 }
 #Set Default Path
-if (!($PSScriptRoot -match $env:SystemDrive)) {
-    $ScriptPath = $PSScriptRoot
-}
-else {
+if (($ScriptPath -match $env:SystemDrive)) {
     $ScriptPath = "$env:systemDrive\QiInstaller"
 }
 if (!(Test-Path $ScriptPath\logs)) {
