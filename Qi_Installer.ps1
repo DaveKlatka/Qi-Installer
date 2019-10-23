@@ -3,6 +3,16 @@ $TechInstaller_Load = {
 $Close_Click = {
     $TechInstaller.Close()
 }
+#Set Default Path
+if (!($PSScriptRoot -match $env:SystemDrive)) {
+    $ScriptPath = $PSScriptRoot
+}
+else {
+    $ScriptPath = "$env:systemDrive\QiInstaller"
+}
+if (!(Test-Path $ScriptPath\logs)) {
+    New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
+}
 write-host $ScriptPath
 #Authenticator
 $AuthSubmit_Click = {
