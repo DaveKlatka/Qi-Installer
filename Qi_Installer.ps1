@@ -10,7 +10,7 @@ if (($ScriptPath -match $env:SystemDrive)) {
 if (!(Test-Path $ScriptPath\logs)) {
     New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
 }
-write-host $ScriptPath
+
 #Authenticator
 $AuthSubmit_Click = {
     #https://github.com/gavsto/AutomateAPI
