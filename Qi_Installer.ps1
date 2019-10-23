@@ -108,7 +108,7 @@ $InstallSoftware_Click = {
 #Qi Power Policy
 $PowerPolicy_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/PowerPolicy.ps1')
-    (New-Object System.Net.WebClient).DownloadString('hhttps://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/PowerPolicy.ps1') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/PowerPolicy.ps1') | Invoke-Expression; 
 }
 
 #Dell Command Update
