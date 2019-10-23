@@ -12,7 +12,7 @@ $AuthSubmit_Click = {
         
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
         $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
-        Connect-AutomateAPI -credential $Credential -Server $AuthServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
+        Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
         if ($AuthUser -eq 'dklatkaadm') {
             $Script:Location = (get-automateclient -clientname "QualityIP").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
         }

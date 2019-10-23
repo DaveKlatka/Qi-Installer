@@ -16,6 +16,8 @@
 #pragma compile(ProductName, Qi-Installer)
 #pragma compile(FileDescription, QiInstaller is a technician installer to be useed by Qi Technicians.)
 #NoTrayIcon
-$authserver = "Automate.QualityIP.com"
-$Command = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -command $ScriptPath = '" &@ScriptDir & "';$AuthServer = '" &$AuthServer & "';(New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Qi_Installer%2Eps1/raw?ref=master') | Invoke-Expression;"
+$AutomateServer = 'Automate.QualityIP.com'
+$AutomatePass = 'BndOZpmJrChvdODpKIbdiA=='
+$DownloadHost = 'https://qi-host.nyc3.digitaloceanspaces.com'
+$Command = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -command $ScriptPath = '" &@ScriptDir & "';$AutomateServer = '" &$AutomateServer & "';$AutomatePass = '" &$AutomatePass & "';$DownloadHost = '" &$DownloadHost & "';(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Qi_Installer.ps1') | Invoke-Expression;"
 runwait($Command)
