@@ -1,10 +1,10 @@
 function Start-QiInstaller {
     param(
-        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory=$True)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $AutomateServer,
-        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory=$True)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $AutomatePass,
-        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory=$True)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $DownloadHost
     )
 
@@ -30,7 +30,7 @@ function Start-QiInstaller {
             $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
             $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
             Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
-            if ($AuthUser -eq 'dklatkaadm') {
+            if ($AuthUser.text -eq 'dklatkaadm') {
                 $Script:Location = (get-automateclient -clientname "QualityIP").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
             }
             else {
