@@ -129,7 +129,7 @@ function Start-Extract {
         [string] $File,
         [string] $ExtractTo
     )
-    $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Tools/7za.exe"
+    $Source = "$DownloadHost/AutoMate/Tools/7za.exe"
     $7zip = "$Scriptpath\7za.exe"
     if (!(Test-Path $7zip)) {
         update-Textbox "Downloading 7zip extractor"
@@ -179,7 +179,7 @@ function Install-Software {
             New-Item $env:ALLUSERSPROFILE\choco-cache -ItemType Directory -Force 
             $env:TEMP = "$env:ALLUSERSPROFILE\choco-cache" 
             $RunLog = "$ScriptPath\logs\Chocolatey log.txt"
-            $process = (start-process powershell -ArgumentList "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Software/Chocolatey/Chocolatey.ps1'))" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+            $process = (start-process powershell -ArgumentList "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Chocolatey.ps1'))" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
             Start-Sleep -Seconds 1
             Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
         }

@@ -1,48 +1,13 @@
 $TechInstaller_Load = {
-
 }
 $Close_Click = {
     $TechInstaller.Close()
 }
 
-
-#Set Default Path
-if (!($PSScriptRoot -match $env:SystemDrive)) {
-    $ScriptPath = $PSScriptRoot
-}
-else {
-    $ScriptPath = "$env:systemDrive\QiInstaller"
-}
-if (!(Test-Path $ScriptPath\logs)) {
-    New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
-}
-
-try {
-    Find-Package nuget -force -erroraction stop | out-null
-    Find-Package AutomateAPI -force -ErrorAction stop | out-null
-    Import-Module AutomateAPI -ErrorAction stop
-}
-catch {
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
-    function Get-ConditionsStacked {
-        param (
-            [Parameter()]
-            [string[]]$ArrayOfConditions
-        )
-    
-        $FinalString = ($ArrayOfConditions) -join " And "
-        Return $FinalString
-      
-    }
-}
-
-
 #Authenticator
 $AuthSubmit_Click = {
     #https://github.com/gavsto/AutomateAPI
-
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
     Try {
         
         $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
@@ -78,23 +43,23 @@ $AlphaButton_Click = {
 #Run Automate Buttons
 $ReInstall_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Automate.ps1') | Invoke-Expression; 
     Invoke-ReInstall_Automate
 }
 $UnInstall_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Automate.ps1') | Invoke-Expression; 
     Invoke-UnInstall_Automate
 }
 $Install_Automate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FAutomate%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Automate.ps1') | Invoke-Expression; 
     Invoke-Install_Automate
 }
 
 $dotnet35_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/dotnet.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2Fdotnet%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/DotNet.ps1') | Invoke-Expression; 
 }
 
 $InstallSoftware_Click = {
@@ -114,7 +79,7 @@ $InstallSoftware_Click = {
         switch ($msgBoxInput) {
             'Yes' {
                 #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-                (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FPowershell%2Eps1/raw?ref=master') | Invoke-Expression; 
+                (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Powershell.ps1') | Invoke-Expression; 
             }
         
             'No' {
@@ -129,26 +94,26 @@ $InstallSoftware_Click = {
     
     if ($365checkbox.checked -and $365checkbox.enabled) {
         #. (Join-Path $PSScriptRoot 'Functions/Office.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FOffice%2Eps1/raw?ref=master') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Office.ps1') | Invoke-Expression; 
     }
 }
 
 #Qi Power Policy
 $PowerPolicy_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/PowerPolicy.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FPowerPolicy%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('hhttps://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/PowerPolicy.ps1') | Invoke-Expression; 
 }
 
 #Dell Command Update
 $DellUpdate_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/DellCommandUpdate.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FDellCommandUpdate%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/DellCommandUpdate.ps1') | Invoke-Expression; 
 }
 
 #Powershell 5
 $Powershell5_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FPowershell%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Powershell.ps1') | Invoke-Expression; 
 }
 
 #Win10 Upgrade
@@ -158,7 +123,7 @@ $Win10Upgrade_Click = {
     switch ($msgBoxInput) {
         'Yes' {
             #. (Join-Path $PSScriptRoot 'Functions/UpgradeWin10.ps1')
-            (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FUpgradeWin10%2Eps1/raw?ref=master') | Invoke-Expression; 
+            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/UpgradeWin10.ps1') | Invoke-Expression; 
         }
         
         'No' {
@@ -170,7 +135,7 @@ $Win10Upgrade_Click = {
 #Rename Computer/ Join Domain
 $RenameDomain_Click = {
     #. (Join-Path $PSScriptRoot 'Functions/Rename.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FRename%2Eps1/raw?ref=master') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Rename.ps1') | Invoke-Expression; 
 }
 
 #Download Icons
@@ -182,10 +147,10 @@ if (!(Test-Path $Images)) {
     New-Item -ItemType Directory -Path $Images | Out-Null
 }
 if (!(Test-Path -path $png)) {
-    Start-BitsTransfer -Source 'https://qi-host.nyc3.digitaloceanspaces.com/Images/quality-ip-logo-HIRES.png' -Destination $png
+    Start-BitsTransfer -Source 'https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Images/quality-ip-logo-HIRES.png' -Destination $png
 }
 if (!(Test-Path -path $ico)) {
-    Start-BitsTransfer -Source 'https://qi-host.nyc3.digitaloceanspaces.com/Images/qip_logo_25x25_300dpi_49b_icon.ico' -Destination $ico
+    Start-BitsTransfer -Source 'https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Images/Qi_ico.ico' -Destination $ico
 }
 
 #GUI interactions
@@ -220,16 +185,16 @@ $Cancel_Click = {
 
 #USMT Functions
 #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-(New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FUser_Migration%2Eps1/raw?ref=master') | Invoke-Expression; 
+(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
 
 #Univeral Functions
 #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
-(New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Functions%2FFunctions%2Eps1/raw?ref=master') | Invoke-Expression; 
+(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Functions.ps1') | Invoke-Expression; 
 
 #GUI
 Add-Type -AssemblyName System.Windows.Forms
 #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
-(New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Qi_Installer.designer%2Eps1/raw?ref=master') | Invoke-Expression; 
+(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Qi_Installer.designer.ps1') | Invoke-Expression; 
 
 #Check Automate Installed
 if (Test-Path $env:windir\LTSVC) {

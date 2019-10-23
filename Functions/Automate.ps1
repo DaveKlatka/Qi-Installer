@@ -10,27 +10,27 @@ Function Invoke-Install_Automate {
 
         if ($DotNetInstalled -eq $true) {
             if ((Get-Host).Version.Major -gt 3) {
-                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
             } 
             else {
-                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -PassThru)
+                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -PassThru)
             }
         }
         else {
             if ((Get-Host).Version.Major -gt 3) {
-                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
             } 
             else {
-                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
+                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
             }
         }
     }
     else {
         if ((Get-Host).Version.Major -gt 3) {
-            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
         } 
         else {
-            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
+            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
         }
     }
     start-sleep -Seconds 1
@@ -46,10 +46,10 @@ Function Invoke-ReInstall_Automate {
     #Re-Install Command
     $RunLog = "$ScriptPath\logs\Automate_Re-Install.txt"
     if ((Get-Host).Version.Major -gt 3) {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; ReInstall-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
     } 
     else {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; ReInstall-LTService -Server 'https://automate.qualityip.com' -Password 'BndOZpmJrChvdODpKIbdiA==' -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
     }
     start-sleep -Seconds 1
     Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
@@ -58,10 +58,10 @@ Function Invoke-UnInstall_Automate {
     #Un-Install Command
     $RunLog = "$ScriptPath\logs\Automate_Un-Install.txt"
     if ((Get-Host).Version.Major -gt 3) {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; UnInstall-LTService -Server 'https://automate.qualityip.com'" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; UnInstall-LTService -Server $AutomateServer" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
     } 
     else {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; UnInstall-LTService -Server 'https://automate.qualityip.com'" -RedirectStandardOutput $RunLog -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $LTPoSH; UnInstall-LTService -Server $AutomateServer" -RedirectStandardOutput $RunLog -PassThru)
     }
     start-sleep -Seconds 1
     Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID

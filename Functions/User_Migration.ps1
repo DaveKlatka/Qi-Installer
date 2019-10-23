@@ -139,7 +139,7 @@ function Get-USMT {
     else {
         Update-Textbox "USMT not on local machine. Downloading binaries."
         $Script:output = $ScriptPath
-        $Script:Source = 'https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Tools/User_State_Migration_Tool.zip'
+        $Script:Source = "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip"
         $Script:Destination = "$output\User_State_migration_Tool.zip"
         if (!(Test-Path $output)) { New-Item -ItemType Directory -Path $output }
         Import-Module BitsTransfer

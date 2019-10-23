@@ -10,7 +10,7 @@ if (!((Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse
                 New-Item -ItemType Directory -Path $output | Out-Null
             }
             
-            Get-Files -Source 'https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Windows/DotNet/Win10_sxs.zip' -Destination "$output\Win10_sxs.zip" -NumberOfFiles 1 -Software '.NET 3.5'
+            Get-Files -Source "$DownloadHost/AutoMate/Microsoft/Windows/DotNet/Win10_sxs.zip" -Destination "$output\Win10_sxs.zip" -NumberOfFiles 1 -Software '.NET 3.5'
             Start-Extract -File "$output\Win10_sxs.zip" -ExtractTo $output
 
             #Install Command

@@ -27,7 +27,7 @@ Try {
     else {
         $Output = $ScriptPath + '\PowerPolicy'
         if (!(Test-Path $output)) { New-Item -ItemType Directory -Path $output | Out-Null }
-        get-files -source 'https://qi-host.nyc3.digitaloceanspaces.com/Standalone_Installer/Tech_Installer/PowerPolicy/Qi%20-%20Power%20Policy.zip' -Destination "$Output\Qi - Power Policy.zip" -NumberOfFiles 1 -Software "PowerPolicy"
+        get-files -source "$DownloadHost/Standalone_Installer/Tech_Installer/PowerPolicy/Qi%20-%20Power%20Policy.zip" -Destination "$Output\Qi - Power Policy.zip" -NumberOfFiles 1 -Software "PowerPolicy"
         Start-Extract -File "$Output\Qi - Power Policy.zip" -ExtractTo $Output
         
         if (Test-Path -path "$output\Qi - $comp Power Policy.pow") {

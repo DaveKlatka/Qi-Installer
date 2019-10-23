@@ -1,4 +1,6 @@
-$AuthServer = 'Automate.QualityIP.com'
+$AutomateServer = 'Automate.QualityIP.com'
+$AutomatePass = 'BndOZpmJrChvdODpKIbdiA=='
+$DownloadHost = 'https://qi-host.nyc3.digitaloceanspaces.com'
 
 #Set Default Path
 if (!($PSScriptRoot -match $env:SystemDrive)) {
@@ -11,28 +13,7 @@ if (!(Test-Path $ScriptPath\logs)) {
     New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
 }
 
-try {
-    Find-Package nuget -force -erroraction stop | out-null
-    Find-Package AutomateAPI -force -ErrorAction stop | out-null
-    Import-Module AutomateAPI -ErrorAction stop
-}
-catch {
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Connect-AutomateAPI.ps1') | Invoke-Expression;
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateClient.ps1') | Invoke-Expression;
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/gavsto/AutomateAPI/master/Public/Get-AutomateAPIGeneric.ps1') | Invoke-Expression;
-    function Get-ConditionsStacked {
-        param (
-            [Parameter()]
-            [string[]]$ArrayOfConditions
-        )
-    
-        $FinalString = ($ArrayOfConditions) -join " And "
-        Return $FinalString
-      
-    }
-}
-
-(New-Object System.Net.WebClient).DownloadString('https://gitlab.com/api/v4/projects/14874591/repository/files/Qi_Installer%2Eps1/raw?ref=master') | Invoke-Expression;
+(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Qi_Installer.ps1') | Invoke-Expression;
 
 <#
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;

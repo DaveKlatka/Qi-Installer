@@ -27,13 +27,13 @@ function Set-RestorePoint {
 if (((Get-Host).version).major -gt 2) {
     $version = $Win10Version
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
-        $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
+        $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
         $Destination = "$($ScriptPath)\Win10_Upgrade\$($Version)_x64.zip"
         $zip = "$($Destination).001"
         $NumberOfFiles = 37
     }
     else {
-        $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
+        $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
         $Destination = "$ScriptPath\Win10_Upgrade\$($Version)_x86.zip"
         $zip = "$($Destination).001"
         $NumberOfFiles = 27

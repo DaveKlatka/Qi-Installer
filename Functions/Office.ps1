@@ -5,19 +5,19 @@ else {
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
         Switch ($365ComboBox.Text) {
             "Office 365 Business" {
-                $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Office/365_Business_x64/Office_365_Business_x64.zip"
+                $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x64/Office_365_Business_x64.zip"
                 $Destination = "$ScriptPath\O365\Business x64\Office_365_Business_x64.zip"
                 $ArgumentList = "/Configure $env:systemDrive\office365\configuration-Office365-x64.xml"
                 $NumberOfFiles = 24
             }
             "Office 365 ProPlus" {
-                $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Office/365_ProPlus_x64/Office_365_ProPlus_x64.zip"
+                $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x64/Office_365_ProPlus_x64.zip"
                 $Destination = "$ScriptPath\O365\ProPlus x64t\Office_365_ProPlus_x64.zip"
                 $ArgumentList = "/Configure $env:systemDrive\office365\configuration-Office365-x64.xml"
                 $NumberOfFiles = 23
             }
             "Office 2019 Standard" {
-                $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Office/2019_Standard/Office_2019_Standard.zip"
+                $Source = "$DownloadHost/AutoMate/Microsoft/Office/2019_Standard/Office_2019_Standard.zip"
                 $Destination = "$ScriptPath\Office_2019\Standard\Office_2019_Standard.zip"
                 $ArgumentList = "/Configure $env:systemDrive\office365\configuration-Office2019.xml"
                 $NumberOfFiles = 20
@@ -28,13 +28,13 @@ else {
     else {
         Switch ($365ComboBox.Text) {
             "Office 365 Business" {
-                $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Office/365_Business_x86/Office_365_Business_x86.zip"         
+                $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x86/Office_365_Business_x86.zip"         
                 $Destination = "$ScriptPath\O365\Business x86\Office_365_Business_x86.zip"
                 $ArgumentList = "/Configure $env:systemDrive\office365\configuration-Office365-x86.xml"
                 $NumberOfFiles = 18
             }
             "Office 365 ProPlus" {
-                $Source = "https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Office/365_ProPlus_x86/Office_365_ProPlus_x86.zip"
+                $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x86/Office_365_ProPlus_x86.zip"
                 $Destination = "$ScriptPath\O365\ProPlus x86\Office_365_ProPlus_x86.zip"
                 $ArgumentList = "/Configure $env:systemDrive\office365\configuration-Office365-x86.xml"
                 $NumberOfFiles = 18
