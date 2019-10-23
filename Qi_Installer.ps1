@@ -3,7 +3,7 @@ $TechInstaller_Load = {
 $Close_Click = {
     $TechInstaller.Close()
 }
-
+write-host $ScriptPath
 #Authenticator
 $AuthSubmit_Click = {
     #https://github.com/gavsto/AutomateAPI
