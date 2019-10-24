@@ -40,19 +40,22 @@ else {
                 $NumberOfFiles = 18
             }
             "Office 2019 Standard" {
-
+                update-Textbox "No Installer for 32 bit Office 2019 Standard"
+                $NumberOfFiles = 0
             }
         }
     }
     if ((Get-ChildItem -path (Split-Path -path $Destination) -ErrorAction SilentlyContinue).count -lt $NumberOfFiles) {
         Get-Files -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $365ComboBox.Text
     }
-    if (!(Test-Path "$env:systemDrive\office365")) { New-Item -ItemType Directory -Path "$env:systemDrive\office365" }
-    Start-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
-    Start-Sleep -seconds 1
-    update-Textbox "Installing $($365ComboBox.Text)"
-    Start-Process -filepath "$env:systemDrive\office365\setup.exe" -ArgumentList $ArgumentList
-            
+    if ($NumberOfFiles -gt 0) {
+        if (!(Test-Path "$env:systemDrive\office365")) { New-Item -ItemType Directory -Path "$env:systemDrive\office365" }
+        Start-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+        Start-Sleep -seconds 1
+        update-Textbox "Installing $($365ComboBox.Text)"
+        Start-Process -filepath "$env:systemDrive\office365\setup.exe" -ArgumentList $ArgumentList
+    }
+    
     $365Checkbox.Checked = $false
     $365ComboBox.enabled = $false
 }
