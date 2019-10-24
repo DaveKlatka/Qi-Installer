@@ -12,7 +12,7 @@ else {
             }
             "Office 365 ProPlus" {
                 $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x64/Office_365_ProPlus_x64.zip"
-                $Destination = "$ScriptPath\O365\ProPlus x64t\Office_365_ProPlus_x64.zip"
+                $Destination = "$ScriptPath\O365\ProPlus x64\Office_365_ProPlus_x64.zip"
                 $ArgumentList = "/Configure $env:systemDrive\office365\configuration-Office365-x64.xml"
                 $NumberOfFiles = 23
             }
