@@ -176,16 +176,12 @@ function Start-QiInstaller {
     }
     
     #USMT Functions
-    #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
+    . (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
+    #(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
 
     #USMT_Profile Select
     $Profiles_Click = {
-        $SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
-        update-Textbox "Profile(s) selected for migration:"
-        $SelectedProfile | ForEach-Object { 
-            update-Textbox "$($_.UserName)"
-        }
+        Select-Profiles
     }
     $AddDirectory_Click = {
         Add-ExtraDirectory
@@ -266,5 +262,3 @@ function Start-QiInstaller {
     
     $TechInstaller.ShowDialog()
 }
-
-

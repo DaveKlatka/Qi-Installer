@@ -192,6 +192,14 @@ function Get-USMTResults {
     }
 }
 
+function Select-Profiles {
+    $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+    update-Textbox "Profile(s) selected for migration:"
+    $SelectedProfile | ForEach-Object { 
+        update-Textbox "$($_.UserName)"
+    }
+}
+
 function Get-UserProfiles {
     # Get all user profiles on this PC and let the user select which ones to migrate
     $RegKey = 'Registry::HKey_Local_Machine\Software\Microsoft\Windows NT\CurrentVersion\ProfileList\*'
@@ -199,7 +207,7 @@ function Get-UserProfiles {
     # Return each profile on this computer
     Get-ItemProperty -Path $RegKey | ForEach-Object {
         try {
-            $SID = New-object System.Security.Principal.SecurityIdentifier($_.PSChildName)
+            $SID = New-object System.Security.Principal.SecurityIdentifier($_.PSChildName) -ErrorAction stop
             try {
 
                 $User = $SID.Translate([System.Security.Principal.NTAccount]).Value
@@ -217,24 +225,23 @@ function Get-UserProfiles {
                     $ProfilePath = Get-UserProfilePath -Domain $Domain -UserName $UserName
 
                     # Create and return a custom object for each user found
-                    $Script:UserObject = New-Object psobject
-                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name Domain -Value $Domain
-                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name UserName -Value $UserName
-                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name LastLogin -Value $LastLogin
-                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name ProfilePath -Value $ProfilePath
-                    $Script:UserObject
+                    $UserObject = New-Object psobject
+                    $UserObject | Add-Member -MemberType NoteProperty -Name Domain -Value $Domain
+                    $UserObject | Add-Member -MemberType NoteProperty -Name UserName -Value $UserName
+                    $UserObject | Add-Member -MemberType NoteProperty -Name LastLogin -Value $LastLogin
+                    $UserObject | Add-Member -MemberType NoteProperty -Name ProfilePath -Value $ProfilePath
+                    $UserObject
                 }
             }
             catch {
-                #$Script:UpdateText = "Error while translating $SID to a user name."
-                update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
+                #update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
             }
         }
         catch {
-            #$Script:UpdateText = "Error while translating $($_.PSChildName) to SID."
-            update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
+            #update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
         }
     }
+    
 }
 
 function Get-UserProfilePath {

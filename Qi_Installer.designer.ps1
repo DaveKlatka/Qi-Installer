@@ -25,7 +25,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TabPage]$TabPage4 = $null
 [System.Windows.Forms.TabControl]$TabControl2 = $null
 [System.Windows.Forms.TabPage]$TabPage5 = $null
-[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.Button]$Export = $null
 [System.Windows.Forms.GroupBox]$SaveDestination = $null
 [System.Windows.Forms.Button]$ExportLocationButton = $null
@@ -39,6 +38,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$Profiles = $null
 [System.Windows.Forms.TabPage]$TabPage6 = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
+[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
@@ -101,16 +101,16 @@ $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
 $TotalProgress = (New-Object -TypeName System.Windows.Forms.ProgressBar)
 $AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
 $GroupBox6 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$Label4 = (New-Object -TypeName System.Windows.Forms.Label)
+$Label3 = (New-Object -TypeName System.Windows.Forms.Label)
+$Label2 = (New-Object -TypeName System.Windows.Forms.Label)
+$2FAAuth = (New-Object -TypeName System.Windows.Forms.TextBox)
+$AuthPass = (New-Object -TypeName System.Windows.Forms.TextBox)
 $AuthCancel = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthError = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
-$AuthPass = (New-Object -TypeName System.Windows.Forms.TextBox)
-$2FAAuth = (New-Object -TypeName System.Windows.Forms.TextBox)
-$Label2 = (New-Object -TypeName System.Windows.Forms.Label)
-$Label3 = (New-Object -TypeName System.Windows.Forms.Label)
-$Label4 = (New-Object -TypeName System.Windows.Forms.Label)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -433,7 +433,6 @@ $TabControl2.TabIndex = [System.Int32]3
 #
 #TabPage5
 #
-$TabPage5.Controls.Add($AlphaButton)
 $TabPage5.Controls.Add($Export)
 $TabPage5.Controls.Add($SaveDestination)
 $TabPage5.Controls.Add($GroupBox5)
@@ -451,7 +450,7 @@ $TabPage5.UseVisualStyleBackColor = $true
 #
 $AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]72,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
 $AlphaButton.ForeColor = [System.Drawing.Color]::Red
-$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]3,[System.Int32]0))
+$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]375,[System.Int32]51))
 $AlphaButton.Name = [System.String]'AlphaButton'
 $AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]288,[System.Int32]413))
 $AlphaButton.TabIndex = [System.Int32]22
@@ -477,7 +476,7 @@ $SaveDestination.Controls.Add($ExportLocationButton)
 $SaveDestination.Controls.Add($ExportLocation)
 $SaveDestination.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]288))
 $SaveDestination.Name = [System.String]'SaveDestination'
-$SaveDestination.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]77))
+$SaveDestination.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]77))
 $SaveDestination.TabIndex = [System.Int32]5
 $SaveDestination.TabStop = $false
 $SaveDestination.Text = [System.String]'Save Destination'
@@ -499,7 +498,7 @@ $ExportLocationButton.add_Click($ExportLocationButton_Click)
 $ExportLocation.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
 $ExportLocation.Name = [System.String]'ExportLocation'
 $ExportLocation.ReadOnly = $true
-$ExportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]188,[System.Int32]21))
+$ExportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]21))
 $ExportLocation.TabIndex = [System.Int32]4
 #
 #GroupBox5
@@ -507,9 +506,9 @@ $ExportLocation.TabIndex = [System.Int32]4
 $GroupBox5.Controls.Add($AddDirectory)
 $GroupBox5.Controls.Add($RemoveDirectory)
 $GroupBox5.Controls.Add($ExtraDataGridView)
-$GroupBox5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]141))
+$GroupBox5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]156))
 $GroupBox5.Name = [System.String]'GroupBox5'
-$GroupBox5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]145))
+$GroupBox5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]130))
 $GroupBox5.TabIndex = [System.Int32]3
 $GroupBox5.TabStop = $false
 $GroupBox5.Text = [System.String]'Additional Locations'
@@ -517,7 +516,7 @@ $GroupBox5.UseCompatibleTextRendering = $true
 #
 #AddDirectory
 #
-$AddDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]26,[System.Int32]120))
+$AddDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]26,[System.Int32]105))
 $AddDirectory.Name = [System.String]'AddDirectory'
 $AddDirectory.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]25,[System.Int32]19))
 $AddDirectory.TabIndex = [System.Int32]21
@@ -528,7 +527,7 @@ $AddDirectory.add_Click($AddDirectory_Click)
 #
 #RemoveDirectory
 #
-$RemoveDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]120))
+$RemoveDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]105))
 $RemoveDirectory.Name = [System.String]'RemoveDirectory'
 $RemoveDirectory.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]21,[System.Int32]19))
 $RemoveDirectory.TabIndex = [System.Int32]4
@@ -552,7 +551,7 @@ $ExtraDataGridView.MultiSelect = $false
 $ExtraDataGridView.Name = [System.String]'ExtraDataGridView'
 $ExtraDataGridView.ReadOnly = $true
 $ExtraDataGridView.RowHeadersVisible = $false
-$ExtraDataGridView.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]191,[System.Int32]119))
+$ExtraDataGridView.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]104))
 $ExtraDataGridView.TabIndex = [System.Int32]3
 #
 #GroupBox4
@@ -560,7 +559,7 @@ $ExtraDataGridView.TabIndex = [System.Int32]3
 $GroupBox4.Controls.Add($USMTCheckList)
 $GroupBox4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]6))
 $GroupBox4.Name = [System.String]'GroupBox4'
-$GroupBox4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]129))
+$GroupBox4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]144))
 $GroupBox4.TabIndex = [System.Int32]2
 $GroupBox4.TabStop = $false
 $GroupBox4.Text = [System.String]'Include with Migration'
@@ -575,7 +574,7 @@ $USMTCheckList.Items.AddRange([System.Object[]]@([System.String]'AppData',[Syste
 $USMTCheckList.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
 $USMTCheckList.MultiColumn = $true
 $USMTCheckList.Name = [System.String]'USMTCheckList'
-$USMTCheckList.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]84))
+$USMTCheckList.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]116))
 $USMTCheckList.TabIndex = [System.Int32]1
 $USMTCheckList.UseCompatibleTextRendering = $true
 #
@@ -647,7 +646,7 @@ $TotalProgress.Visible = $false
 #
 $AuthPanel.BackColor = [System.Drawing.Color]::Transparent
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]691,[System.Int32]437))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]5
@@ -671,6 +670,52 @@ $GroupBox6.TabIndex = [System.Int32]1
 $GroupBox6.TabStop = $false
 $GroupBox6.Text = [System.String]'Authentication'
 $GroupBox6.UseCompatibleTextRendering = $true
+#
+#Label4
+#
+$Label4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]57))
+$Label4.Name = [System.String]'Label4'
+$Label4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
+$Label4.TabIndex = [System.Int32]8
+$Label4.Text = [System.String]'Username:'
+$Label4.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label4.UseCompatibleTextRendering = $true
+#
+#Label3
+#
+$Label3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]101))
+$Label3.Name = [System.String]'Label3'
+$Label3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]20))
+$Label3.TabIndex = [System.Int32]7
+$Label3.Text = [System.String]'Password:'
+$Label3.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label3.UseCompatibleTextRendering = $true
+#
+#Label2
+#
+$Label2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]148))
+$Label2.Name = [System.String]'Label2'
+$Label2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
+$Label2.TabIndex = [System.Int32]6
+$Label2.Text = [System.String]'Token:'
+$Label2.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label2.UseCompatibleTextRendering = $true
+#
+#2FAAuth
+#
+$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]168))
+$2FAAuth.Name = [System.String]'2FAAuth'
+$2FAAuth.PasswordChar = [System.Char]'*'
+$2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]175,[System.Int32]21))
+$2FAAuth.TabIndex = [System.Int32]3
+#
+#AuthPass
+#
+$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]124))
+$AuthPass.Name = [System.String]'AuthPass'
+$AuthPass.PasswordChar = [System.Char]'*'
+$AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]21))
+$AuthPass.TabIndex = [System.Int32]2
 #
 #AuthCancel
 #
@@ -723,57 +768,12 @@ $Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
 #
-#AuthPass
-#
-$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]124))
-$AuthPass.Name = [System.String]'AuthPass'
-$AuthPass.PasswordChar = [System.Char]'*'
-$AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]176,[System.Int32]21))
-$AuthPass.TabIndex = [System.Int32]2
-#
-#2FAAuth
-#
-$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]168))
-$2FAAuth.Name = [System.String]'2FAAuth'
-$2FAAuth.PasswordChar = [System.Char]'*'
-$2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]175,[System.Int32]21))
-$2FAAuth.TabIndex = [System.Int32]3
-#
-#Label2
-#
-$Label2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]148))
-$Label2.Name = [System.String]'Label2'
-$Label2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
-$Label2.TabIndex = [System.Int32]6
-$Label2.Text = [System.String]'Token:'
-$Label2.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label2.UseCompatibleTextRendering = $true
-#
-#Label3
-#
-$Label3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]101))
-$Label3.Name = [System.String]'Label3'
-$Label3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]20))
-$Label3.TabIndex = [System.Int32]7
-$Label3.Text = [System.String]'Password:'
-$Label3.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label3.UseCompatibleTextRendering = $true
-#
-#Label4
-#
-$Label4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]57))
-$Label4.Name = [System.String]'Label4'
-$Label4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
-$Label4.TabIndex = [System.Int32]8
-$Label4.Text = [System.String]'Username:'
-$Label4.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label4.UseCompatibleTextRendering = $true
-#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($AlphaButton)
 $TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($TotalProgress)
 $TechInstaller.Controls.Add($CurrentFile)
@@ -835,7 +835,6 @@ Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberTy
 Add-Member -InputObject $TechInstaller -Name TabPage4 -Value $TabPage4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabControl2 -Value $TabControl2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage5 -Value $TabPage5 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Export -Value $Export -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SaveDestination -Value $SaveDestination -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ExportLocationButton -Value $ExportLocationButton -MemberType NoteProperty
@@ -849,6 +848,7 @@ Add-Member -InputObject $TechInstaller -Name USMTCheckList -Value $USMTCheckList
 Add-Member -InputObject $TechInstaller -Name Profiles -Value $Profiles -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage6 -Value $TabPage6 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty
