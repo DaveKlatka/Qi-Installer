@@ -217,12 +217,12 @@ function Get-UserProfiles {
                     $ProfilePath = Get-UserProfilePath -Domain $Domain -UserName $UserName
 
                     # Create and return a custom object for each user found
-                    $UserObject = New-Object psobject
-                    $UserObject | Add-Member -MemberType NoteProperty -Name Domain -Value $Domain
-                    $UserObject | Add-Member -MemberType NoteProperty -Name UserName -Value $UserName
-                    $UserObject | Add-Member -MemberType NoteProperty -Name LastLogin -Value $LastLogin
-                    $UserObject | Add-Member -MemberType NoteProperty -Name ProfilePath -Value $ProfilePath
-                    $UserObject
+                    $Script:UserObject = New-Object psobject
+                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name Domain -Value $Domain
+                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name UserName -Value $UserName
+                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name LastLogin -Value $LastLogin
+                    $Script:UserObject | Add-Member -MemberType NoteProperty -Name ProfilePath -Value $ProfilePath
+                    $Script:UserObject
                 }
             }
             catch {

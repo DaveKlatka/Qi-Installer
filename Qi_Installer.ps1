@@ -175,11 +175,15 @@ function Start-QiInstaller {
         $365ComboBox.Enabled = -not $365ComboBox.Enabled
     }
     
+    #USMT Functions
+    #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
+
     #USMT_Profile Select
     $Profiles_Click = {
-        $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+        $SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
         update-Textbox "Profile(s) selected for migration:"
-        $Script:SelectedProfile | ForEach-Object { 
+        $SelectedProfile | ForEach-Object { 
             update-Textbox "$($_.UserName)"
         }
     }
@@ -199,10 +203,6 @@ function Start-QiInstaller {
     $Cancel_Click = {
         $TechInstaller.Close()
     }
-    
-    #USMT Functions
-    #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
     
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
