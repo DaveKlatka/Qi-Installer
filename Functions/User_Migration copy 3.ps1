@@ -14,16 +14,16 @@ function Save-UserState {
     # After connection has been verified, continue with save state
 
     # Get the selected profiles
-    if ($Script:SelectedProfile) {
+    if ($SelectedProfile) {
         Update-Textbox "Profile(s) selected for save state:"
-        $Script:SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
+        $SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
     }
     else {
         Update-Textbox "You must select a user profile." -Color 'Red'
         return
     }
 
-    $Script:Destination = "$($ExportLocation.Text)\$OldComputer"
+    $Destination = "$($ExportLocation.Text)\$OldComputer"
 
     # Create destination folder
     if (!(Test-Path $Destination)) {
@@ -41,8 +41,8 @@ function Save-UserState {
 
         # If profile is a domain other than $DefaultDomain, save this info to text file
 
-        $FullUserName = "$($Script:SelectedProfile.Domain)\$($Script:SelectedProfile.UserName)"
-        if ($Script:SelectedProfile.Domain -ne $DefaultDomain) {
+        $FullUserName = "$($SelectedProfile.Domain)\$($SelectedProfile.UserName)"
+        if ($SelectedProfile.Domain -ne $DefaultDomain) {
             New-Item "$Destination\DomainMigration.txt" -ItemType File -Value $FullUserName -Force | Out-Null
             Update-Textbox "Text file created with cross-domain information."
         }
@@ -145,18 +145,15 @@ function Get-USMT {
     }
     else {
         Update-Textbox "USMT not on local machine. Downloading binaries."
-        $Script:output = $ScriptPath
-        $Script:Source = "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip"
-        $Script:Destination = "$output\User_State_migration_Tool.zip"
-        if (!(Test-Path $output)) { New-Item -ItemType Directory -Path $output }
-        Import-Module BitsTransfer
-        Start-BitsTransfer -Source $Source -Destination $Destination
-        $Script:file = $Destination
-        $Script:ExtractDestination = $output
-        Start-Extract
-        Remove-Item -Path "$file*" -Recurse
+        Get-Files -Source "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip" -Destination "$ScriptPath\User_State_migration_Tool.zip" -NumberOfFiles 1 -Software "USMT"
+
+        Start-Extract -file "$ScriptPath\User_State_migration_Tool.zip" -ExtractTo $ScriptPath
+
+        Start-CleanUp -File "$ScriptPath\User_State_migration_Tool.zip"
+
         $Script:ScanState = "$USMTPath\scanstate.exe"
         $Script:LoadState = "$USMTPath\loadstate.exe"
+        update-Textbox "Using [$USMTPath] as path to USMT binaries."
     }
 }
 
@@ -190,12 +187,20 @@ function Get-USMTResults {
         $Results = Get-Content "$Destination\$ActionType.log" -Tail 4 | ForEach-Object {
             ($_.Split(']', 2)[1]).TrimStart()
         } | Out-String
-    }
+}
 
-    Update-Textbox $Results -Color 'Cyan'
+Update-Textbox $Results -Color 'Cyan'
 
-    if ($ActionType -eq 'load') {
-        Update-Textbox 'A reboot is recommended.' -Color 'Yellow'
+if ($ActionType -eq 'load') {
+    Update-Textbox 'A reboot is recommended.' -Color 'Yellow'
+}
+}
+
+function Select-Profiles {
+    $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+    update-Textbox "Profile(s) selected for migration:"
+    $SelectedProfile | ForEach-Object { 
+        update-Textbox "$($_.UserName)"
     }
 }
 
@@ -206,7 +211,7 @@ function Get-UserProfiles {
     # Return each profile on this computer
     Get-ItemProperty -Path $RegKey | ForEach-Object {
         try {
-            $SID = New-object System.Security.Principal.SecurityIdentifier($_.PSChildName)
+            $SID = New-object System.Security.Principal.SecurityIdentifier($_.PSChildName) -ErrorAction stop
             try {
 
                 $User = $SID.Translate([System.Security.Principal.NTAccount]).Value
@@ -233,15 +238,14 @@ function Get-UserProfiles {
                 }
             }
             catch {
-                #$Script:UpdateText = "Error while translating $SID to a user name."
                 #update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
             }
         }
         catch {
-            #$Script:UpdateText = "Error while translating $($_.PSChildName) to SID."
             #update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
         }
     }
+    
 }
 
 function Get-UserProfilePath {
@@ -369,7 +373,7 @@ function Set-Config {
     $Include = @()
     $Exclude = @()
     foreach ($Control in $USMTCheckList.Items) {
-        if ($USMTCheckList.checkeditems.Contains(($Control))){
+        if ($USMTCheckList.checkeditems.Contains(($Control))) {
             $Include += $control
             update-Textbox $Control
         }
