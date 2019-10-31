@@ -138,18 +138,15 @@ function Get-USMT {
     }
     else {
         Update-Textbox "USMT not on local machine. Downloading binaries."
-        $Script:output = $ScriptPath
-        $Script:Source = "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip"
-        $Script:Destination = "$output\User_State_migration_Tool.zip"
-        if (!(Test-Path $output)) { New-Item -ItemType Directory -Path $output }
-        Import-Module BitsTransfer
-        Start-BitsTransfer -Source $Source -Destination $Destination
-        $Script:file = $Destination
-        $Script:ExtractDestination = $output
-        Start-Extract
-        Remove-Item -Path "$file*" -Recurse
+        Get-Files -Source "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip" -Destination "$ScriptPath\User_State_migration_Tool.zip" -NumberOfFiles 1 -Software "USMT"
+
+        Start-Extract -file "$ScriptPath\User_State_migration_Tool.zip" -ExtractTo $ScriptPath
+
+        Start-CleanUp -File "$ScriptPath\User_State_migration_Tool.zip"
+
         $Script:ScanState = "$USMTPath\scanstate.exe"
         $Script:LoadState = "$USMTPath\loadstate.exe"
+        update-Textbox "Using [$USMTPath] as path to USMT binaries."
     }
 }
 
