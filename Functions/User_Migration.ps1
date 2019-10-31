@@ -199,6 +199,14 @@ function Get-USMTResults {
     }
 }
 
+function Select-Profiles {
+    $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+    update-Textbox "Profile(s) selected for migration:"
+    $SelectedProfile | ForEach-Object { 
+        update-Textbox "$($_.UserName)"
+    }
+}
+
 function Get-UserProfiles {
     # Get all user profiles on this PC and let the user select which ones to migrate
     $RegKey = 'Registry::HKey_Local_Machine\Software\Microsoft\Windows NT\CurrentVersion\ProfileList\*'
