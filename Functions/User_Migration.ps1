@@ -14,16 +14,16 @@ function Save-UserState {
     # After connection has been verified, continue with save state
 
     # Get the selected profiles
-    if ($Script:SelectedProfile) {
+    if ($SelectedProfile) {
         Update-Textbox "Profile(s) selected for save state:"
-        $Script:SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
+        $SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
     }
     else {
         Update-Textbox "You must select a user profile." -Color 'Red'
         return
     }
 
-    $Script:Destination = "$($ExportLocation.Text)\$OldComputer"
+    $Destination = "$($ExportLocation.Text)\$OldComputer"
 
     # Create destination folder
     if (!(Test-Path $Destination)) {
@@ -41,8 +41,8 @@ function Save-UserState {
 
         # If profile is a domain other than $DefaultDomain, save this info to text file
 
-        $FullUserName = "$($Script:SelectedProfile.Domain)\$($Script:SelectedProfile.UserName)"
-        if ($Script:SelectedProfile.Domain -ne $DefaultDomain) {
+        $FullUserName = "$($SelectedProfile.Domain)\$($SelectedProfile.UserName)"
+        if ($SelectedProfile.Domain -ne $DefaultDomain) {
             New-Item "$Destination\DomainMigration.txt" -ItemType File -Value $FullUserName -Force | Out-Null
             Update-Textbox "Text file created with cross-domain information."
         }
@@ -95,9 +95,15 @@ function Save-UserState {
         # If we're running in debug mode don't actually start the process
         if ($Debug) { return }
 
-        Update-Textbox "Saving state of $OldComputer to $Destination..." -NoNewLine
-        Start-Process -FilePath $ScanState -ArgumentList $Arguments -Verb RunAs
+        Update-Log "Saving state of $OldComputer to $Destination..." -NoNewLine
+        $RunLog = "$ScriptPath\logs\USMT_ScanState.txt"
+        $Process = (Start-Process -FilePath $ScanState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
+        start-sleep -Seconds 1
+        Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+        
 
+
+        <#
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
 
@@ -105,17 +111,18 @@ function Save-UserState {
         try {
             $ScanProcess = Get-Process -Name scanstate -ErrorAction Stop
             while (-not $ScanProcess.HasExited) {
-                Get-USMTProgress -Destination $Destination -ActionType 'scan'
-                Start-Sleep -Milliseconds 250
+                Get-USMTProgress
+                Start-Sleep -Seconds 3
             }
-            Update-Textbox "Complete!" -Color 'Green'
+            Update-Log "Complete!" -Color 'Green'
 
-            Update-Textbox 'Results:'
+            Update-Log 'Results:'
             Get-USMTResults -ActionType 'scan'
         }
         catch {
-            Update-Textbox $_.Exception.Message -Color 'Red'
+            Update-Log $_.Exception.Message -Color 'Red'
         }
+        #>
     }
     ELSE {
         Update-Textbox "Error when trying to access [$Destination] Please verify that the user account running the utility has appropriate permissions to the folder.: $($_.Exception.Message)" -Color 'Yellow'
@@ -180,13 +187,13 @@ function Get-USMTResults {
         $Results = Get-Content "$Destination\$ActionType.log" -Tail 4 | ForEach-Object {
             ($_.Split(']', 2)[1]).TrimStart()
         } | Out-String
-    }
+}
 
-    Update-Textbox $Results -Color 'Cyan'
+Update-Textbox $Results -Color 'Cyan'
 
-    if ($ActionType -eq 'load') {
-        Update-Textbox 'A reboot is recommended.' -Color 'Yellow'
-    }
+if ($ActionType -eq 'load') {
+    Update-Textbox 'A reboot is recommended.' -Color 'Yellow'
+}
 }
 
 function Select-Profiles {
@@ -366,7 +373,7 @@ function Set-Config {
     $Include = @()
     $Exclude = @()
     foreach ($Control in $USMTCheckList.Items) {
-        if ($USMTCheckList.checkeditems.Contains(($Control))){
+        if ($USMTCheckList.checkeditems.Contains(($Control))) {
             $Include += $control
             update-Textbox $Control
         }
