@@ -174,10 +174,6 @@ function Start-QiInstaller {
     $365Checkbox_CheckedChanged = {
         $365ComboBox.Enabled = -not $365ComboBox.Enabled
     }
-    
-    #USMT Functions
-    . (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-    #(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
 
     #USMT_Profile Select
     $Profiles_Click = {
@@ -199,6 +195,10 @@ function Start-QiInstaller {
     $Cancel_Click = {
         $TechInstaller.Close()
     }
+
+    #USMT Functions
+    #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
     
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
