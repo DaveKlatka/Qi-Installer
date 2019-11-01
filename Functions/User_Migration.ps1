@@ -227,12 +227,12 @@ function Get-UserProfiles {
             }
             catch {
                 #$Script:UpdateText = "Error while translating $SID to a user name."
-                update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
+                #update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
             }
         }
         catch {
             #$Script:UpdateText = "Error while translating $($_.PSChildName) to SID."
-            update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
+            #update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
         }
     }
 }
