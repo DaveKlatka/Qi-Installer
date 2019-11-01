@@ -95,15 +95,9 @@ function Save-UserState {
         # If we're running in debug mode don't actually start the process
         if ($Debug) { return }
 
-        Update-Log "Saving state of $OldComputer to $Destination..." -NoNewLine
-        $RunLog = "$ScriptPath\logs\USMT_ScanState.txt"
-        $Process = (Start-Process -FilePath $ScanState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
-        start-sleep -Seconds 1
-        Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
-        
+        Update-Textbox "Saving state of $OldComputer to $Destination..." -NoNewLine
+        Start-Process -FilePath $ScanState -ArgumentList $Arguments -Verb RunAs
 
-
-        <#
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
 
@@ -111,18 +105,17 @@ function Save-UserState {
         try {
             $ScanProcess = Get-Process -Name scanstate -ErrorAction Stop
             while (-not $ScanProcess.HasExited) {
-                Get-USMTProgress
-                Start-Sleep -Seconds 3
+                Get-USMTProgress -Destination $Destination -ActionType 'scan'
+                Start-Sleep -Milliseconds 250
             }
-            Update-Log "Complete!" -Color 'Green'
+            Update-Textbox "Complete!" -Color 'Green'
 
-            Update-Log 'Results:'
+            Update-Textbox 'Results:'
             Get-USMTResults -ActionType 'scan'
         }
         catch {
-            Update-Log $_.Exception.Message -Color 'Red'
+            Update-Textbox $_.Exception.Message -Color 'Red'
         }
-        #>
     }
     ELSE {
         Update-Textbox "Error when trying to access [$Destination] Please verify that the user account running the utility has appropriate permissions to the folder.: $($_.Exception.Message)" -Color 'Yellow'
@@ -199,14 +192,6 @@ function Get-USMTResults {
     }
 }
 
-function Select-Profiles {
-    $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
-    update-Textbox "Profile(s) selected for migration:"
-    $SelectedProfile | ForEach-Object { 
-        update-Textbox "$($_.UserName)"
-    }
-}
-
 function Get-UserProfiles {
     # Get all user profiles on this PC and let the user select which ones to migrate
     $RegKey = 'Registry::HKey_Local_Machine\Software\Microsoft\Windows NT\CurrentVersion\ProfileList\*'
@@ -242,12 +227,12 @@ function Get-UserProfiles {
             }
             catch {
                 #$Script:UpdateText = "Error while translating $SID to a user name."
-                #update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
+                update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
             }
         }
         catch {
             #$Script:UpdateText = "Error while translating $($_.PSChildName) to SID."
-            #update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
+            update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
         }
     }
 }
