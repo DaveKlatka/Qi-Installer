@@ -385,7 +385,16 @@ function Set-RestorePoint {
             vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
         }
         Update-Textbox "Creating Restore Point $Description"
-        Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS -ErrorAction stop
+
+        $RunLog = "$ScriptPath\logs\SystemRestorePoint"
+        if ((Get-Host).Version.Major -gt 3) {
+            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
+        } 
+        else {
+            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -PassThru)
+        }
+        start-sleep -Seconds 1
+        Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
         $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
         if ($null -ne $RestorePoint) {
             update-Textbox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
