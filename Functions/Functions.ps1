@@ -372,7 +372,7 @@ function Set-RestorePoint {
     $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
     $VSSStorage = (vssadmin.exe list shadowstorage).split("`n")
     if ($null -ne $RestorePoint) {
-        Update-Textbox "Cannot Create a restore point. '$($RestorePoint.Description)' has been created in the last 24 hours"
+        Update-Textbox "Cannot Create a restore point. '$($RestorePoint.Description)' has been created in the last 24 hours" -color 'Yellow'
     } 
     else {
         $VSS = Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }
@@ -388,7 +388,7 @@ function Set-RestorePoint {
         Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS -ErrorAction stop
         $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
         if ($null -ne $RestorePoint) {
-            update-Textbox "Restore Point '$($RestorePoint.Description)' has been created"
+            update-Textbox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
         }
     }
 }
