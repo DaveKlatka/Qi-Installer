@@ -55,7 +55,7 @@ function Save-UserState {
         IF (!($SelectedXMLS)) {
             # Create the scan configuration
             Update-Textbox 'Generating configuration file...'
-            $Config = Set-Config
+            Set-Config
             $GeneratedConfig = """$Config"""
             $ScanStateConfig = "/i:$GeneratedConfig"
         }
@@ -553,7 +553,7 @@ $WallpapersXML
 </migration>
 "@
 
-    $Config = "$Destination\Config.xml"
+    $Script:Config = "$Destination\Config.xml"
     try {
         New-Item $Config -ItemType File -Force -ErrorAction Stop | Out-Null
     }
@@ -570,5 +570,5 @@ $WallpapersXML
     }
 
     # Return the path to the config
-    $Config
+    #$Config
 }
