@@ -255,7 +255,7 @@ function Add-ExtraDirectory {
     $OpenDirectoryDialog.RootFolder = 'Desktop'
     $OpenDirectoryDialog.SelectedPath = 'C:\'
     $Result = $OpenDirectoryDialog.ShowDialog()
-    $SelectedDirectory = $OpenDirectoryDialog.SelectedPath
+    $Script:SelectedDirectory = $OpenDirectoryDialog.SelectedPath
     try {
         # If user hits cancel don't add the path
         if ($Result -eq 'OK') {
@@ -307,7 +307,7 @@ function Set-SaveDirectory {
         if ($SelectedDirectory) {
             update-Textbox "Changed save directory to [$SelectedDirectory]."
             if ($Type -eq 'Destination') {
-                $Script:ExportLocation.Text = $SelectedDirectory
+                $ExportLocation.Text = $SelectedDirectory
             }
             else {
                 $SaveSourceTextBox.Text = $SelectedDirectory
