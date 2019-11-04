@@ -186,6 +186,7 @@ function Start-QiInstaller {
         $SelectedProfile | ForEach-Object { 
             update-Textbox "$($_.UserName)"
         }
+        update-Textbox $SelectedProfile -color 'orange'
     }
     $AddDirectory_Click = {
         Add-ExtraDirectory
