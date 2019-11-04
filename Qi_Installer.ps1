@@ -150,7 +150,7 @@ function Start-QiInstaller {
     }
 
     $SystemRestorePoint_Click = {
-        Set-RestorePoint -Description 'System Restore Point'
+        Set-RestorePoint -Description 'Qi-Installer'
     }
     
     #Rename Computer/ Join Domain
@@ -181,9 +181,9 @@ function Start-QiInstaller {
 
     #USMT_Profile Select
     $Profiles_Click = {
-        $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+        $SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
         update-Textbox "Profile(s) selected for migration:"
-        $Script:SelectedProfile | ForEach-Object { 
+        $SelectedProfile | ForEach-Object { 
             update-Textbox "$($_.UserName)"
         }
     }
