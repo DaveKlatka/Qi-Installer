@@ -181,12 +181,11 @@ function Start-QiInstaller {
 
     #USMT_Profile Select
     $Profiles_Click = {
-        $SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+        $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
         update-Textbox "Profile(s) selected for migration:"
         $SelectedProfile | ForEach-Object { 
             update-Textbox "$($_.UserName)"
         }
-        update-Textbox $SelectedProfile.username -color 'orange'
     }
     $AddDirectory_Click = {
         Add-ExtraDirectory

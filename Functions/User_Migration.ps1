@@ -41,8 +41,8 @@ function Save-UserState {
 
         # If profile is a domain other than $DefaultDomain, save this info to text file
 
-        $FullUserName = "$($Script:SelectedProfile.Domain)\$($Script:SelectedProfile.UserName)"
-        if ($Script:SelectedProfile.Domain -ne $DefaultDomain) {
+        $FullUserName = "$($Script:SelectedProfile.Domain)\$($SelectedProfile.UserName)"
+        if ($SelectedProfile.Domain -ne $DefaultDomain) {
             New-Item "$Destination\DomainMigration.txt" -ItemType File -Value $FullUserName -Force | Out-Null
             Update-Textbox "Text file created with cross-domain information."
         }
