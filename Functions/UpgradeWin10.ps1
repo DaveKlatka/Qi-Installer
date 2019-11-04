@@ -1,29 +1,24 @@
 function Set-RestorePoint {
     $date = (Get-Date).tostring("yyyyMMdd")
-    
-    $RestorePoint = Get-ComputerRestorePoint | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" } | Select-Object Description -ExpandProperty Description
+        
+    $RestorePoint = (Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }).Description
     $VSSStorage = (vssadmin.exe list shadowstorage).split("`n")
     if ($null -ne $RestorePoint) {
-        $Script:Success = $True
-    }
-     else {
-        $VSS = Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive } | Select-Object DeviceID -ExpandProperty DeviceID
+        $Success = $True
+    } 
+    else {
+        $VSS = (Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }).DeviceID
         if ($VSSStorage -like "*$VSS*") {
             $VSSEnabled = $True
         }
         if ($VSSEnabled -ne $True) {
-            Enable-ComputerRestore -drive $env:SystemDrive
+            Enable-ComputerRestore -drive $env:SystemDrive -ErrorAction stop
             vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
         }
-        update-Textbox "Creating System Checkpoint"
-        $ArgumentList = "Checkpoint-Computer -description 'Win10 $version Upgrade' -RestorePointType MODIFY_SETTINGS"
-        $RunLog = "$ScriptPath\logs\Extract log.txt"
-        $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
-
-        #Checkpoint-Computer -description "Win10 $version Upgrade" -RestorePointType MODIFY_SETTINGS
-        $RestorePoint = Get-ComputerRestorePoint | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" } | Select-Object Description -ExpandProperty Description
+        Checkpoint-Computer -description "Automate Restore Point" -RestorePointType MODIFY_SETTINGS -ErrorAction stop
+        $RestorePoint = (Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }).Description
         if ($null -ne $RestorePoint) {
-            $Script:Success = $True
+            $Success = $True
         }
     }
 }
