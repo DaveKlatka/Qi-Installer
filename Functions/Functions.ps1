@@ -378,12 +378,12 @@ function Set-RestorePoint {
     }
 
     Update-Textbox "Creating Restore Point $Description"
-    $RunLog = "$ScriptPath\logs\SystemRestorePoint"
+    $RunLog = "$ScriptPath\logs\SystemRestorePoint.txt"
     if ((Get-Host).Version.Major -gt 3) {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description '$Description' -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
     } 
     else {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description '$Description' -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -PassThru)
     }
 
     start-sleep -Seconds 1
