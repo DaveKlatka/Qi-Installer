@@ -369,24 +369,26 @@ function Set-RestorePoint {
     )
     $date = (Get-Date).tostring("yyyyMMdd")
         
-    $RestorePoint = (Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }).Description
+    $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
     $VSSStorage = (vssadmin.exe list shadowstorage).split("`n")
     if ($null -ne $RestorePoint) {
-        $Script:Success = $True
+        Update-Textbox "Cannot Create a restore point. '$($RestorePoint.Description)' has been created in the last 24 hours"
     } 
     else {
-        $VSS = (Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }).DeviceID
-        if ($VSSStorage -like "*$VSS*") {
+        $VSS = Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }
+        if ($VSSStorage -like "*$($VSS.DeviceID)*") {
             $VSSEnabled = $True
         }
         if ($VSSEnabled -ne $True) {
+            Update-Textbox "Enabling and configuring System Restore"
             Enable-ComputerRestore -drive $env:SystemDrive -ErrorAction stop
             vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
         }
+        Update-Textbox "Creating Restore Point $Description"
         Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS -ErrorAction stop
-        $RestorePoint = (Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }).Description
+        $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
         if ($null -ne $RestorePoint) {
-            $Script:Success = $True
+            update-Textbox "Restore Point '$($RestorePoint.Description)' has been created"
         }
     }
 }
