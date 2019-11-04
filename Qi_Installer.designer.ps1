@@ -82,7 +82,6 @@ $TabPage3 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabPage4 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabControl2 = (New-Object -TypeName System.Windows.Forms.TabControl)
 $TabPage5 = (New-Object -TypeName System.Windows.Forms.TabPage)
-$AlphaButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Export = (New-Object -TypeName System.Windows.Forms.Button)
 $SaveDestination = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $ExportLocationButton = (New-Object -TypeName System.Windows.Forms.Button)
@@ -96,6 +95,7 @@ $USMTCheckList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $Profiles = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage6 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabPage7 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$AlphaButton = (New-Object -TypeName System.Windows.Forms.Button)
 $LogBox = (New-Object -TypeName System.Windows.Forms.RichTextBox)
 $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
 $TotalProgress = (New-Object -TypeName System.Windows.Forms.ProgressBar)
@@ -268,7 +268,7 @@ $SystemInfo.MultiSelect = $false
 $SystemInfo.Name = [System.String]'SystemInfo'
 $SystemInfo.ReadOnly = $true
 $SystemInfo.RowHeadersVisible = $false
-$SystemInfo.RowTemplate.Height = [System.Int32]24
+$SystemInfo.RowTemplate.Height = [System.Int32]20
 $SystemInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]243))
 $SystemInfo.TabIndex = [System.Int32]5
 #
@@ -446,19 +446,6 @@ $TabPage5.TabIndex = [System.Int32]0
 $TabPage5.Text = [System.String]'Export'
 $TabPage5.UseVisualStyleBackColor = $true
 #
-#AlphaButton
-#
-$AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]72,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$AlphaButton.ForeColor = [System.Drawing.Color]::Red
-$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]375,[System.Int32]51))
-$AlphaButton.Name = [System.String]'AlphaButton'
-$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]288,[System.Int32]413))
-$AlphaButton.TabIndex = [System.Int32]22
-$AlphaButton.Text = [System.String]'Alpha'
-$AlphaButton.UseCompatibleTextRendering = $true
-$AlphaButton.UseVisualStyleBackColor = $true
-$AlphaButton.add_Click($AlphaButton_Click)
-#
 #Export
 #
 $Export.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]185,[System.Int32]373))
@@ -608,6 +595,19 @@ $TabPage7.TabIndex = [System.Int32]2
 $TabPage7.Text = [System.String]'Network Migration'
 $TabPage7.UseVisualStyleBackColor = $true
 $TabPage7.Visible = $false
+#
+#AlphaButton
+#
+$AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]72,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$AlphaButton.ForeColor = [System.Drawing.Color]::Red
+$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]375,[System.Int32]51))
+$AlphaButton.Name = [System.String]'AlphaButton'
+$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]288,[System.Int32]413))
+$AlphaButton.TabIndex = [System.Int32]22
+$AlphaButton.Text = [System.String]'Alpha'
+$AlphaButton.UseCompatibleTextRendering = $true
+$AlphaButton.UseVisualStyleBackColor = $true
+$AlphaButton.add_Click($AlphaButton_Click)
 #
 #LogBox
 #
