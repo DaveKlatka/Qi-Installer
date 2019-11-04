@@ -14,16 +14,16 @@ function Save-UserState {
     # After connection has been verified, continue with save state
 
     # Get the selected profiles
-    if ($Script:SelectedProfile) {
+    if ($SelectedProfile) {
         Update-Textbox "Profile(s) selected for save state:"
-        $Script:SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
+        $SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
     }
     else {
         Update-Textbox "You must select a user profile." -Color 'Red'
         return
     }
 
-    $Script:Destination = "$($ExportLocation.Text)\$OldComputer"
+    $Destination = "$($ExportLocation.Text)\$OldComputer"
 
     # Create destination folder
     if (!(Test-Path $Destination)) {
