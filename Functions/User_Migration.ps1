@@ -307,7 +307,7 @@ function Set-SaveDirectory {
         if ($SelectedDirectory) {
             update-Textbox "Changed save directory to [$SelectedDirectory]."
             if ($Type -eq 'Destination') {
-                $ExportLocation.Text = $SelectedDirectory
+                $Script:ExportLocation.Text = $SelectedDirectory
             }
             else {
                 $SaveSourceTextBox.Text = $SelectedDirectory

@@ -16,7 +16,7 @@ function Set-RestorePoint {
             vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
         }
         update-Textbox "Creating System Checkpoint"
-        update-Textbox (Checkpoint-Computer -description "Win10 $version Upgrade" -RestorePointType MODIFY_SETTINGS)
+        Checkpoint-Computer -description "Win10 $version Upgrade" -RestorePointType MODIFY_SETTINGS
         $RestorePoint = Get-ComputerRestorePoint | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" } | Select-Object Description -ExpandProperty Description
         if ($null -ne $RestorePoint) {
             $Script:Success = $True
