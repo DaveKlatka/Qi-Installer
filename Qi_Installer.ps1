@@ -148,6 +148,10 @@ function Start-QiInstaller {
             }
         }
     }
+
+    $SystemRestorePoint_Click = {
+        Set-RestorePoint -Description 'System Restore Point'
+    }
     
     #Rename Computer/ Join Domain
     $RenameDomain_Click = {

@@ -9,6 +9,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$ReInstall_Automate = $null
 [System.Windows.Forms.Button]$Install_Automate = $null
 [System.Windows.Forms.GroupBox]$GroupBox3 = $null
+[System.Windows.Forms.Button]$SystemRestorePoint = $null
 [System.Windows.Forms.DataGridView]$SystemInfo = $null
 [System.Windows.Forms.Button]$RenameDomain = $null
 [System.Windows.Forms.Button]$Win10Upgrade = $null
@@ -111,6 +112,7 @@ $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthError = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
+$SystemRestorePoint = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -237,6 +239,7 @@ $Install_Automate.add_Click($Install_Automate_Click)
 #
 #GroupBox3
 #
+$GroupBox3.Controls.Add($SystemRestorePoint)
 $GroupBox3.Controls.Add($SystemInfo)
 $GroupBox3.Controls.Add($RenameDomain)
 $GroupBox3.Controls.Add($Win10Upgrade)
@@ -257,19 +260,19 @@ $SystemInfo.AllowUserToAddRows = $false
 $SystemInfo.AllowUserToDeleteRows = $false
 $SystemInfo.AllowUserToResizeColumns = $false
 $SystemInfo.AllowUserToResizeRows = $false
-$SystemInfo.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+$SystemInfo.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::DisplayedCells
 $SystemInfo.BackgroundColor = [System.Drawing.SystemColors]::Control
 $SystemInfo.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $SystemInfo.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode]::AutoSize
 $SystemInfo.ColumnHeadersVisible = $false
 $SystemInfo.EditMode = [System.Windows.Forms.DataGridViewEditMode]::EditProgrammatically
-$SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]1,[System.Int32]180))
+$SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]1,[System.Int32]218))
 $SystemInfo.MultiSelect = $false
 $SystemInfo.Name = [System.String]'SystemInfo'
 $SystemInfo.ReadOnly = $true
 $SystemInfo.RowHeadersVisible = $false
 $SystemInfo.RowTemplate.Height = [System.Int32]20
-$SystemInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]243))
+$SystemInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]205))
 $SystemInfo.TabIndex = [System.Int32]5
 #
 #RenameDomain
@@ -768,6 +771,17 @@ $Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
 #
+#SystemRestorePoint
+#
+$SystemRestorePoint.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]180))
+$SystemRestorePoint.Name = [System.String]'SystemRestorePoint'
+$SystemRestorePoint.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$SystemRestorePoint.TabIndex = [System.Int32]19
+$SystemRestorePoint.Text = [System.String]'Create Restore Point'
+$SystemRestorePoint.UseCompatibleTextRendering = $true
+$SystemRestorePoint.UseVisualStyleBackColor = $true
+$SystemRestorePoint.add_Click($SystemRestorePoint_Click)
+#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
@@ -819,6 +833,7 @@ Add-Member -InputObject $TechInstaller -Name UnInstall_Automate -Value $UnInstal
 Add-Member -InputObject $TechInstaller -Name ReInstall_Automate -Value $ReInstall_Automate -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Install_Automate -Value $Install_Automate -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox3 -Value $GroupBox3 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name SystemRestorePoint -Value $SystemRestorePoint -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SystemInfo -Value $SystemInfo -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name RenameDomain -Value $RenameDomain -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Win10Upgrade -Value $Win10Upgrade -MemberType NoteProperty

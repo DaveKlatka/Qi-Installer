@@ -152,7 +152,7 @@ function Start-Extract {
     update-Textbox "Extracting $file to $ExtractTo"
     $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
-    if ((Get-Host).Version.Major -gt 3){
+    if ((Get-Host).Version.Major -gt 3) {
         $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
     } 
     else {
@@ -361,4 +361,32 @@ Function Get-ProgressBar {
             $TotalProgress.Visible = $false
         }
     }  
+}
+
+function Set-RestorePoint {
+    Param(
+        [string] $Description
+    )
+    $date = (Get-Date).tostring("yyyyMMdd")
+        
+    $RestorePoint = (Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }).Description
+    $VSSStorage = (vssadmin.exe list shadowstorage).split("`n")
+    if ($null -ne $RestorePoint) {
+        $Script:Success = $True
+    } 
+    else {
+        $VSS = (Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }).DeviceID
+        if ($VSSStorage -like "*$VSS*") {
+            $VSSEnabled = $True
+        }
+        if ($VSSEnabled -ne $True) {
+            Enable-ComputerRestore -drive $env:SystemDrive -ErrorAction stop
+            vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
+        }
+        Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS -ErrorAction stop
+        $RestorePoint = (Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }).Description
+        if ($null -ne $RestorePoint) {
+            $Script:Success = $True
+        }
+    }
 }
