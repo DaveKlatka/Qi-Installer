@@ -368,36 +368,28 @@ function Set-RestorePoint {
         [string] $Description
     )
     $date = (Get-Date).tostring("yyyyMMdd")
-        
-    $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
+
     $VSSStorage = (vssadmin.exe list shadowstorage).split("`n")
-    if ($null -ne $RestorePoint) {
-        Update-Textbox "Cannot Create a restore point. '$($RestorePoint.Description)' has been created in the last 24 hours" -color 'Yellow'
+    $VSS = Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }
+    if (!($VSSStorage -like "*$($VSS.DeviceID)*")) {
+        Update-Textbox "Enabling and configuring System Restore"
+        Enable-ComputerRestore -drive $env:SystemDrive -ErrorAction stop
+        vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
+    }
+
+    Update-Textbox "Creating Restore Point $Description"
+    $RunLog = "$ScriptPath\logs\SystemRestorePoint"
+    if ((Get-Host).Version.Major -gt 3) {
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
     } 
     else {
-        $VSS = Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }
-        if ($VSSStorage -like "*$($VSS.DeviceID)*") {
-            $VSSEnabled = $True
-        }
-        if ($VSSEnabled -ne $True) {
-            Update-Textbox "Enabling and configuring System Restore"
-            Enable-ComputerRestore -drive $env:SystemDrive -ErrorAction stop
-            vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
-        }
-        Update-Textbox "Creating Restore Point $Description"
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -PassThru)
+    }
 
-        $RunLog = "$ScriptPath\logs\SystemRestorePoint"
-        if ((Get-Host).Version.Major -gt 3) {
-            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
-        } 
-        else {
-            $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description $Description -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -PassThru)
-        }
-        start-sleep -Seconds 1
-        Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
-        $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
-        if ($null -ne $RestorePoint) {
-            update-Textbox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
-        }
+    start-sleep -Seconds 1
+    Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
+    if ($null -ne $RestorePoint) {
+        update-Textbox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
     }
 }
