@@ -151,9 +151,9 @@ function Restore-UserState {
     $ContinueCommand = "/c"
 
     # Set the value for the Config file if one exists.
-    
-    if (Test-Path (Get-Childitem -Path $Destination -include Config.xml -recurse).FullName) {
-        $LoadStateConfigFile = """" + (Get-Childitem -Path $Destination -include Config.xml -recurse).FullName + """"
+    $ConfigXML = (Get-Childitem -Path $Destination -include Config.xml -recurse).FullName
+    if (Test-Path $ConfigXML) {
+        $LoadStateConfigFile = """$ConfigXML"""
         $LoadStateConfig = "/i:$LoadStateConfigFile"
     }
 
