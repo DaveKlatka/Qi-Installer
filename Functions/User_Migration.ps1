@@ -103,7 +103,7 @@ function Save-UserState {
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
 
-        Get-ProgressBar -Runlog "$Destination\$($ActionType)_progress.log" -ProcessID $Process.id -Tracker
+        Get-ProgressBar -Runlog "$Destination\Scan_progress.log" -ProcessID $Process.id -Tracker
 
         # Wait until the save state is complete
         <#

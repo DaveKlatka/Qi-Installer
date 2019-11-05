@@ -24,7 +24,7 @@ function Start-QiInstaller {
     #Authenticator
     $AuthSubmit_Click = {
         #https://github.com/gavsto/AutomateAPI
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
         Try {
             
             $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
@@ -60,23 +60,23 @@ function Start-QiInstaller {
     #Run Automate Buttons
     $ReInstall_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Automate.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pIY85I') | Invoke-Expression; 
         Invoke-ReInstall_Automate
     }
     $UnInstall_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Automate.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pIY85I') | Invoke-Expression; 
         Invoke-UnInstall_Automate
     }
     $Install_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Automate.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pIY85I') | Invoke-Expression; 
         Invoke-Install_Automate
     }
     
     $dotnet35_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/dotnet.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/DotNet.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/34BQtET') | Invoke-Expression; 
     }
     
     $InstallSoftware_Click = {
@@ -96,7 +96,7 @@ function Start-QiInstaller {
             switch ($msgBoxInput) {
                 'Yes' {
                     #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-                    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Powershell.ps1') | Invoke-Expression; 
+                    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/33jsDh9') | Invoke-Expression; 
                 }
             
                 'No' {
@@ -111,26 +111,26 @@ function Start-QiInstaller {
         
         if ($365checkbox.checked -and $365checkbox.enabled) {
             #. (Join-Path $PSScriptRoot 'Functions/Office.ps1')
-            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Office.ps1') | Invoke-Expression; 
+            (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pHCBKw') | Invoke-Expression; 
         }
     }
     
     #Qi Power Policy
     $PowerPolicy_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/PowerPolicy.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/PowerPolicy.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/36EXy9U') | Invoke-Expression; 
     }
     
     #Dell Command Update
     $DellUpdate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/DellCommandUpdate.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/DellCommandUpdate.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2NLQ6kF') | Invoke-Expression; 
     }
     
     #Powershell 5
     $Powershell5_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Powershell.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/33jsDh9') | Invoke-Expression; 
     }
     
     #Win10 Upgrade
@@ -140,7 +140,7 @@ function Start-QiInstaller {
         switch ($msgBoxInput) {
             'Yes' {
                 #. (Join-Path $PSScriptRoot 'Functions/UpgradeWin10.ps1')
-                (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/UpgradeWin10.ps1') | Invoke-Expression; 
+                (New-Object System.Net.WebClient).DownloadString('http://bit.ly/33vEKHO') | Invoke-Expression; 
             }
             
             'No' {
@@ -156,7 +156,7 @@ function Start-QiInstaller {
     #Rename Computer/ Join Domain
     $RenameDomain_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Rename.ps1')
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Rename.ps1') | Invoke-Expression; 
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32fCO56') | Invoke-Expression; 
     }
     
     #Download Icons
@@ -168,10 +168,10 @@ function Start-QiInstaller {
         New-Item -ItemType Directory -Path $Images | Out-Null
     }
     if (!(Test-Path -path $png)) {
-        Start-BitsTransfer -Source 'https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Images/quality-ip-logo-HIRES.png' -Destination $png
+        Start-BitsTransfer -Source 'http://bit.ly/2qtUqN9' -Destination $png
     }
     if (!(Test-Path -path $ico)) {
-        Start-BitsTransfer -Source 'https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Images/Qi_ico.ico' -Destination $ico
+        Start-BitsTransfer -Source 'http://bit.ly/2POjxFd' -Destination $ico
     }
     
     #GUI interactions
@@ -209,16 +209,16 @@ function Start-QiInstaller {
 
     #USMT Functions
     #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/User_Migration.ps1') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JTVAbJ') | Invoke-Expression; 
     
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Functions/Functions.ps1') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
     
     #GUI
     Add-Type -AssemblyName System.Windows.Forms
     #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/master/Qi_Installer.designer.ps1') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JRPhoW') | Invoke-Expression; 
     
     #Check Automate Installed
     if (Test-Path $env:windir\LTSVC) {
