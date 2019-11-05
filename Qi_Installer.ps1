@@ -189,15 +189,12 @@ function Start-QiInstaller {
     }
     $AddDirectory_Click = {
         Add-ExtraDirectory
-        update-Textbox $ExtraDataGridView.Rows -color 'orange'
     }
     $RemoveDirectory_Click = {
         Remove-ExtraDirectory
-        update-Textbox $ExtraDataGridView.Rows -color 'orange'
     }
     $ExportLocationButton_Click = {
         Set-SaveDirectory -Type Destination
-        update-Textbox $ExportLocation.Text -color 'orange'
     }
     $Export_Click = {
         Save-UserState
