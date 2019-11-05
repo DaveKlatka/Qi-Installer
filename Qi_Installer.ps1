@@ -203,7 +203,7 @@ function Start-QiInstaller {
         Set-SaveDirectory -Type Source
     }
     $ImportButton_Click = {
-        Restore-UserState
+        Restore-UserState -Debug
     }
 
     $Cancel_Click = {
