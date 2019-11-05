@@ -129,6 +129,116 @@ function Save-UserState {
     }
 }
 
+function Restore-UserState {
+    param(
+        [switch] $Debug
+    )
+
+    Update-Textbox "`nBeginning migration..."
+    
+    # Get the location of the save state data
+    $Script:Destination = "$($SaveSourceTextBox.Text)"
+
+    # Check that the save state data exists
+    if (!(Test-Path (Get-Childitem -Path $Destination -include *.MIG -recurse).FullName)) {
+        Update-Textbox "No saved state found at [$Destination]. Migration cancelled." -Color 'Red'
+        return
+    }
+
+    # Set the value to continue on error if it was specified above
+    $ContinueCommand = "/c"
+
+    # Set the value for the Config file if one exists.
+    
+    if (Test-Path (Get-Childitem -Path $Destination -include Config.xml -recurse).FullName) {
+        $LoadStateConfigFile = """" + (Get-Childitem -Path $Destination -include Config.xml -recurse).FullName + """"
+        $LoadStateConfig = "/i:$LoadStateConfigFile"
+    }
+
+    # Generate arguments for load state process
+    $Logs = "`"/l:$Destination\load.log`" `"/progress:$Destination\load_progress.log`""
+
+    # Options for creating local accounts that don't already exist on new computer
+    $LocalAccountOptions = '/all'
+
+    # Check if user to be migrated is coming from a different domain and do a cross-domain migration if so
+    if ($CrossDomainMigrationGroupBox.Enabled) {
+        $OldUser = "$($OldDomainTextBox.Text)\$($OldUserNameTextBox.Text)"
+        $NewUser = "$($NewDomainTextBox.Text)\$($NewUserNameTextBox.Text)"
+
+        # Make sure the user entered a new user's user name before continuing
+        if ($NewUserNameTextBox.Text -eq '') {
+            Update-Textbox "New user's user name must not be empty." -Color 'Red'
+            return
+        }
+
+        Update-Textbox "$OldUser will be migrated as $NewUser."
+        $Arguments = "`"$Destination`" $LoadStateConfig $LocalAccountOptions `"/mu:$($OldUser):$NewUser`" $Logs $ContinueCommand /v:0"
+    }
+    else {
+        $Arguments = "`"$Destination`" $LoadStateConfig $LocalAccountOptions $Logs $ContinueCommand /v:0"
+    }
+
+    # Begin loading user state to this computer
+    # Create a value in order to obscure the encryption key if one was specified.
+    $LogArguments = $Arguments -Replace '/key:".*"', '/key:(Hidden)'
+    Update-Textbox "Command used:"
+    Update-Textbox "$LoadState $LogArguments" -Color 'Cyan'
+
+
+    # If we're running in debug mode don't actually start the process
+    if ($Debug) { return }
+
+    Update-Textbox "Loading state of $OldComputer..." -NoNewLine
+
+    $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
+    #-Verb RunAs
+
+    # Give the process time to start before checking for its existence
+    Start-Sleep -Seconds 3
+
+    Get-ProgressBar -Runlog "$Destination\load_progress.log" -ProcessID $Process.id -Tracker
+    <#
+    # Wait until the load state is complete
+    try {
+        $LoadProcess = Get-Process -Name loadstate -ErrorAction Stop
+        while (-not $LoadProcess.HasExited) {
+            Get-USMTProgress
+            Start-Sleep -Seconds 1
+        }
+    }
+    catch {
+        Update-Log $_.Exception.Message -Color 'Red'
+    }
+    #>
+    Update-Textbox 'Results:'
+    Get-USMTResults -ActionType 'load'
+
+    # Sometimes loadstate will kill the explorer task and it needs to be start again manually
+    if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) {
+        Update-Textbox 'Restarting Explorer process.'
+        Start-Process explorer
+    }
+
+    if ($USMTLoadState.ExitCode -eq 0) {
+        Update-Textbox "Complete!" -Color 'Green'
+
+        <#
+        # Delete the save state data
+        try {
+            #Get-ChildItem $MigrationStorePath | Remove-Item -Recurse
+            Update-Textbox 'Successfully removed old save state data.'
+        }
+        catch {
+            Update-Textbox 'There was an issue when trying to remove old save state data.'
+        }
+        #>
+    }
+    else {
+        Update-Textbox 'There was an issue during the loadstate process, please review the results. The state data was not deleted.'
+    }
+}
+
 function Get-USMT {
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
         $bit = "amd64"
@@ -310,7 +420,7 @@ function Set-SaveDirectory {
                 $ExportLocation.Text = $SelectedDirectory
             }
             else {
-                $SaveSourceTextBox.Text = $SelectedDirectory
+                $ImportLocation.Text = $SelectedDirectory
             }
         }
     }

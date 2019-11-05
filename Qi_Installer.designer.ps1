@@ -26,7 +26,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TabPage]$TabPage4 = $null
 [System.Windows.Forms.TabControl]$TabControl2 = $null
 [System.Windows.Forms.TabPage]$TabPage5 = $null
-[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.Button]$Export = $null
 [System.Windows.Forms.GroupBox]$SaveDestination = $null
 [System.Windows.Forms.Button]$ExportLocationButton = $null
@@ -39,7 +38,12 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.CheckedListBox]$USMTCheckList = $null
 [System.Windows.Forms.Button]$Profiles = $null
 [System.Windows.Forms.TabPage]$TabPage6 = $null
+[System.Windows.Forms.Button]$ImportButton = $null
+[System.Windows.Forms.GroupBox]$GroupBox7 = $null
+[System.Windows.Forms.Button]$ImportSelect = $null
+[System.Windows.Forms.TextBox]$ImportLocation = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
+[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
@@ -67,6 +71,7 @@ $UnInstall_Automate = (New-Object -TypeName System.Windows.Forms.Button)
 $ReInstall_Automate = (New-Object -TypeName System.Windows.Forms.Button)
 $Install_Automate = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox3 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$SystemRestorePoint = (New-Object -TypeName System.Windows.Forms.Button)
 $SystemInfo = (New-Object -TypeName System.Windows.Forms.DataGridView)
 $RenameDomain = (New-Object -TypeName System.Windows.Forms.Button)
 $Win10Upgrade = (New-Object -TypeName System.Windows.Forms.Button)
@@ -83,6 +88,7 @@ $TabPage3 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabPage4 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabControl2 = (New-Object -TypeName System.Windows.Forms.TabControl)
 $TabPage5 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$AlphaButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Export = (New-Object -TypeName System.Windows.Forms.Button)
 $SaveDestination = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $ExportLocationButton = (New-Object -TypeName System.Windows.Forms.Button)
@@ -96,7 +102,6 @@ $USMTCheckList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $Profiles = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage6 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabPage7 = (New-Object -TypeName System.Windows.Forms.TabPage)
-$AlphaButton = (New-Object -TypeName System.Windows.Forms.Button)
 $LogBox = (New-Object -TypeName System.Windows.Forms.RichTextBox)
 $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
 $TotalProgress = (New-Object -TypeName System.Windows.Forms.ProgressBar)
@@ -112,7 +117,10 @@ $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthError = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
-$SystemRestorePoint = (New-Object -TypeName System.Windows.Forms.Button)
+$GroupBox7 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$ImportLocation = (New-Object -TypeName System.Windows.Forms.TextBox)
+$ImportSelect = (New-Object -TypeName System.Windows.Forms.Button)
+$ImportButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -129,8 +137,10 @@ $SaveDestination.SuspendLayout()
 $GroupBox5.SuspendLayout()
 ([System.ComponentModel.ISupportInitialize]$ExtraDataGridView).BeginInit()
 $GroupBox4.SuspendLayout()
+$TabPage6.SuspendLayout()
 $AuthPanel.SuspendLayout()
 $GroupBox6.SuspendLayout()
+$GroupBox7.SuspendLayout()
 $TechInstaller.SuspendLayout()
 #
 #GroupBox1
@@ -253,6 +263,17 @@ $GroupBox3.TabIndex = [System.Int32]4
 $GroupBox3.TabStop = $false
 $GroupBox3.Text = [System.String]'System'
 $GroupBox3.UseCompatibleTextRendering = $true
+#
+#SystemRestorePoint
+#
+$SystemRestorePoint.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]180))
+$SystemRestorePoint.Name = [System.String]'SystemRestorePoint'
+$SystemRestorePoint.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$SystemRestorePoint.TabIndex = [System.Int32]19
+$SystemRestorePoint.Text = [System.String]'Create Restore Point'
+$SystemRestorePoint.UseCompatibleTextRendering = $true
+$SystemRestorePoint.UseVisualStyleBackColor = $true
+$SystemRestorePoint.add_Click($SystemRestorePoint_Click)
 #
 #SystemInfo
 #
@@ -436,7 +457,6 @@ $TabControl2.TabIndex = [System.Int32]3
 #
 #TabPage5
 #
-$TabPage5.Controls.Add($AlphaButton)
 $TabPage5.Controls.Add($Export)
 $TabPage5.Controls.Add($SaveDestination)
 $TabPage5.Controls.Add($GroupBox5)
@@ -449,6 +469,19 @@ $TabPage5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([Syst
 $TabPage5.TabIndex = [System.Int32]0
 $TabPage5.Text = [System.String]'Export'
 $TabPage5.UseVisualStyleBackColor = $true
+#
+#AlphaButton
+#
+$AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]72,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$AlphaButton.ForeColor = [System.Drawing.Color]::Red
+$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]429,[System.Int32]4))
+$AlphaButton.Name = [System.String]'AlphaButton'
+$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]413))
+$AlphaButton.TabIndex = [System.Int32]22
+$AlphaButton.Text = [System.String]'Alpha'
+$AlphaButton.UseCompatibleTextRendering = $true
+$AlphaButton.UseVisualStyleBackColor = $true
+$AlphaButton.add_Click($AlphaButton_Click)
 #
 #Export
 #
@@ -582,6 +615,8 @@ $Profiles.add_Click($Profiles_Click)
 #
 #TabPage6
 #
+$TabPage6.Controls.Add($ImportButton)
+$TabPage6.Controls.Add($GroupBox7)
 $TabPage6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage6.Name = [System.String]'TabPage6'
 $TabPage6.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
@@ -599,19 +634,6 @@ $TabPage7.TabIndex = [System.Int32]2
 $TabPage7.Text = [System.String]'Network Migration'
 $TabPage7.UseVisualStyleBackColor = $true
 $TabPage7.Visible = $false
-#
-#AlphaButton
-#
-$AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]72,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$AlphaButton.ForeColor = [System.Drawing.Color]::Red
-$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
-$AlphaButton.Name = [System.String]'AlphaButton'
-$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]413))
-$AlphaButton.TabIndex = [System.Int32]22
-$AlphaButton.Text = [System.String]'Alpha'
-$AlphaButton.UseCompatibleTextRendering = $true
-$AlphaButton.UseVisualStyleBackColor = $true
-$AlphaButton.add_Click($AlphaButton_Click)
 #
 #LogBox
 #
@@ -772,22 +794,54 @@ $Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
 #
-#SystemRestorePoint
+#GroupBox7
 #
-$SystemRestorePoint.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]180))
-$SystemRestorePoint.Name = [System.String]'SystemRestorePoint'
-$SystemRestorePoint.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
-$SystemRestorePoint.TabIndex = [System.Int32]19
-$SystemRestorePoint.Text = [System.String]'Create Restore Point'
-$SystemRestorePoint.UseCompatibleTextRendering = $true
-$SystemRestorePoint.UseVisualStyleBackColor = $true
-$SystemRestorePoint.add_Click($SystemRestorePoint_Click)
+$GroupBox7.Controls.Add($ImportSelect)
+$GroupBox7.Controls.Add($ImportLocation)
+$GroupBox7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]6))
+$GroupBox7.Name = [System.String]'GroupBox7'
+$GroupBox7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]279,[System.Int32]100))
+$GroupBox7.TabIndex = [System.Int32]0
+$GroupBox7.TabStop = $false
+$GroupBox7.Text = [System.String]'Save State Source'
+$GroupBox7.UseCompatibleTextRendering = $true
+#
+#ImportLocation
+#
+$ImportLocation.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
+$ImportLocation.Name = [System.String]'ImportLocation'
+$ImportLocation.ReadOnly = $true
+$ImportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]267,[System.Int32]21))
+$ImportLocation.TabIndex = [System.Int32]0
+#
+#ImportSelect
+#
+$ImportSelect.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]29,[System.Int32]47))
+$ImportSelect.Name = [System.String]'ImportSelect'
+$ImportSelect.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$ImportSelect.TabIndex = [System.Int32]1
+$ImportSelect.Text = [System.String]'Select'
+$ImportSelect.UseCompatibleTextRendering = $true
+$ImportSelect.UseVisualStyleBackColor = $true
+$ImportSelect.add_Click($ImportSelect_Click)
+#
+#ImportButton
+#
+$ImportButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]177,[System.Int32]362))
+$ImportButton.Name = [System.String]'ImportButton'
+$ImportButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$ImportButton.TabIndex = [System.Int32]1
+$ImportButton.Text = [System.String]'Import'
+$ImportButton.UseCompatibleTextRendering = $true
+$ImportButton.UseVisualStyleBackColor = $true
+$ImportButton.add_Click($ImportButton_Click)
 #
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($AlphaButton)
 $TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($TotalProgress)
 $TechInstaller.Controls.Add($CurrentFile)
@@ -818,9 +872,12 @@ $SaveDestination.PerformLayout()
 $GroupBox5.ResumeLayout($false)
 ([System.ComponentModel.ISupportInitialize]$ExtraDataGridView).EndInit()
 $GroupBox4.ResumeLayout($false)
+$TabPage6.ResumeLayout($false)
 $AuthPanel.ResumeLayout($false)
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
+$GroupBox7.ResumeLayout($false)
+$GroupBox7.PerformLayout()
 $TechInstaller.ResumeLayout($false)
 Add-Member -InputObject $TechInstaller -Name base -Value $base -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox1 -Value $GroupBox1 -MemberType NoteProperty
@@ -850,7 +907,6 @@ Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberTy
 Add-Member -InputObject $TechInstaller -Name TabPage4 -Value $TabPage4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabControl2 -Value $TabControl2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage5 -Value $TabPage5 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Export -Value $Export -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SaveDestination -Value $SaveDestination -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ExportLocationButton -Value $ExportLocationButton -MemberType NoteProperty
@@ -863,7 +919,12 @@ Add-Member -InputObject $TechInstaller -Name GroupBox4 -Value $GroupBox4 -Member
 Add-Member -InputObject $TechInstaller -Name USMTCheckList -Value $USMTCheckList -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Profiles -Value $Profiles -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage6 -Value $TabPage6 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name ImportButton -Value $ImportButton -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name GroupBox7 -Value $GroupBox7 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name ImportSelect -Value $ImportSelect -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name ImportLocation -Value $ImportLocation -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty

@@ -199,7 +199,13 @@ function Start-QiInstaller {
     $Export_Click = {
         Save-UserState
     }
-    
+    $ImportSelect_Click = {
+        Set-SaveDirectory -Type Source
+    }
+    $ImportButton_Click = {
+        Restore-UserState
+    }
+
     $Cancel_Click = {
         $TechInstaller.Close()
     }
