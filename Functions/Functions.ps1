@@ -320,11 +320,9 @@ Function Get-ProgressBar {
                     foreach ($line in ($lines = get-content $RunLog)) {
                         if (!($promptcheck -contains $line)) {
                             if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                                $LastLine += ($Line.Split(',', 4)[3]).TrimStart() + "`n"
+                                $line = ($Line.Split(',', 4)[3]).TrimStart()
                             }
-                            else {
-                                $lastline += "$line`n"
-                            }
+                            $lastline += "$line`n"
                         }
                     }
                     $Promptcheck = $lines
