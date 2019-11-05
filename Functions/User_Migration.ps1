@@ -139,7 +139,7 @@ function Restore-UserState {
     Update-Textbox "`nBeginning migration..."
     
     # Get the location of the save state data
-    $Script:Destination = "$($SaveSourceTextBox.Text)"
+    $Destination = "$($SaveSourceTextBox.Text)"
 
     # Check that the save state data exists
     if (!(Test-Path (Get-Childitem -Path $Destination -include *.MIG -recurse).FullName)) {
