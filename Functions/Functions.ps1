@@ -312,8 +312,15 @@ Function Get-ProgressBar {
             }
             else {
                 if (!($Promptcheck)) {
-                    $LastLine = get-content $RunLog
-                    $Promptcheck = $lastline
+                    foreach ($line in ($lines = get-content $RunLog)) {
+                        if (!($promptcheck -contains $line)) {
+                            if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                                $line = ($Line.Split(',', 4)[3]).TrimStart()
+                            }
+                            $lastline += "$line`n"
+                        }
+                    }
+                    $Promptcheck = $lines
                 } 
                 else {
                     Clear-Variable -name LastLine
@@ -330,6 +337,9 @@ Function Get-ProgressBar {
             }
             if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
                 if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
                     $CurrentFile.Value = $matches[1]
                 }
                 elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
