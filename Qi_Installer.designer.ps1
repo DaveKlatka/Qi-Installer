@@ -26,6 +26,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TabPage]$TabPage4 = $null
 [System.Windows.Forms.TabControl]$TabControl2 = $null
 [System.Windows.Forms.TabPage]$TabPage5 = $null
+[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.Button]$Export = $null
 [System.Windows.Forms.GroupBox]$SaveDestination = $null
 [System.Windows.Forms.Button]$ExportLocationButton = $null
@@ -39,7 +40,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$Profiles = $null
 [System.Windows.Forms.TabPage]$TabPage6 = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
-[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
@@ -436,6 +436,7 @@ $TabControl2.TabIndex = [System.Int32]3
 #
 #TabPage5
 #
+$TabPage5.Controls.Add($AlphaButton)
 $TabPage5.Controls.Add($Export)
 $TabPage5.Controls.Add($SaveDestination)
 $TabPage5.Controls.Add($GroupBox5)
@@ -603,9 +604,9 @@ $TabPage7.Visible = $false
 #
 $AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]72,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
 $AlphaButton.ForeColor = [System.Drawing.Color]::Red
-$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]375,[System.Int32]51))
+$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
 $AlphaButton.Name = [System.String]'AlphaButton'
-$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]288,[System.Int32]413))
+$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]413))
 $AlphaButton.TabIndex = [System.Int32]22
 $AlphaButton.Text = [System.String]'Alpha'
 $AlphaButton.UseCompatibleTextRendering = $true
@@ -787,7 +788,6 @@ $SystemRestorePoint.add_Click($SystemRestorePoint_Click)
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
-$TechInstaller.Controls.Add($AlphaButton)
 $TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($TotalProgress)
 $TechInstaller.Controls.Add($CurrentFile)
@@ -850,6 +850,7 @@ Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberTy
 Add-Member -InputObject $TechInstaller -Name TabPage4 -Value $TabPage4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabControl2 -Value $TabControl2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage5 -Value $TabPage5 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Export -Value $Export -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SaveDestination -Value $SaveDestination -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ExportLocationButton -Value $ExportLocationButton -MemberType NoteProperty
@@ -863,7 +864,6 @@ Add-Member -InputObject $TechInstaller -Name USMTCheckList -Value $USMTCheckList
 Add-Member -InputObject $TechInstaller -Name Profiles -Value $Profiles -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage6 -Value $TabPage6 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty

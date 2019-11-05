@@ -96,26 +96,33 @@ function Save-UserState {
         if ($Debug) { return }
 
         Update-Textbox "Saving state of $OldComputer to $Destination..." -NoNewLine
-        Start-Process -FilePath $ScanState -ArgumentList $Arguments -Verb RunAs
+
+        $Process = (Start-Process -FilePath $ScanState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
+        #-Verb RunAs
 
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
 
+        Get-ProgressBar -Runlog "$Destination\$($ActionType)_progress.log" -ProcessID $Process.id -Tracker
+
         # Wait until the save state is complete
+        <#
         try {
             $ScanProcess = Get-Process -Name scanstate -ErrorAction Stop
             while (-not $ScanProcess.HasExited) {
                 Get-USMTProgress -Destination $Destination -ActionType 'scan'
                 Start-Sleep -Milliseconds 250
             }
-            Update-Textbox "Complete!" -Color 'Green'
-
-            Update-Textbox 'Results:'
-            Get-USMTResults -ActionType 'scan'
+            
         }
         catch {
             Update-Textbox $_.Exception.Message -Color 'Red'
         }
+        #>
+        Update-Textbox "Complete!" -Color 'Green'
+
+        Update-Textbox 'Results:'
+        Get-USMTResults -ActionType 'scan'
     }
     ELSE {
         Update-Textbox "Error when trying to access [$Destination] Please verify that the user account running the utility has appropriate permissions to the folder.: $($_.Exception.Message)" -Color 'Yellow'
@@ -355,7 +362,7 @@ function Set-Config {
     $Include = @()
     $Exclude = @()
     foreach ($Control in $USMTCheckList.Items) {
-        if ($USMTCheckList.checkeditems.Contains(($Control))){
+        if ($USMTCheckList.checkeditems.Contains(($Control))) {
             $Include += $control
             update-Textbox $Control
         }
