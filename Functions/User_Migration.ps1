@@ -134,6 +134,8 @@ function Restore-UserState {
         [switch] $Debug
     )
 
+    Get-USMT
+
     Update-Textbox "`nBeginning migration..."
     
     # Get the location of the save state data
