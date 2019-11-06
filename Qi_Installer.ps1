@@ -18,6 +18,9 @@ function Start-QiInstaller {
     if (($ScriptPath -match $env:SystemDrive)) {
         $ScriptPath = "$env:systemDrive\QiInstaller"
     }
+    else {
+        $ScriptPath = "$ScriptPath\QiInstaller"
+    }
     if (!(Test-Path $ScriptPath\logs)) {
         New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
     }
