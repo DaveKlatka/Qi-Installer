@@ -6,7 +6,7 @@ function Start-QiInstaller {
         [string] $AutomatePass,
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $DownloadHost,
-        [switch] $Debug
+        [switch] $QiDebug
     )
 
     $TechInstaller_Load = {
@@ -25,7 +25,7 @@ function Start-QiInstaller {
     #Authenticator
     $AuthSubmit_Click = {
         #https://github.com/gavsto/AutomateAPI
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
         }
         else {
@@ -72,7 +72,7 @@ function Start-QiInstaller {
     #Run Automate Buttons
     $ReInstall_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Automate.ps1') | Invoke-Expression;
         }
         else {
@@ -82,7 +82,7 @@ function Start-QiInstaller {
     }
     $UnInstall_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Automate.ps1') | Invoke-Expression;
         } 
         else {
@@ -92,7 +92,7 @@ function Start-QiInstaller {
     }
     $Install_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Automate.ps1') | Invoke-Expression;
         } 
         else {
@@ -103,7 +103,7 @@ function Start-QiInstaller {
     
     $dotnet35_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/dotnet.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/dotnet.ps1') | Invoke-Expression;
         } 
         else {
@@ -128,7 +128,7 @@ function Start-QiInstaller {
             switch ($msgBoxInput) {
                 'Yes' {
                     #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-                    if ($Debug) {
+                    if ($QiDebug) {
                         (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Powershell.ps1') | Invoke-Expression;
                     } 
                     else {
@@ -148,7 +148,7 @@ function Start-QiInstaller {
         
         if ($365checkbox.checked -and $365checkbox.enabled) {
             #. (Join-Path $PSScriptRoot 'Functions/Office.ps1')
-            if ($Debug) {
+            if ($QiDebug) {
                 (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Office.ps1') | Invoke-Expression;
             } 
             else {
@@ -160,7 +160,7 @@ function Start-QiInstaller {
     #Qi Power Policy
     $PowerPolicy_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/PowerPolicy.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/PowerPolicy.ps1') | Invoke-Expression;
         } 
         else {
@@ -171,7 +171,7 @@ function Start-QiInstaller {
     #Dell Command Update
     $DellUpdate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/DellCommandUpdate.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/DellCommandUpdate.ps1') | Invoke-Expression;
         }
         else {
@@ -182,7 +182,7 @@ function Start-QiInstaller {
     #Powershell 5
     $Powershell5_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Powershell.ps1') | Invoke-Expression;
         }
         else {
@@ -197,7 +197,7 @@ function Start-QiInstaller {
         switch ($msgBoxInput) {
             'Yes' {
                 #. (Join-Path $PSScriptRoot 'Functions/UpgradeWin10.ps1')
-                if ($Debug) {
+                if ($QiDebug) {
                     (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/UpgradeWin10.ps1') | Invoke-Expression;
                 }
                 else {
@@ -218,7 +218,7 @@ function Start-QiInstaller {
     #Rename Computer/ Join Domain
     $RenameDomain_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Rename.ps1')
-        if ($Debug) {
+        if ($QiDebug) {
             (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Rename.ps1') | Invoke-Expression;
         }
         else {
@@ -311,7 +311,7 @@ function Start-QiInstaller {
     #GUI
     Add-Type -AssemblyName System.Windows.Forms
     #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
-    if ($Debug) {
+    if ($QiDebug) {
         (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.designer.ps1') | Invoke-Expression;
     }
     else {
@@ -320,7 +320,7 @@ function Start-QiInstaller {
 
     #USMT Functions
     #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-    if ($Debug) {
+    if ($QiDebug) {
         (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/User_Migration.ps1') | Invoke-Expression;
     }
     else {
@@ -329,7 +329,7 @@ function Start-QiInstaller {
     
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
-    if ($Debug) {
+    if ($QiDebug) {
         (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Functions.ps1') | Invoke-Expression;
     }
     else {
