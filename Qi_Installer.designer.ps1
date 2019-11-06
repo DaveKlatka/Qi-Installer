@@ -39,11 +39,13 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.CheckedListBox]$USMTCheckList = $null
 [System.Windows.Forms.Button]$Profiles = $null
 [System.Windows.Forms.TabPage]$TabPage6 = $null
+[System.Windows.Forms.Button]$BetaButton2 = $null
 [System.Windows.Forms.Button]$ImportButton = $null
 [System.Windows.Forms.GroupBox]$GroupBox7 = $null
 [System.Windows.Forms.Button]$ImportSelect = $null
 [System.Windows.Forms.TextBox]$ImportLocation = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
+[System.Windows.Forms.Button]$Beta3 = $null
 [System.Windows.Forms.Button]$RunNetMig = $null
 [System.Windows.Forms.GroupBox]$ComputerInfo = $null
 [System.Windows.Forms.CheckBox]$UNCVerified = $null
@@ -147,6 +149,8 @@ $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $UNCVerified = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $RunNetMig = (New-Object -TypeName System.Windows.Forms.Button)
+$BetaButton2 = (New-Object -TypeName System.Windows.Forms.Button)
+$Beta3 = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -503,9 +507,9 @@ $TabPage5.UseVisualStyleBackColor = $true
 #
 $AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
 $AlphaButton.ForeColor = [System.Drawing.Color]::DarkOrange
-$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]166,[System.Int32]371))
+$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
 $AlphaButton.Name = [System.String]'AlphaButton'
-$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]122,[System.Int32]40))
+$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
 $AlphaButton.TabIndex = [System.Int32]22
 $AlphaButton.Text = [System.String]'Beta'
 $AlphaButton.UseCompatibleTextRendering = $true
@@ -644,6 +648,7 @@ $Profiles.add_Click($Profiles_Click)
 #
 #TabPage6
 #
+$TabPage6.Controls.Add($BetaButton2)
 $TabPage6.Controls.Add($ImportButton)
 $TabPage6.Controls.Add($GroupBox7)
 $TabPage6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
@@ -698,6 +703,7 @@ $ImportLocation.TabIndex = [System.Int32]0
 #
 #TabPage7
 #
+$TabPage7.Controls.Add($Beta3)
 $TabPage7.Controls.Add($RunNetMig)
 $TabPage7.Controls.Add($ComputerInfo)
 $TabPage7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
@@ -858,7 +864,7 @@ $TotalProgress.Visible = $false
 #
 $AuthPanel.BackColor = [System.Drawing.Color]::Transparent
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]694,[System.Int32]427))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]5
@@ -1002,6 +1008,34 @@ $RunNetMig.UseCompatibleTextRendering = $true
 $RunNetMig.UseVisualStyleBackColor = $true
 $RunNetMig.add_Click($RunNetMig_Click)
 #
+#BetaButton2
+#
+$BetaButton2.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$BetaButton2.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
+
+$BetaButton2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
+$BetaButton2.Name = [System.String]'BetaButton2'
+$BetaButton2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
+$BetaButton2.TabIndex = [System.Int32]2
+$BetaButton2.Text = [System.String]'Beta'
+$BetaButton2.UseCompatibleTextRendering = $true
+$BetaButton2.UseVisualStyleBackColor = $true
+$BetaButton2.add_Click($BetaButton2_Click)
+#
+#Beta3
+#
+$Beta3.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$Beta3.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
+
+$Beta3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
+$Beta3.Name = [System.String]'Beta3'
+$Beta3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
+$Beta3.TabIndex = [System.Int32]2
+$Beta3.Text = [System.String]'Beta'
+$Beta3.UseCompatibleTextRendering = $true
+$Beta3.UseVisualStyleBackColor = $true
+$Beta3.add_Click($Beta3_Click)
+#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
@@ -1088,11 +1122,13 @@ Add-Member -InputObject $TechInstaller -Name GroupBox4 -Value $GroupBox4 -Member
 Add-Member -InputObject $TechInstaller -Name USMTCheckList -Value $USMTCheckList -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Profiles -Value $Profiles -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage6 -Value $TabPage6 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name BetaButton2 -Value $BetaButton2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportButton -Value $ImportButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox7 -Value $GroupBox7 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportSelect -Value $ImportSelect -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportLocation -Value $ImportLocation -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Beta3 -Value $Beta3 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name RunNetMig -Value $RunNetMig -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ComputerInfo -Value $ComputerInfo -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name UNCVerified -Value $UNCVerified -MemberType NoteProperty

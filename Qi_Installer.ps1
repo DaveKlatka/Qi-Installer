@@ -1,4 +1,3 @@
-
 function Start-QiInstaller {
     param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
@@ -56,6 +55,12 @@ function Start-QiInstaller {
     
     $AlphaButton_Click = {
         $AlphaButton.Visible = $false
+    }
+    $Beta3_Click = {
+        $Beta3.Visible = $false
+    }
+    $BetaButton2_Click = {
+        $BetaButton2.Visible = $false
     }
     
     #Run Automate Buttons
