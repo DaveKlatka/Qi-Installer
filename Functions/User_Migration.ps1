@@ -322,6 +322,81 @@ function Invoke-USMT {
      }
 }
 
+function Test-ComputerConnection {
+    param(
+        [System.Windows.Forms.TextBox] $OldComputerText,
+
+        [System.Windows.Forms.TextBox] $OldIPAddressText,
+
+        [System.Windows.Forms.CheckBox] $ConnectionCheckBox
+    )
+
+    $ConnectionCheckBox.Checked = $false
+
+    # Try and use the IP if the user filled that out, otherwise use the name
+    if ($OldIPAddressText.Text -ne '') {
+        $Computer = $OldIPAddressText.Text
+        # Try to update the computer's name with its IP address
+        if ($OldComputerText.Text -eq '') {
+            try {
+                Update-Textbox 'Computer name is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
+                $HostName = ([System.Net.Dns]::GetHostEntry($Computer)).HostName
+                $OldComputerText.Text = $HostName
+                Update-Textbox "Computer name set to $HostName."
+            }
+            catch {
+                Update-Textbox "Unable to resolve host name from IP address, you'll need to manually set this." -Color 'Red'
+                return
+            }
+        }
+    }
+    elseif ($OldComputerText.Text -ne '') {
+        $Computer = $OldComputerText.Text
+        # Try to update the computer's IP address using its DNS name
+        try {
+            Update-Textbox 'Computer IP address is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
+            # Get the first IP address found, which is usually the primary adapter
+            $IPAddress = ([System.Net.Dns]::GetHostEntry($Computer)).AddressList.IPAddressToString.Split('.', 1)[0]
+
+            # Set IP address in text box
+            $OldIPAddressText.Text = $IPAddress
+            Update-Textbox "Computer IP address set to $IPAddress."
+        }
+        catch {
+            Update-Textbox "Unable to resolve IP address from host name, you'll need to manually set this." -Color 'Red'
+            return
+        }
+    }
+    else {
+        $Computer = $null
+    }
+
+    # Don't even try if both fields are empty
+    if ($Computer) {
+        # If the computer doesn't appear to have a valid office IP, such as if it's on VPN, don't allow the user to continue
+        if ($OldIPAddressText.Text -notlike $ValidIPAddress) {
+            Update-Textbox "$IPAddress does not appear to be a valid IP address. The Migration Tool requires an IP address matching $ValidIPAddress." -Color 'Red'
+            return
+        }
+
+        Update-Textbox "Testing connection to $Computer..." -NoNewLine
+
+        if (Test-Connection $Computer -Quiet) {
+            $ConnectionCheckBox.Checked = $true
+            Update-Textbox "Connection established." -Color 'Green'
+        }
+        else {
+            Update-Textbox "Unable to reach $Computer." -Color 'Red'
+            if ($OldIPAddressText.Text -eq '') {
+                Update-Textbox "Try entering $Computer's IP address." -Color 'Yellow'
+            }
+        }
+    }
+    else {
+        Update-Textbox "Enter the computer's name or IP address."  -Color 'Red'
+    }
+}
+
 function Get-USMT {
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
         $bit = "amd64"

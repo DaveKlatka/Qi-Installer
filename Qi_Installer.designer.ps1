@@ -45,12 +45,14 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$ImportLocation = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
 [System.Windows.Forms.GroupBox]$ComputerInfo = $null
+[System.Windows.Forms.CheckBox]$ConnectionCheckBox = $null
+[System.Windows.Forms.Button]$Button1 = $null
 [System.Windows.Forms.Label]$NewIPLabel = $null
-[System.Windows.Forms.TextBox]$OldIPAddress = $null
+[System.Windows.Forms.TextBox]$OldIPAddressText = $null
 [System.Windows.Forms.Label]$NewComputerLabel = $null
 [System.Windows.Forms.Label]$OldIPLabel = $null
 [System.Windows.Forms.TextBox]$NewIpAddressText = $null
-[System.Windows.Forms.TextBox]$OldComputer = $null
+[System.Windows.Forms.TextBox]$OldComputerText = $null
 [System.Windows.Forms.TextBox]$NewComputerText = $null
 [System.Windows.Forms.Label]$OldComputerLabel = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
@@ -131,14 +133,16 @@ $AuthError = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $ComputerInfo = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$OldComputer = (New-Object -TypeName System.Windows.Forms.TextBox)
-$OldIPAddress = (New-Object -TypeName System.Windows.Forms.TextBox)
+$OldComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
+$OldIPAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $NewComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $NewIpAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $OldIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $NewComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $NewIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
+$Button1 = (New-Object -TypeName System.Windows.Forms.Button)
+$ConnectionCheckBox = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -860,12 +864,14 @@ $Label1.UseCompatibleTextRendering = $true
 #
 #ComputerInfo
 #
+$ComputerInfo.Controls.Add($ConnectionCheckBox)
+$ComputerInfo.Controls.Add($Button1)
 $ComputerInfo.Controls.Add($NewIPLabel)
-$ComputerInfo.Controls.Add($OldIPAddress)
+$ComputerInfo.Controls.Add($OldIPAddressText)
 $ComputerInfo.Controls.Add($NewComputerLabel)
 $ComputerInfo.Controls.Add($OldIPLabel)
 $ComputerInfo.Controls.Add($NewIpAddressText)
-$ComputerInfo.Controls.Add($OldComputer)
+$ComputerInfo.Controls.Add($OldComputerText)
 $ComputerInfo.Controls.Add($NewComputerText)
 $ComputerInfo.Controls.Add($OldComputerLabel)
 $ComputerInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]3,[System.Int32]3))
@@ -876,19 +882,19 @@ $ComputerInfo.TabStop = $false
 $ComputerInfo.Text = [System.String]'Computer Info'
 $ComputerInfo.UseCompatibleTextRendering = $true
 #
-#OldComputer
+#OldComputerText
 #
-$OldComputer.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]36))
-$OldComputer.Name = [System.String]'OldComputer'
-$OldComputer.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
-$OldComputer.TabIndex = [System.Int32]0
+$OldComputerText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]36))
+$OldComputerText.Name = [System.String]'OldComputerText'
+$OldComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
+$OldComputerText.TabIndex = [System.Int32]0
 #
-#OldIPAddress
+#OldIPAddressText
 #
-$OldIPAddress.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]36))
-$OldIPAddress.Name = [System.String]'OldIPAddress'
-$OldIPAddress.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
-$OldIPAddress.TabIndex = [System.Int32]1
+$OldIPAddressText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]36))
+$OldIPAddressText.Name = [System.String]'OldIPAddressText'
+$OldIPAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
+$OldIPAddressText.TabIndex = [System.Int32]1
 #
 #NewComputerText
 #
@@ -945,6 +951,27 @@ $NewIPLabel.TabIndex = [System.Int32]5
 $NewIPLabel.Text = [System.String]'New IP Address'
 $NewIPLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
 $NewIPLabel.UseCompatibleTextRendering = $true
+#
+#Button1
+#
+$Button1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]103))
+$Button1.Name = [System.String]'Button1'
+$Button1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]106,[System.Int32]23))
+$Button1.TabIndex = [System.Int32]6
+$Button1.Text = [System.String]'Test Connection'
+$Button1.UseCompatibleTextRendering = $true
+$Button1.UseVisualStyleBackColor = $true
+#
+#ConnectionCheckBox
+#
+$ConnectionCheckBox.Enabled = $false
+$ConnectionCheckBox.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]104))
+$ConnectionCheckBox.Name = [System.String]'ConnectionCheckBox'
+$ConnectionCheckBox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]23))
+$ConnectionCheckBox.TabIndex = [System.Int32]7
+$ConnectionCheckBox.Text = [System.String]'Connected'
+$ConnectionCheckBox.UseCompatibleTextRendering = $true
+$ConnectionCheckBox.UseVisualStyleBackColor = $true
 #
 #TechInstaller
 #
@@ -1038,12 +1065,14 @@ Add-Member -InputObject $TechInstaller -Name ImportSelect -Value $ImportSelect -
 Add-Member -InputObject $TechInstaller -Name ImportLocation -Value $ImportLocation -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ComputerInfo -Value $ComputerInfo -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name ConnectionCheckBox -Value $ConnectionCheckBox -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Button1 -Value $Button1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewIPLabel -Value $NewIPLabel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name OldIPAddress -Value $OldIPAddress -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name OldIPAddressText -Value $OldIPAddressText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewComputerLabel -Value $NewComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldIPLabel -Value $OldIPLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewIpAddressText -Value $NewIpAddressText -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name OldComputer -Value $OldComputer -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name OldComputerText -Value $OldComputerText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewComputerText -Value $NewComputerText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
