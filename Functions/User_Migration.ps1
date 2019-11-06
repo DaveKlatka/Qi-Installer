@@ -265,7 +265,6 @@ function Invoke-USMT {
         Try {
             Get-USMT
             if (!(Test-Path "USMT:\usmtfiles")) {
-                get-psdrive
                 New-Item -ItemType Directory -Path "USMT:\usmtfiles"# | Out-Null
             }
             Copy-Item -Path $USMTPath -Destination "USMT:\usmtfiles\" -ErrorAction Stop -Recurse -force
@@ -384,7 +383,7 @@ function Test-ComputerConnection {
     if ($ConnectionCheckBox.Checked) {
         Update-Textbox "Testing UNC path to $Computer..." -NoNewLine
         $Script:Creds = Get-Credential
-        new-psdrive -name "USMT" -PSProvider "FileSystem" -Root "\\$Computer\C$" -Credential $Creds
+        new-psdrive -name "USMT" -PSProvider "FileSystem" -Root "\\$Computer\C$" -Credential $Creds -scope global
         if (Test-Path -Path "USMT:") {
             $UNCVerified.Checked = $true
             Update-Textbox "Connection established." -Color 'Green'
