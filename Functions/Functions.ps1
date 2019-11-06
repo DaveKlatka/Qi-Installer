@@ -194,7 +194,7 @@ Function Get-ProgressBar {
     Param(
         [String] $Runlog,
         [String] $ProcessID,
-        [strint] $job,
+        [string] $job,
         [Switch] $Tracker
     )
     if ($Lastline) {
