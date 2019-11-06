@@ -21,6 +21,9 @@ function Start-QiInstaller {
     else {
         $ScriptPath = "$ScriptPath\QiInstaller"
     }
+    if (!(Test-Path $ScriptPath)) {
+        New-Item -ItemType Directory -Path $ScriptPath | Out-Null
+    }
     if (!(Test-Path $ScriptPath\logs)) {
         New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
     }
