@@ -1,7 +1,7 @@
 #USMT Functions
 
-$NewComputer.Text = $env:COMPUTERNAME
-$NewIpAddress.Text = (Test-Connection -ComputerName (hostname) -Count 1).IPV4Address.IPAddressToString
+$NewComputerText.Text = $env:COMPUTERNAME
+$NewIpAddressText.Text = (Test-Connection -ComputerName (hostname) -Count 1).IPV4Address.IPAddressToString
 function Save-UserState {
     param(
         [switch] $Debug

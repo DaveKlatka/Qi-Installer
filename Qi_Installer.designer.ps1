@@ -49,9 +49,9 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$OldIPAddress = $null
 [System.Windows.Forms.Label]$NewComputerLabel = $null
 [System.Windows.Forms.Label]$OldIPLabel = $null
-[System.Windows.Forms.TextBox]$NewIpAddress = $null
+[System.Windows.Forms.TextBox]$NewIpAddressText = $null
 [System.Windows.Forms.TextBox]$OldComputer = $null
-[System.Windows.Forms.TextBox]$NewComputer = $null
+[System.Windows.Forms.TextBox]$NewComputerText = $null
 [System.Windows.Forms.Label]$OldComputerLabel = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
@@ -133,8 +133,8 @@ $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $ComputerInfo = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $OldComputer = (New-Object -TypeName System.Windows.Forms.TextBox)
 $OldIPAddress = (New-Object -TypeName System.Windows.Forms.TextBox)
-$NewComputer = (New-Object -TypeName System.Windows.Forms.TextBox)
-$NewIpAddress = (New-Object -TypeName System.Windows.Forms.TextBox)
+$NewComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
+$NewIpAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $OldIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $NewComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
@@ -864,9 +864,9 @@ $ComputerInfo.Controls.Add($NewIPLabel)
 $ComputerInfo.Controls.Add($OldIPAddress)
 $ComputerInfo.Controls.Add($NewComputerLabel)
 $ComputerInfo.Controls.Add($OldIPLabel)
-$ComputerInfo.Controls.Add($NewIpAddress)
+$ComputerInfo.Controls.Add($NewIpAddressText)
 $ComputerInfo.Controls.Add($OldComputer)
-$ComputerInfo.Controls.Add($NewComputer)
+$ComputerInfo.Controls.Add($NewComputerText)
 $ComputerInfo.Controls.Add($OldComputerLabel)
 $ComputerInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]3,[System.Int32]3))
 $ComputerInfo.Name = [System.String]'ComputerInfo'
@@ -890,21 +890,22 @@ $OldIPAddress.Name = [System.String]'OldIPAddress'
 $OldIPAddress.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
 $OldIPAddress.TabIndex = [System.Int32]1
 #
-#NewComputer
+#NewComputerText
 #
-$NewComputer.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]77))
-$NewComputer.Name = [System.String]'NewComputer'
-$NewComputer.ReadOnly = $true
-$NewComputer.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
-$NewComputer.TabIndex = [System.Int32]2
+$NewComputerText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]77))
+$NewComputerText.Name = [System.String]'NewComputerText'
+$NewComputerText.ReadOnly = $true
+$NewComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
+$NewComputerText.TabIndex = [System.Int32]2
+$NewComputerText.Text = [System.String]'abc'
 #
-#NewIpAddress
+#NewIpAddressText
 #
-$NewIpAddress.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]77))
-$NewIpAddress.Name = [System.String]'NewIpAddress'
-$NewIpAddress.ReadOnly = $true
-$NewIpAddress.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
-$NewIpAddress.TabIndex = [System.Int32]3
+$NewIpAddressText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]77))
+$NewIpAddressText.Name = [System.String]'NewIpAddressText'
+$NewIpAddressText.ReadOnly = $true
+$NewIpAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
+$NewIpAddressText.TabIndex = [System.Int32]3
 #
 #OldComputerLabel
 #
@@ -1042,9 +1043,9 @@ Add-Member -InputObject $TechInstaller -Name NewIPLabel -Value $NewIPLabel -Memb
 Add-Member -InputObject $TechInstaller -Name OldIPAddress -Value $OldIPAddress -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewComputerLabel -Value $NewComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldIPLabel -Value $OldIPLabel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name NewIpAddress -Value $NewIpAddress -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name NewIpAddressText -Value $NewIpAddressText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldComputer -Value $OldComputer -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name NewComputer -Value $NewComputer -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name NewComputerText -Value $NewComputerText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
