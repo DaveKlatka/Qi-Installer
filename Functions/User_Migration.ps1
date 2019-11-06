@@ -324,9 +324,9 @@ function Invoke-USMT {
 
 function Test-ComputerConnection {
     param(
-        [System.Windows.Forms.TextBox] $OldComputerText,
+        [System.Windows.Forms.TextBox] $ComputerNameTextBox,
 
-        [System.Windows.Forms.TextBox] $OldIPAddressText,
+        [System.Windows.Forms.TextBox] $ComputerIPTextBox,
 
         [System.Windows.Forms.CheckBox] $ConnectionCheckBox
     )
@@ -334,14 +334,14 @@ function Test-ComputerConnection {
     $ConnectionCheckBox.Checked = $false
 
     # Try and use the IP if the user filled that out, otherwise use the name
-    if ($OldIPAddressText.Text -ne '') {
-        $Computer = $OldIPAddressText.Text
+    if ($ComputerIPTextBox.Text -ne '') {
+        $Computer = $ComputerIPTextBox.Text
         # Try to update the computer's name with its IP address
-        if ($OldComputerText.Text -eq '') {
+        if ($ComputerNameTextBox.Text -eq '') {
             try {
                 Update-Textbox 'Computer name is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
                 $HostName = ([System.Net.Dns]::GetHostEntry($Computer)).HostName
-                $OldComputerText.Text = $HostName
+                $ComputerNameTextBox.Text = $HostName
                 Update-Textbox "Computer name set to $HostName."
             }
             catch {
@@ -350,8 +350,8 @@ function Test-ComputerConnection {
             }
         }
     }
-    elseif ($OldComputerText.Text -ne '') {
-        $Computer = $OldComputerText.Text
+    elseif ($ComputerNameTextBox.Text -ne '') {
+        $Computer = $ComputerNameTextBox.Text
         # Try to update the computer's IP address using its DNS name
         try {
             Update-Textbox 'Computer IP address is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
@@ -359,7 +359,7 @@ function Test-ComputerConnection {
             $IPAddress = ([System.Net.Dns]::GetHostEntry($Computer)).AddressList.IPAddressToString.Split('.', 1)[0]
 
             # Set IP address in text box
-            $OldIPAddressText.Text = $IPAddress
+            $ComputerIPTextBox.Text = $IPAddress
             Update-Textbox "Computer IP address set to $IPAddress."
         }
         catch {
@@ -374,7 +374,7 @@ function Test-ComputerConnection {
     # Don't even try if both fields are empty
     if ($Computer) {
         # If the computer doesn't appear to have a valid office IP, such as if it's on VPN, don't allow the user to continue
-        if ($OldIPAddressText.Text -notlike $ValidIPAddress) {
+        if ($ComputerIPTextBox.Text -notlike $ValidIPAddress) {
             Update-Textbox "$IPAddress does not appear to be a valid IP address. The Migration Tool requires an IP address matching $ValidIPAddress." -Color 'Red'
             return
         }
@@ -387,7 +387,7 @@ function Test-ComputerConnection {
         }
         else {
             Update-Textbox "Unable to reach $Computer." -Color 'Red'
-            if ($OldIPAddressText.Text -eq '') {
+            if ($ComputerIPTextBox.Text -eq '') {
                 Update-Textbox "Try entering $Computer's IP address." -Color 'Yellow'
             }
         }

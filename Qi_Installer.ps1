@@ -206,7 +206,12 @@ function Start-QiInstaller {
         Restore-UserState
     }
     $TestConnection_Click = {
-        Test-ComputerConnection
+        $TestComputerConnectionParams = @{
+            ComputerNameTextBox = $OldComputerText
+            ComputerIPTextBox   = $OldIPAddressText
+            ConnectionCheckBox  = $ConnectionCheckBox
+        }
+        Test-ComputerConnection @TestComputerConnectionParams
     }
 
     $Cancel_Click = {
