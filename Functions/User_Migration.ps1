@@ -258,8 +258,7 @@ function Invoke-USMT {
         [string]$USMTFilesPath,
         [Parameter(Mandatory=$true)]
         [string]$Domain,
-        [Parameter(Mandatory=$true, HelpMessage='Enter USMT key')]
-        [Security.SecureString]$SecureKey,
+
         [pscredential]$Credential
     )
     
@@ -268,13 +267,8 @@ function Invoke-USMT {
         #Test source and destination computers are online
         if (!(Test-Connection -ComputerName $SourceComputer -Count 2))
         {
-            Write-Warning -Message "Count not ping $SourceComputer"
-            Break
-        }
-         if (!(Test-Connection -ComputerName $DestinationComputer -Count 2))
-        {
-            Write-Warning -Message "Count not ping $DestinationComputer"
-            Break
+            Update-TextBox "Count not ping $SourceComputer" -color 'Red'
+            Return
         }
     }
     
@@ -283,25 +277,21 @@ function Invoke-USMT {
         #Copy USMT files to remote computers
         Try 
         {
-            Copy-Item -Path $USMTFilesPath -Destination "\\$SourceComputer\C$\" -ErrorAction Stop -Recurse -force -con
-            Copy-Item -Path $USMTFilesPath -Destination "\\$DestinationComputer\C$\" -ErrorAction Stop -Recurse -force
+            Get-USMT
+            Copy-Item -Path $ScanState -Destination "USMT:\" -ErrorAction Stop -Recurse -force
         }
         Catch 
         {
-            Write-Error $_
-            Break
+            Update-Textbox "Failed to copy Scanstate.exe to $SourceComputer" -color 'Red'
+            Return
         }
         #Enable CredSSP
         Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock {Enable-WSManCredSSP -Role server -Force} 
-        Invoke-Command -ComputerName $DestinationComputer -Credential $Credential -ScriptBlock {Enable-WSManCredSSP -Role server -Force} 
         Enable-WSManCredSSP -Role client -DelegateComputer $SourceComputer -Force
-        Enable-WSManCredSSP -Role client -DelegateComputer $DestinationComputer -Force 
         
         #Start startscan on source
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Using:SecureKey)
-            $Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-            c:\USMTFiles\scanstate.exe "$Using:SharePath\$Using:Username" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /ui:$Using:Domain\$Using:UserName /c /localonly /encrypt /key:$Key /listfiles:c:\usmtfiles\listfiles.txt /ue:pcadmin /ue:$Using:Domain\*
+            c:\scanstate.exe "C:\$SourceComputer" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /ui:$Using:Domain\$Using:UserName /c /localonly /encrypt /key:$Key /listfiles:c:\usmtfiles\listfiles.txt /ue:pcadmin /ue:$Using:Domain\*
         } -ArgumentList {$UserName,$SharePath,$SecureKey,$SourceComputer,$Domain}
 #
         #Start loadscan on destination
@@ -332,6 +322,7 @@ function Test-ComputerConnection {
     )
 
     $ConnectionCheckBox.Checked = $false
+    $UNCVerified.Checked = $false
 
     # Try and use the IP if the user filled that out, otherwise use the name
     if ($ComputerIPTextBox.Text -ne '') {
@@ -395,6 +386,15 @@ function Test-ComputerConnection {
     }
     else {
         Update-Textbox "Enter the computer's name or IP address."  -Color 'Red'
+    }
+
+    if ($ConnectionCheckBox.Checked) {
+        Update-Textbox "Testing UNC path to $Computer..." -NoNewLine
+        $Script:Creds = Get-Credential
+        new-psdrive -name "USMT" -PSProvider "FileSystem" -Root "\\$($ComputerIPTextBox.Text)\C$" -Credential $Creds
+        if (Test-Path -Path "USMT:") {
+            $UNCVerified.Checked = $true
+        }
     }
 }
 
@@ -589,6 +589,266 @@ function Set-SaveDirectory {
 }
 
 function Set-Config {
+    $ExtraDirectoryCount = $ExtraDataGridView.RowCount
+
+    if ($ExtraDirectoryCount) {
+        update-Textbox "Including $ExtraDirectoryCount extra directories."
+
+        $ExtraDirectoryXML = @"
+<!-- This component includes the additional directories selected by the user -->
+<component type="Documents" context="System">
+    <displayName>Additional Folders</displayName>
+    <role role="Data">
+        <rules>
+            <include>
+                <objectSet>
+
+"@
+        # Include each directory user has added to the Extra Directories data grid view
+        $ExtraDataGridView.Rows | ForEach-Object {
+            $CurrentRowIndex = $_.Index
+            $Path = $ExtraDataGridView.Item(0, $CurrentRowIndex).Value
+
+            $ExtraDirectoryXML += @"
+                    <pattern type=`"File`">$Path\* [*]</pattern>"
+
+"@
+        }
+
+        $ExtraDirectoryXML += @"
+                </objectSet>
+            </include>
+        </rules>
+    </role>
+</component>
+"@
+    }
+    else {
+        update-Textbox 'No extra directories will be included.'
+    }
+
+    update-Textbox 'Data to be included:'
+    $Include = @()
+    $Exclude = @()
+    foreach ($Control in $USMTCheckList.Items) {
+        if ($USMTCheckList.checkeditems.Contains(($Control))) {
+            $Include += $control
+            update-Textbox $Control
+        }
+        else {
+            $Exclude += $Control
+        }
+    }
+    Update-Textbox "Include array $Include"
+    Update-Textbox "Exclude array $Exclude"
+
+    $ExcludedDataXML = @"
+        $(
+            if ($Exclude -Contains 'Printers') { "<pattern type=`"File`">%CSIDL_PRINTERS%\* [*]</pattern>`n" }
+            if ($Exclude -Contains 'Recycle Bin') { "<pattern type=`"File`">%CSIDL_BITBUCKET%\* [*]</pattern>`n" }
+            if ($Exclude -Contains 'My Documents') {
+                "<pattern type=`"File`">%CSIDL_MYDOCUMENTS%\* [*]</pattern>`n"
+                "<pattern type=`"File`">%CSIDL_PERSONAL%\* [*]</pattern>`n"
+            }
+            if ($Exclude -Contains 'Desktop') {
+                "<pattern type=`"File`">%CSIDL_DESKTOP%\* [*]</pattern>`n"
+                "<pattern type=`"File`">%CSIDL_DESKTOPDIRECTORY%\* [*]</pattern>`n"
+            }
+            if ($Exclude -Contains 'Downloads') { "<pattern type=`"File`">%CSIDL_DOWNLOADS%\* [*]</pattern>`n" }
+            if ($Exclude -Contains 'Favorites') { "<pattern type=`"File`">%CSIDL_FAVORITES%\* [*]</pattern>`n" }
+            if ($Exclude -Contains 'My Music') { "<pattern type=`"File`">%CSIDL_MYMUSIC%\* [*]</pattern>`n" }
+            if ($Exclude -Contains 'My Pictures') { "<pattern type=`"File`">%CSIDL_MYPICTURES%\* [*]</pattern>`n" }
+            if ($Exclude -Contains 'My Video') { "<pattern type=`"File`">%CSIDL_MYVIDEO%\* [*]</pattern>`n" }
+        )
+"@
+
+    $AppDataXML = if ($Include -Contains 'AppData') {
+        @"
+        <!-- This component migrates all user app data -->
+        <component type=`"Documents`" context=`"User`">
+            <displayName>App Data</displayName>
+            <paths>
+                <path type="File">%CSIDL_APPDATA%</path>
+            </paths>
+            <role role="Data">
+                <detects>
+                    <detect>
+                        <condition>MigXmlHelper.DoesObjectExist("File","%CSIDL_APPDATA%")</condition>
+                    </detect>
+                </detects>
+                <rules>
+                    <include filter='MigXmlHelper.IgnoreIrrelevantLinks()'>
+                        <objectSet>
+                            <pattern type="File">%CSIDL_APPDATA%\* [*]</pattern>
+                        </objectSet>
+                    </include>
+                    <merge script='MigXmlHelper.DestinationPriority()'>
+                        <objectSet>
+                            <pattern type="File">%CSIDL_APPDATA%\* [*]</pattern>
+                        </objectSet>
+                    </merge>
+                </rules>
+            </role>
+        </component>
+"@
+    }
+
+    $LocalAppDataXML = if ($Include -Contains 'Local AppData') {
+        @"
+        <!-- This component migrates all user local app data -->
+        <component type=`"Documents`" context=`"User`">
+            <displayName>Local App Data</displayName>
+            <paths>
+                <path type="File">%CSIDL_LOCAL_APPDATA%</path>
+            </paths>
+            <role role="Data">
+                <detects>
+                    <detect>
+                        <condition>MigXmlHelper.DoesObjectExist("File","%CSIDL_LOCAL_APPDATA%")</condition>
+                    </detect>
+                </detects>
+                <rules>
+                    <include filter='MigXmlHelper.IgnoreIrrelevantLinks()'>
+                        <objectSet>
+                            <pattern type="File">%CSIDL_LOCAL_APPDATA%\* [*]</pattern>
+                        </objectSet>
+                    </include>
+                    <merge script='MigXmlHelper.DestinationPriority()'>
+                        <objectSet>
+                            <pattern type="File">%CSIDL_LOCAL_APPDATA%\* [*]</pattern>
+                        </objectSet>
+                    </merge>
+                </rules>
+            </role>
+        </component>
+"@
+    }
+
+    $WallpapersXML = if ($Include -Contains 'Wallpapers') {
+        @"
+        <!-- This component migrates wallpaper settings -->
+        <component type="System" context="User">
+            <displayName>Wallpapers</displayName>
+            <role role="Settings">
+                <rules>
+                    <include>
+                        <objectSet>
+                            <pattern type="Registry">HKCU\Control Panel\Desktop [Pattern]</pattern>
+                            <pattern type="Registry">HKCU\Control Panel\Desktop [PatternUpgrade]</pattern>
+                            <pattern type="Registry">HKCU\Control Panel\Desktop [TileWallpaper]</pattern>
+                            <pattern type="Registry">HKCU\Control Panel\Desktop [WallPaper]</pattern>
+                            <pattern type="Registry">HKCU\Control Panel\Desktop [WallpaperStyle]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Windows\CurrentVersion\Themes [SetupVersion]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [BackupWallpaper]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [TileWallpaper]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [Wallpaper]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [WallpaperFileTime]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [WallpaperLocalFileTime]</pattern>
+                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [WallpaperStyle]</pattern>
+                            <content filter="MigXmlHelper.ExtractSingleFile(NULL, NULL)">
+                                <objectSet>
+                                    <pattern type="Registry">HKCU\Control Panel\Desktop [WallPaper]</pattern>
+                                    <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [BackupWallpaper]</pattern>
+                                    <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [Wallpaper]</pattern>
+                                </objectSet>
+                            </content>
+                        </objectSet>
+                    </include>
+                </rules>
+            </role>
+        </component>
+
+        <!-- This component migrates wallpaper files -->
+        <component type="Documents" context="System">
+            <displayName>Move JPG and BMP</displayName>
+            <role role="Data">
+                <rules>
+                    <include>
+                        <objectSet>
+                            <pattern type="File"> %windir% [*.bmp]</pattern>
+                            <pattern type="File"> %windir%\web\wallpaper [*.jpg]</pattern>
+                            <pattern type="File"> %windir%\web\wallpaper [*.bmp]</pattern>
+                        </objectSet>
+                    </include>
+                </rules>
+            </role>
+        </component>
+"@
+    }
+
+    $ConfigContent = @"
+<?xml version="1.0" encoding="UTF-8"?>
+<migration urlid="http://www.microsoft.com/migration/1.0/migxmlext/config">
+<_locDefinition>
+    <_locDefault _loc="locNone"/>
+    <_locTag _loc="locData">displayName</_locTag>
+</_locDefinition>
+
+$ExtraDirectoryXML
+
+<!-- This component migrates all user data except specified exclusions -->
+<component type="Documents" context="User">
+    <displayName>Documents</displayName>
+    <role role="Data">
+        <rules>
+            <include filter="MigXmlHelper.IgnoreIrrelevantLinks()">
+                <objectSet>
+                    <script>MigXmlHelper.GenerateDocPatterns ("FALSE","TRUE","FALSE")</script>
+                </objectSet>
+            </include>
+            <exclude filter='MigXmlHelper.IgnoreIrrelevantLinks()'>
+                <objectSet>
+                    <script>MigXmlHelper.GenerateDocPatterns ("FALSE","FALSE","FALSE")</script>
+                </objectSet>
+            </exclude>
+            <exclude>
+                <objectSet>
+$ExcludedDataXML
+                </objectSet>
+            </exclude>
+            <contentModify script="MigXmlHelper.MergeShellLibraries('TRUE','TRUE')">
+                <objectSet>
+                    <pattern type="File">*[*.library-ms]</pattern>
+                </objectSet>
+            </contentModify>
+            <merge script="MigXmlHelper.SourcePriority()">
+                <objectSet>
+                    <pattern type="File">*[*.library-ms]</pattern>
+                </objectSet>
+            </merge>
+        </rules>
+    </role>
+</component>
+
+$AppDataXML
+
+$LocalAppDataXML
+
+$WallpapersXML
+
+</migration>
+"@
+
+    $Script:Config = "$Destination\Config.xml"
+    try {
+        New-Item $Config -ItemType File -Force -ErrorAction Stop | Out-Null
+    }
+    catch {
+        update-Textbox "Error creating config file [$Config]: $($_.Exception.Message)" -Color 'Red'
+        return
+    }
+    try {
+        Set-Content $Config $ConfigContent -ErrorAction Stop
+    }
+    catch {
+        update-Textbox "Error while setting config file content: $($_.Exception.Message)" -Color 'Red'
+        return
+    }
+
+    # Return the path to the config
+    #$Config
+}
+function Set-NetworkConfig {
     $ExtraDirectoryCount = $ExtraDataGridView.RowCount
 
     if ($ExtraDirectoryCount) {

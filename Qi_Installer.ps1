@@ -1,3 +1,5 @@
+$RunNetMig_Click = {
+}
 function Start-QiInstaller {
     param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
@@ -212,6 +214,27 @@ function Start-QiInstaller {
             ConnectionCheckBox  = $ConnectionCheckBox
         }
         Test-ComputerConnection @TestComputerConnectionParams
+    }
+    $RunNetMig_Click = {
+        if ($ConnectionCheckBox.Checked -and $UNCVerified.Checked) {
+            Invoke-USMT -SourceComputer $OldComputerText.Text -DestinationComputer $NewComputerText.Text -Credential $Creds
+            
+            
+
+                    [Parameter(Mandatory=$true)]
+                    [string]$UserName,
+                    [Parameter(Mandatory=$true)]
+                    [string]$SharePath,
+                    [Parameter(Mandatory=$true)]
+                    [string]$USMTFilesPath,
+                    [Parameter(Mandatory=$true)]
+                    [string]$Domain,
+            
+                
+        }
+        else {
+            Update-Textbox "Connection not Verified. Please Test Connection first" -color 'Orange'
+        }
     }
 
     $Cancel_Click = {
