@@ -264,8 +264,8 @@ function Invoke-USMT {
         #Copy USMT files to remote computers
         Try {
             Get-USMT
-            if (!(Test-Path $USMTPath)) {
-                New-Item -ItemType Directory -Path $USMTPath | Out-Null
+            if (!(Test-Path "USMT:\usmtfiles")) {
+                New-Item -ItemType Directory -Path "USMT:\usmtfiles" | Out-Null
             }
             Copy-Item -Path $USMTPath -Destination "USMT:\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
@@ -278,9 +278,17 @@ function Invoke-USMT {
         Enable-WSManCredSSP -Role client -DelegateComputer $SourceComputer -Force
         
         #Start scanstate on source
-        Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            c:\scanstate.exe "C:\$SourceComputer" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\listfiles.txt
-        } -ArgumentList { $UserName, $SharePath, $SecureKey, $SourceComputer, $Domain }
+        if (!(Test-Path "USMT:\$SourceComputer")) {
+            New-Item -ItemType Directory -Path "USMT:\$SourceComputer" | Out-Null
+        }
+
+        "`"/listfiles:$Destination\FilesMigrated.log`" `"/l:$Destination\scan.log`" `"/progress:$Destination\scan_progress.log`""
+
+
+        $job = Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
+            &C:\usmtfiles\$using:bit\scanstate.exe "C:\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\listfiles.txt /l:c:\usmtfiles\scan.txt /progress:c:\usmtfiles\scan_progress.txt
+        } -asjob # -ArgumentList {$SourceComputer, $bit}
+        Get-ProgressBar -Runlog "$Destination\load_progress.log" -Job $job.state -Tracker
         #
         <#
         #Start loadscan on destination
@@ -392,10 +400,10 @@ function Test-ComputerConnection {
 
 function Get-USMT {
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
-        $bit = "amd64"
+        $Script:bit = "amd64"
     }
     else {
-        $bit = "x86"
+        $Script:bit = "x86"
     }
     # Test that USMT binaries are reachable
     $Script:USMTPath = "$ScriptPath\User State Migration Tool\$bit"
