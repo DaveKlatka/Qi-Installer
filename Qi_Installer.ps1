@@ -288,8 +288,6 @@ function Start-QiInstaller {
             Update-Textbox "Connection not Verified. Please Test Connection first" -color 'Orange'
         }
     }
-    $RunNetMig_Click = {
-    }
 
     $Cancel_Click = {
         $TechInstaller.Close()
