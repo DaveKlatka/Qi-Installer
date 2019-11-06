@@ -264,6 +264,9 @@ function Invoke-USMT {
         #Copy USMT files to remote computers
         Try {
             Get-USMT
+            if (!(Test-Path $USMTPath)) {
+                New-Item -ItemType Directory -Path $USMTPath | Out-Null
+            }
             Copy-Item -Path $USMTPath -Destination "USMT:\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
         Catch {
