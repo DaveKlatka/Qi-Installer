@@ -29,21 +29,7 @@ begin {
     # Set a value for the wscript comobject
     $WScriptShell = New-Object -ComObject wscript.shell
 
-    function Update-Log {
-        param(
-            [string] $Message,
 
-            [string] $Color = 'White',
-
-            [switch] $NoNewLine
-        )
-
-        $LogTextBox.SelectionColor = $Color
-        $LogTextBox.AppendText("$Message")
-        if (-not $NoNewLine) { $LogTextBox.AppendText("`n") }
-        $LogTextBox.Update()
-        $LogTextBox.ScrollToCaret()
-    }
 
     function Get-IPAddress { (Test-Connection -ComputerName (hostname) -Count 1).IPV4Address.IPAddressToString }
 
@@ -68,41 +54,12 @@ begin {
             'N/A'
         }
     }
-    function Test-IsAdmin {
-        $UserIdentity = [Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
-
-        if (-not $UserIdentity.IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-            Update-Log "You are not running this script as Administrator. " -Color 'Yellow' -NoNewLine
-            Update-Log "Some tasks may fail if launched as Administrator.`n" -Color 'Yellow'
-        }
-    }
 
     
 
 
 
-    function Get-SaveState {
-        # Use the migration folder name to get the old computer name
-        if (Get-ChildItem $SaveSourceTextBox.Text -ErrorAction SilentlyContinue) {
-            $SaveSource = Get-ChildItem $SaveSourceTextBox.Text | Where-Object { $_.PSIsContainer } |
-                Sort-Object -Descending -Property { $_.CreationTime } | Select-Object -last 1
-            if (Test-Path "$($SaveSource.FullName)\USMT\USMT.MIG") {
-                $Script:UncompressedSource = $false
-            }
-            else {
-                $Script:UncompressedSource = $true
-                Update-Log -Message "Uncompressed save state detected."
-            }
-            $OldComputer = $SaveSource.BaseName
-            Update-Log -Message "Old computer set to $OldComputer."
-        }
-        else {
-            $OldComputer = 'N/A'
-            Update-Log -Message "No saved state found at [$($SaveSourceTextBox.Text)]." -Color 'Yellow'
-        }
 
-        $OldComputer
-    }
 
     function Show-DomainInfo {
         # Populate old user data if DomainMigration.txt file exists, otherwise disable group box

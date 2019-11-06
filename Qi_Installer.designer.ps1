@@ -44,6 +44,15 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$ImportSelect = $null
 [System.Windows.Forms.TextBox]$ImportLocation = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
+[System.Windows.Forms.GroupBox]$ComputerInfo = $null
+[System.Windows.Forms.Label]$NewIPLabel = $null
+[System.Windows.Forms.TextBox]$OldIPAddress = $null
+[System.Windows.Forms.Label]$NewComputerLabel = $null
+[System.Windows.Forms.Label]$OldIPLabel = $null
+[System.Windows.Forms.TextBox]$NewIpAddress = $null
+[System.Windows.Forms.TextBox]$OldComputer = $null
+[System.Windows.Forms.TextBox]$NewComputer = $null
+[System.Windows.Forms.Label]$OldComputerLabel = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
@@ -101,6 +110,10 @@ $GroupBox4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $USMTCheckList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $Profiles = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage6 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$ImportButton = (New-Object -TypeName System.Windows.Forms.Button)
+$GroupBox7 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$ImportSelect = (New-Object -TypeName System.Windows.Forms.Button)
+$ImportLocation = (New-Object -TypeName System.Windows.Forms.TextBox)
 $TabPage7 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $LogBox = (New-Object -TypeName System.Windows.Forms.RichTextBox)
 $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
@@ -117,10 +130,15 @@ $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthError = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
-$GroupBox7 = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$ImportLocation = (New-Object -TypeName System.Windows.Forms.TextBox)
-$ImportSelect = (New-Object -TypeName System.Windows.Forms.Button)
-$ImportButton = (New-Object -TypeName System.Windows.Forms.Button)
+$ComputerInfo = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$OldComputer = (New-Object -TypeName System.Windows.Forms.TextBox)
+$OldIPAddress = (New-Object -TypeName System.Windows.Forms.TextBox)
+$NewComputer = (New-Object -TypeName System.Windows.Forms.TextBox)
+$NewIpAddress = (New-Object -TypeName System.Windows.Forms.TextBox)
+$OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
+$OldIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
+$NewComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
+$NewIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -138,9 +156,11 @@ $GroupBox5.SuspendLayout()
 ([System.ComponentModel.ISupportInitialize]$ExtraDataGridView).BeginInit()
 $GroupBox4.SuspendLayout()
 $TabPage6.SuspendLayout()
+$GroupBox7.SuspendLayout()
+$TabPage7.SuspendLayout()
 $AuthPanel.SuspendLayout()
 $GroupBox6.SuspendLayout()
-$GroupBox7.SuspendLayout()
+$ComputerInfo.SuspendLayout()
 $TechInstaller.SuspendLayout()
 #
 #GroupBox1
@@ -626,8 +646,51 @@ $TabPage6.TabIndex = [System.Int32]1
 $TabPage6.Text = [System.String]'Import'
 $TabPage6.UseVisualStyleBackColor = $true
 #
+#ImportButton
+#
+$ImportButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]210,[System.Int32]381))
+$ImportButton.Name = [System.String]'ImportButton'
+$ImportButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$ImportButton.TabIndex = [System.Int32]1
+$ImportButton.Text = [System.String]'Import'
+$ImportButton.UseCompatibleTextRendering = $true
+$ImportButton.UseVisualStyleBackColor = $true
+$ImportButton.add_Click($ImportButton_Click)
+#
+#GroupBox7
+#
+$GroupBox7.Controls.Add($ImportSelect)
+$GroupBox7.Controls.Add($ImportLocation)
+$GroupBox7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]6))
+$GroupBox7.Name = [System.String]'GroupBox7'
+$GroupBox7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]279,[System.Int32]81))
+$GroupBox7.TabIndex = [System.Int32]0
+$GroupBox7.TabStop = $false
+$GroupBox7.Text = [System.String]'Load State Source'
+$GroupBox7.UseCompatibleTextRendering = $true
+#
+#ImportSelect
+#
+$ImportSelect.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]47))
+$ImportSelect.Name = [System.String]'ImportSelect'
+$ImportSelect.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$ImportSelect.TabIndex = [System.Int32]1
+$ImportSelect.Text = [System.String]'Select'
+$ImportSelect.UseCompatibleTextRendering = $true
+$ImportSelect.UseVisualStyleBackColor = $true
+$ImportSelect.add_Click($ImportSelect_Click)
+#
+#ImportLocation
+#
+$ImportLocation.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
+$ImportLocation.Name = [System.String]'ImportLocation'
+$ImportLocation.ReadOnly = $true
+$ImportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]267,[System.Int32]21))
+$ImportLocation.TabIndex = [System.Int32]0
+#
 #TabPage7
 #
+$TabPage7.Controls.Add($ComputerInfo)
 $TabPage7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage7.Name = [System.String]'TabPage7'
 $TabPage7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
@@ -673,7 +736,7 @@ $TotalProgress.Visible = $false
 #
 $AuthPanel.BackColor = [System.Drawing.Color]::Transparent
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]694,[System.Int32]406))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]5
@@ -795,47 +858,93 @@ $Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
 #
-#GroupBox7
+#ComputerInfo
 #
-$GroupBox7.Controls.Add($ImportSelect)
-$GroupBox7.Controls.Add($ImportLocation)
-$GroupBox7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]6))
-$GroupBox7.Name = [System.String]'GroupBox7'
-$GroupBox7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]279,[System.Int32]81))
-$GroupBox7.TabIndex = [System.Int32]0
-$GroupBox7.TabStop = $false
-$GroupBox7.Text = [System.String]'Load State Source'
-$GroupBox7.UseCompatibleTextRendering = $true
+$ComputerInfo.Controls.Add($NewIPLabel)
+$ComputerInfo.Controls.Add($OldIPAddress)
+$ComputerInfo.Controls.Add($NewComputerLabel)
+$ComputerInfo.Controls.Add($OldIPLabel)
+$ComputerInfo.Controls.Add($NewIpAddress)
+$ComputerInfo.Controls.Add($OldComputer)
+$ComputerInfo.Controls.Add($NewComputer)
+$ComputerInfo.Controls.Add($OldComputerLabel)
+$ComputerInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]3,[System.Int32]3))
+$ComputerInfo.Name = [System.String]'ComputerInfo'
+$ComputerInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]285,[System.Int32]240))
+$ComputerInfo.TabIndex = [System.Int32]0
+$ComputerInfo.TabStop = $false
+$ComputerInfo.Text = [System.String]'Computer Info'
+$ComputerInfo.UseCompatibleTextRendering = $true
 #
-#ImportLocation
+#OldComputer
 #
-$ImportLocation.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
-$ImportLocation.Name = [System.String]'ImportLocation'
-$ImportLocation.ReadOnly = $true
-$ImportLocation.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]267,[System.Int32]21))
-$ImportLocation.TabIndex = [System.Int32]0
+$OldComputer.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]36))
+$OldComputer.Name = [System.String]'OldComputer'
+$OldComputer.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
+$OldComputer.TabIndex = [System.Int32]0
 #
-#ImportSelect
+#OldIPAddress
 #
-$ImportSelect.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]47))
-$ImportSelect.Name = [System.String]'ImportSelect'
-$ImportSelect.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$ImportSelect.TabIndex = [System.Int32]1
-$ImportSelect.Text = [System.String]'Select'
-$ImportSelect.UseCompatibleTextRendering = $true
-$ImportSelect.UseVisualStyleBackColor = $true
-$ImportSelect.add_Click($ImportSelect_Click)
+$OldIPAddress.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]36))
+$OldIPAddress.Name = [System.String]'OldIPAddress'
+$OldIPAddress.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
+$OldIPAddress.TabIndex = [System.Int32]1
 #
-#ImportButton
+#NewComputer
 #
-$ImportButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]210,[System.Int32]381))
-$ImportButton.Name = [System.String]'ImportButton'
-$ImportButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$ImportButton.TabIndex = [System.Int32]1
-$ImportButton.Text = [System.String]'Import'
-$ImportButton.UseCompatibleTextRendering = $true
-$ImportButton.UseVisualStyleBackColor = $true
-$ImportButton.add_Click($ImportButton_Click)
+$NewComputer.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]77))
+$NewComputer.Name = [System.String]'NewComputer'
+$NewComputer.ReadOnly = $true
+$NewComputer.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
+$NewComputer.TabIndex = [System.Int32]2
+#
+#NewIpAddress
+#
+$NewIpAddress.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]77))
+$NewIpAddress.Name = [System.String]'NewIpAddress'
+$NewIpAddress.ReadOnly = $true
+$NewIpAddress.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
+$NewIpAddress.TabIndex = [System.Int32]3
+#
+#OldComputerLabel
+#
+$OldComputerLabel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]17))
+$OldComputerLabel.Name = [System.String]'OldComputerLabel'
+$OldComputerLabel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]16))
+$OldComputerLabel.TabIndex = [System.Int32]4
+$OldComputerLabel.Text = [System.String]'Old Computer Name'
+$OldComputerLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$OldComputerLabel.UseCompatibleTextRendering = $true
+#
+#OldIPLabel
+#
+$OldIPLabel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]17))
+$OldIPLabel.Name = [System.String]'OldIPLabel'
+$OldIPLabel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]16))
+$OldIPLabel.TabIndex = [System.Int32]5
+$OldIPLabel.Text = [System.String]'Old IP Address'
+$OldIPLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$OldIPLabel.UseCompatibleTextRendering = $true
+#
+#NewComputerLabel
+#
+$NewComputerLabel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]58))
+$NewComputerLabel.Name = [System.String]'NewComputerLabel'
+$NewComputerLabel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]16))
+$NewComputerLabel.TabIndex = [System.Int32]4
+$NewComputerLabel.Text = [System.String]'New Computer Name'
+$NewComputerLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$NewComputerLabel.UseCompatibleTextRendering = $true
+#
+#NewIPLabel
+#
+$NewIPLabel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]58))
+$NewIPLabel.Name = [System.String]'NewIPLabel'
+$NewIPLabel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]16))
+$NewIPLabel.TabIndex = [System.Int32]5
+$NewIPLabel.Text = [System.String]'New IP Address'
+$NewIPLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$NewIPLabel.UseCompatibleTextRendering = $true
 #
 #TechInstaller
 #
@@ -873,11 +982,14 @@ $GroupBox5.ResumeLayout($false)
 ([System.ComponentModel.ISupportInitialize]$ExtraDataGridView).EndInit()
 $GroupBox4.ResumeLayout($false)
 $TabPage6.ResumeLayout($false)
+$GroupBox7.ResumeLayout($false)
+$GroupBox7.PerformLayout()
+$TabPage7.ResumeLayout($false)
 $AuthPanel.ResumeLayout($false)
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
-$GroupBox7.ResumeLayout($false)
-$GroupBox7.PerformLayout()
+$ComputerInfo.ResumeLayout($false)
+$ComputerInfo.PerformLayout()
 $TechInstaller.ResumeLayout($false)
 Add-Member -InputObject $TechInstaller -Name base -Value $base -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox1 -Value $GroupBox1 -MemberType NoteProperty
@@ -925,6 +1037,15 @@ Add-Member -InputObject $TechInstaller -Name GroupBox7 -Value $GroupBox7 -Member
 Add-Member -InputObject $TechInstaller -Name ImportSelect -Value $ImportSelect -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportLocation -Value $ImportLocation -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name ComputerInfo -Value $ComputerInfo -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name NewIPLabel -Value $NewIPLabel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name OldIPAddress -Value $OldIPAddress -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name NewComputerLabel -Value $NewComputerLabel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name OldIPLabel -Value $OldIPLabel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name NewIpAddress -Value $NewIpAddress -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name OldComputer -Value $OldComputer -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name NewComputer -Value $NewComputer -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty

@@ -403,7 +403,7 @@ function Set-RestorePoint {
     Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
 
     if (!((get-content $RunLog) -match 'WARNING')) {
-        $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" }
+        $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" -and $_.RestorePointType -eq "12" }
         if ($null -ne $RestorePoint) {
             update-Textbox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
         }
