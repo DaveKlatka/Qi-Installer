@@ -864,7 +864,7 @@ $TotalProgress.Visible = $false
 #
 $AuthPanel.BackColor = [System.Drawing.Color]::Transparent
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]427))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]5
