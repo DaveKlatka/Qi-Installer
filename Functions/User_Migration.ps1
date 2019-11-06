@@ -284,7 +284,7 @@ function Invoke-USMT {
         $job = Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
             &C:\usmtfiles\$using:bit\scanstate.exe "C:\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\$using:SourceComputer\listfiles.txt /l:c:\$using:SourceComputer\scan.txt /progress:c:\$using:SourceComputer\scan_progress.txt
         } -asjob # -ArgumentList {$SourceComputer, $bit}
-        Get-ProgressBar -Runlog "USMT:\$SourceComputer\load_progress.log" -Job $job.state -Tracker
+        Get-ProgressBar -Runlog "USMT:\$SourceComputer\load_progress.txt" -Job $job -Tracker
         #
         <#
         #Start loadscan on destination
