@@ -265,7 +265,8 @@ function Invoke-USMT {
         Try {
             Get-USMT
             if (!(Test-Path "USMT:\usmtfiles")) {
-                New-Item -ItemType Directory -Path "USMT:\usmtfiles" | Out-Null
+                get-psdrive
+                New-Item -ItemType Directory -Path "USMT:\usmtfiles"# | Out-Null
             }
             Copy-Item -Path $USMTPath -Destination "USMT:\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
