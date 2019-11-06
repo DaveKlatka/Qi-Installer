@@ -376,9 +376,13 @@ function Test-ComputerConnection {
     if ($ConnectionCheckBox.Checked) {
         Update-Textbox "Testing UNC path to $Computer..." -NoNewLine
         $Script:Creds = Get-Credential
-        new-psdrive -name "USMT" -PSProvider "FileSystem" -Root "\\$($ComputerIPTextBox.Text)\C$" -Credential $Creds
+        new-psdrive -name "USMT" -PSProvider "FileSystem" -Root "\\$Computer\C$" -Credential $Creds
         if (Test-Path -Path "USMT:") {
             $UNCVerified.Checked = $true
+            Update-Textbox "Connection established." -Color 'Green'
+        }
+        else {
+            Update-Textbox "Unable to reach $Computer." -Color 'Red'
         }
     }
 }
