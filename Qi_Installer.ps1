@@ -210,6 +210,11 @@ function Start-QiInstaller {
         $TechInstaller.Close()
     }
 
+    #GUI
+    Add-Type -AssemblyName System.Windows.Forms
+    #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
+    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JRPhoW') | Invoke-Expression; 
+
     #USMT Functions
     #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
     (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JTVAbJ') | Invoke-Expression; 
@@ -217,11 +222,6 @@ function Start-QiInstaller {
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
     (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
-    
-    #GUI
-    Add-Type -AssemblyName System.Windows.Forms
-    #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
-    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JRPhoW') | Invoke-Expression; 
     
     #Check Automate Installed
     if (Test-Path $env:windir\LTSVC) {

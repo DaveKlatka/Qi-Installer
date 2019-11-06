@@ -897,7 +897,6 @@ $NewComputerText.Name = [System.String]'NewComputerText'
 $NewComputerText.ReadOnly = $true
 $NewComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
 $NewComputerText.TabIndex = [System.Int32]2
-$NewComputerText.Text = [System.String]'abc'
 #
 #NewIpAddressText
 #
