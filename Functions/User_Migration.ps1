@@ -2,6 +2,7 @@
 
 $NewComputerText.Text = $env:COMPUTERNAME
 $NewIpAddressText.Text = (Test-Connection -ComputerName (hostname) -Count 1).IPV4Address.IPAddressToString
+$ExportLocation.Text = $ScriptPath
 function Save-UserState {
     param(
         [switch] $Debug
@@ -246,70 +247,54 @@ function Restore-UserState {
 function Invoke-USMT {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$SourceComputer,
-        [Parameter(Mandatory=$true)]
-        [string]$DestinationComputer,
-        [Parameter(Mandatory=$true)]
-        [string]$UserName,
-        [Parameter(Mandatory=$true)]
-        [string]$SharePath,
-        [Parameter(Mandatory=$true)]
-        [string]$USMTFilesPath,
-        [Parameter(Mandatory=$true)]
-        [string]$Domain,
-
         [pscredential]$Credential
     )
     
-    begin 
-    {
+    begin {
         #Test source and destination computers are online
-        if (!(Test-Connection -ComputerName $SourceComputer -Count 2))
-        {
+        if (!(Test-Connection -ComputerName $SourceComputer -Count 2)) {
             Update-TextBox "Count not ping $SourceComputer" -color 'Red'
             Return
         }
     }
     
-    process 
-    {
+    process {
         #Copy USMT files to remote computers
-        Try 
-        {
+        Try {
             Get-USMT
-            Copy-Item -Path $ScanState -Destination "USMT:\" -ErrorAction Stop -Recurse -force
+            Copy-Item -Path $USMTPath -Destination "USMT:\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
-        Catch 
-        {
-            Update-Textbox "Failed to copy Scanstate.exe to $SourceComputer" -color 'Red'
+        Catch {
+            Update-Textbox "Failed to copy $USMTPath to $SourceComputer" -color 'Red'
             Return
         }
         #Enable CredSSP
-        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock {Enable-WSManCredSSP -Role server -Force} 
+        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force } 
         Enable-WSManCredSSP -Role client -DelegateComputer $SourceComputer -Force
         
-        #Start startscan on source
+        #Start scanstate on source
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            c:\scanstate.exe "C:\$SourceComputer" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /ui:$Using:Domain\$Using:UserName /c /localonly /encrypt /key:$Key /listfiles:c:\usmtfiles\listfiles.txt /ue:pcadmin /ue:$Using:Domain\*
-        } -ArgumentList {$UserName,$SharePath,$SecureKey,$SourceComputer,$Domain}
-#
+            c:\scanstate.exe "C:\$SourceComputer" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\listfiles.txt
+        } -ArgumentList { $UserName, $SharePath, $SecureKey, $SourceComputer, $Domain }
+        #
+        <#
         #Start loadscan on destination
         Invoke-Command -ComputerName $DestinationComputer -Authentication Credssp -Credential $Credential -Scriptblock {
             $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Using:SecureKey)
             $Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
             c:\USMTFiles\loadstate.exe "$Using:SharePath\$Using:Username" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /ui:$Using:Domain\$Using:username /c /decrypt /key:$Key
-        } -ArgumentList {$UserName,$SharePath,$SecureKey,$DestinationComputer,$Domain}
-
+        } -ArgumentList { $UserName, $SharePath, $SecureKey, $DestinationComputer, $Domain }
+#>
         #Remove USMT files on remote computers
-        Remove-Item \\$SourceComputer\C$\USMTFiles -Force -Recurse
-        Remove-Item \\$DestinationComputer\C$\USMTFiles -Force -Recurse
+        #Remove-Item \\$SourceComputer\C$\USMTFiles -Force -Recurse
+        #Remove-Item \\$DestinationComputer\C$\USMTFiles -Force -Recurse
 
         #Disable CredSSP on remote computers
-        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock {Disable-WSManCredSSP -Role server }
-        Invoke-Command -ComputerName $DestinationComputer -Credential $Credential -ScriptBlock {Disable-WSManCredSSP -Role server }  
-        Disable-WSManCredSSP -Role client        
-     }
+        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Disable-WSManCredSSP -Role server }
+        #Disable-WSManCredSSP -Role client        
+    }
 }
 
 function Test-ComputerConnection {
@@ -406,7 +391,7 @@ function Get-USMT {
         $bit = "x86"
     }
     # Test that USMT binaries are reachable
-    $USMTPath = "$ScriptPath\User State Migration Tool\$bit"
+    $Script:USMTPath = "$ScriptPath\User State Migration Tool\$bit"
     if ((Test-Path $USMTPath\scanstate.exe) -and (Test-Path $USMTPath\loadstate.exe)) {
         $Script:ScanState = "$USMTPath\scanstate.exe"
         $Script:LoadState = "$USMTPath\loadstate.exe"
