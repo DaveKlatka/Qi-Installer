@@ -373,12 +373,13 @@ function Test-ComputerConnection {
 
     # Don't even try if both fields are empty
     if ($Computer) {
+        <#
         # If the computer doesn't appear to have a valid office IP, such as if it's on VPN, don't allow the user to continue
         if ($ComputerIPTextBox.Text -notlike $ValidIPAddress) {
             Update-Textbox "$IPAddress does not appear to be a valid IP address. The Migration Tool requires an IP address matching $ValidIPAddress." -Color 'Red'
             return
         }
-
+        #>
         Update-Textbox "Testing connection to $Computer..." -NoNewLine
 
         if (Test-Connection $Computer -Quiet) {
