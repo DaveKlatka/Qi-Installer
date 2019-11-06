@@ -281,14 +281,10 @@ function Invoke-USMT {
         if (!(Test-Path "USMT:\$SourceComputer")) {
             New-Item -ItemType Directory -Path "USMT:\$SourceComputer" | Out-Null
         }
-
-        "`"/listfiles:$Destination\FilesMigrated.log`" `"/l:$Destination\scan.log`" `"/progress:$Destination\scan_progress.log`""
-
-
         $job = Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            &C:\usmtfiles\$using:bit\scanstate.exe "C:\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\listfiles.txt /l:c:\usmtfiles\scan.txt /progress:c:\usmtfiles\scan_progress.txt
+            &C:\usmtfiles\$using:bit\scanstate.exe "C:\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\$using:SourceComputer\listfiles.txt /l:c:\$using:SourceComputer\scan.txt /progress:c:\$using:SourceComputer\scan_progress.txt
         } -asjob # -ArgumentList {$SourceComputer, $bit}
-        Get-ProgressBar -Runlog "$Destination\load_progress.log" -Job $job.state -Tracker
+        Get-ProgressBar -Runlog "USMT:\$SourceComputer\load_progress.log" -Job $job.state -Tracker
         #
         <#
         #Start loadscan on destination
