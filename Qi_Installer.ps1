@@ -205,6 +205,9 @@ function Start-QiInstaller {
     $ImportButton_Click = {
         Restore-UserState
     }
+    $TestConnection_Click = {
+        Test-ComputerConnection
+    }
 
     $Cancel_Click = {
         $TechInstaller.Close()
