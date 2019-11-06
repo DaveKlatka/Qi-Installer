@@ -545,7 +545,7 @@ $ExportLocationButton.Location = (New-Object -TypeName System.Drawing.Point -Arg
 $ExportLocationButton.Name = [System.String]'ExportLocationButton'
 $ExportLocationButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
 $ExportLocationButton.TabIndex = [System.Int32]5
-$ExportLocationButton.Text = [System.String]'Select'
+$ExportLocationButton.Text = [System.String]'Change'
 $ExportLocationButton.UseCompatibleTextRendering = $true
 $ExportLocationButton.UseVisualStyleBackColor = $true
 $ExportLocationButton.add_Click($ExportLocationButton_Click)
