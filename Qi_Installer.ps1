@@ -1,5 +1,4 @@
-$RunNetMig_Click = {
-}
+
 function Start-QiInstaller {
     param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
@@ -228,13 +227,15 @@ function Start-QiInstaller {
                     [Parameter(Mandatory=$true)]
                     [string]$USMTFilesPath,
                     [Parameter(Mandatory=$true)]
-                    [string]$Domain,
+                    [string]$Domain
             
                 
         }
         else {
             Update-Textbox "Connection not Verified. Please Test Connection first" -color 'Orange'
         }
+    }
+    $RunNetMig_Click = {
     }
 
     $Cancel_Click = {
