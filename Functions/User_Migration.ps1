@@ -274,15 +274,22 @@ function Invoke-USMT {
             Return
         }
         #Enable CredSSP
-        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force } 
         Enable-WSManCredSSP -Role client -DelegateComputer $SourceComputer -Force
+        if ((get-item wsman:\localhost\client\trustedhosts).value -eq '') {
+            Set-Item WSMan:\localhost\Client\TrustedHosts -Value $SourceComputer -force
+        }
+        else {
+            Set-Item WSMan:\localhost\Client\TrustedHosts -Concatenate -Value $SourceComputer -force
+        }
+        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force } 
+        
         
         #Start scanstate on source
         if (!(Test-Path "USMT:\usmtfiles\$SourceComputer")) {
             New-Item -ItemType Directory -Path "USMT:\usmtfiles\$SourceComputer" | Out-Null
         }
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
+            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:0 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
         } -asjob
 
         # Give the process time to start before checking for its existence
@@ -449,20 +456,17 @@ function Get-USMTProgress {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
                         }
                         Update-USMTTextBox -Text $Line
-                        #$lastline += "$line`n"
                     }
                 }
                 $Promptcheck = $lines
             } 
             else {
-                Clear-Variable -name LastLine
                 foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" }))) {
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
                         }
                         Update-USMTTextBox -Text $Line
-                        #$lastline += "$line`n"
                     }
                 }
                 $Promptcheck = $lines
@@ -493,14 +497,18 @@ function Update-USMTTextBox {
         elseif ($Text.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
             $CurrentFile.Value = $matches[1]
         }
+        elseif ($Text.TrimEnd() -match 'UnableToOpen') {
+            Update-Textbox $Text.TrimEnd() -color 'Orange'
+            Update-Textbox ''
+        }
+        elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
+            Update-Textbox $Text.TrimEnd() -color 'Green'
+        }
         elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
             Update-Textbox $Text.TrimEnd() -Color 'Red'
         }
         elseif ($Text.TrimEnd() -match 'WARNING') {
             Update-Textbox $Text.TrimEnd() -Color 'Yellow'
-        }
-        elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
-            Update-Textbox $Text.TrimEnd() -color 'Green'
         }
         elseif ($Text.TrimEnd() -match 'Waiting') {
             if (!($wait)) {
