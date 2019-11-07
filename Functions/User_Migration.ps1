@@ -529,7 +529,7 @@ function Update-USMTTextBox {
     Param (
         [string] $Text
     )
-    if (!($null -eq $Text) -or $Text.TrimEnd() -ne '.' -or $Text.TrimEnd() -notmatch 'detectedComponent' -or $Text.TrimEnd() -notmatch 'estimatePercentageCompleted') {
+    if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.' -and $Text.TrimEnd() -notmatch 'detectedComponent' -and $Text.TrimEnd() -notmatch 'estimatePercentageCompleted') {
         if ($Text.TrimEnd() -match '([\d]+)\.\d\%') {
             $CurrentFile.Value = $matches[1]
         }
