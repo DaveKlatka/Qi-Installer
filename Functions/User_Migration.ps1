@@ -281,13 +281,12 @@ function Invoke-USMT {
         if (!(Test-Path "USMT:\usmtfiles\$SourceComputer")) {
             New-Item -ItemType Directory -Path "USMT:\usmtfiles\$SourceComputer" | Out-Null
         }
-        $job = Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
+        Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
             &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$SourceComputer\listfiles.txt /l:c:\usmtfiles\$SourceComputer\scan.txt /progress:c:\usmtfiles\$SourceComputer\scan_progress.txt
-        } -asjob # -ArgumentList {$SourceComputer, $bit}
+        } -asjob
 
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
-
 
         if ($CurrentFile.visible -eq $false) {
             $CurrentFile.Value = 0
@@ -302,7 +301,7 @@ function Invoke-USMT {
             }
 
             if (!($Promptcheck)) {
-                foreach ($line in ($lines = Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"})) {
+                foreach ($line in (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"})) {
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
@@ -314,7 +313,7 @@ function Invoke-USMT {
             } 
             else {
                 Clear-Variable -name LastLine
-                foreach ($line in ($lines = ($lines = Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"}))) {
+                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"}))) {
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
