@@ -314,7 +314,7 @@ function Invoke-USMT {
         $Arguments = "`"\\$SourceComputer\c$\usmtfiles\$SourceComputer\`" `"$Destination`" *.* /s" 
 
         Start-Sleep -Seconds 3
-        
+
         $Process = (start-process Robocopy.exe -ArgumentList $Arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
 
         Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID -Tracker
@@ -479,35 +479,37 @@ function Get-USMTProgress {
         $CurrentFile.Value = 0
         $CurrentFile.Visible = $true
     }
-    if ($ActionType = 'NetworkScan') {
-        while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
-            foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue }))) {
-                if (!($promptcheck -contains $line)) {
-                    if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                        $line = ($Line.Split(',', 4)[3]).TrimStart()
+    Switch ($ActionType) {
+        "NetworkScan" {
+            while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
+                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue }))) {
+                    if (!($promptcheck -contains $line)) {
+                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                            $line = ($Line.Split(',', 4)[3]).TrimStart()
+                        }
+                        Update-USMTTextBox -Text $Line
                     }
-                    Update-USMTTextBox -Text $Line
                 }
+                $Promptcheck = $Lines
+                
+                start-sleep -Milliseconds 50
             }
-            $Promptcheck = $Lines
-            
-            start-sleep -Milliseconds 50
-        }
-    }
-    if ($ActionType = 'LoadState') {
-        while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
-            foreach ($line in ($lines = get-content $RunLog)) {
-                if (!($promptcheck -contains $line)) {
-                    if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                        $line = ($Line.Split(',', 4)[3]).TrimStart()
+         }
+         "LoadState" {
+            while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
+                foreach ($line in ($lines = get-content $RunLog)) {
+                    if (!($promptcheck -contains $line)) {
+                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                            $line = ($Line.Split(',', 4)[3]).TrimStart()
+                        }
+                        Update-USMTTextBox -Text $Line
                     }
-                    Update-USMTTextBox -Text $Line
                 }
+                $Promptcheck = $Lines
+                
+                start-sleep -Milliseconds 50
             }
-            $Promptcheck = $Lines
-            
-            start-sleep -Milliseconds 50
-        }
+         }
     }
     
     if ($CurrentFile.Visible -eq $true) {
@@ -521,7 +523,7 @@ function Update-USMTTextBox {
     Param (
         [string] $Text
     )
-    if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
+    if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.' -and $Text.TrimEnd() -match 'detectedComponent') {
         if ($Text.TrimEnd() -match '([\d]+)\.\d\%') {
             $CurrentFile.Value = $matches[1]
         }
