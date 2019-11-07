@@ -448,7 +448,8 @@ function Get-USMTProgress {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
                         }
-                        $lastline += "$line`n"
+                        Update-USMTTextBox -Text $Line
+                        #$lastline += "$line`n"
                     }
                 }
                 $Promptcheck = $lines
@@ -460,42 +461,13 @@ function Get-USMTProgress {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
                         }
-                        $lastline += "$line`n"
+                        Update-USMTTextBox -Text $Line
+                        #$lastline += "$line`n"
                     }
                 }
                 $Promptcheck = $lines
             }
             
-            if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
-                if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Red'
-                }
-                elseif ($lastline.TrimEnd() -match 'WARNING') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
-                }
-                elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
-                    Update-Textbox $lastline.TrimEnd() -color 'Green'
-                }
-                elseif ($lastline.TrimEnd() -match 'Waiting') {
-                    if (!($wait)) {
-                        $Wait = $true
-                        update-Textbox $lastline.TrimEnd()
-                    }
-                }
-                else {
-                    $Wait = $false
-                    Update-Textbox $lastline.TrimEnd()
-                }
-            }
             start-sleep -Milliseconds 50
         }
     }
@@ -505,6 +477,41 @@ function Get-USMTProgress {
     }
     if ($TotalProgress.Visible -eq $true) {
         $TotalProgress.Visible = $false
+    }
+}
+function Update-USMTTextBox {
+    Param (
+        [string] $Text
+    )
+    if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
+        if ($Text.TrimEnd() -match '([\d]+)\.\d\%') {
+            $CurrentFile.Value = $matches[1]
+        }
+        elseif ($Text.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
+            $CurrentFile.Value = $matches[1]
+        }
+        elseif ($Text.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
+            $CurrentFile.Value = $matches[1]
+        }
+        elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
+            Update-Textbox $Text.TrimEnd() -Color 'Red'
+        }
+        elseif ($Text.TrimEnd() -match 'WARNING') {
+            Update-Textbox $Text.TrimEnd() -Color 'Yellow'
+        }
+        elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
+            Update-Textbox $Text.TrimEnd() -color 'Green'
+        }
+        elseif ($Text.TrimEnd() -match 'Waiting') {
+            if (!($wait)) {
+                $Wait = $true
+                update-Textbox $Text.TrimEnd()
+            }
+        }
+        else {
+            $Wait = $false
+            Update-Textbox $Text.TrimEnd()
+        }
     }
 }
 
