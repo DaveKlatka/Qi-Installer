@@ -282,7 +282,7 @@ function Invoke-USMT {
             New-Item -ItemType Directory -Path "USMT:\usmtfiles\$SourceComputer" | Out-Null
         }
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$SourceComputer\listfiles.txt /l:c:\usmtfiles\$SourceComputer\scan.txt /progress:c:\usmtfiles\$SourceComputer\scan_progress.txt
+            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
         } -asjob
 
         # Give the process time to start before checking for its existence
