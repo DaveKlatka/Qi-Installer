@@ -523,21 +523,18 @@ function Update-USMTTextBox {
     Param (
         [string] $Text
     )
-    if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.' -and $Text.TrimEnd() -match 'detectedComponent') {
+    if (!($null -eq $Text) -or $Text.TrimEnd() -ne '.' -or $Text.TrimEnd() -notmatch 'detectedComponent' -or $Text.TrimEnd() -notmatch 'estimatePercentageCompleted') {
         if ($Text.TrimEnd() -match '([\d]+)\.\d\%') {
             $CurrentFile.Value = $matches[1]
         }
         elseif ($Text.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
             $CurrentFile.Value = $matches[1]
         }
-        elseif ($Text.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
-            $CurrentFile.Value = $matches[1]
-        }
         elseif ($Text.TrimEnd() -match 'UnableToOpen') {
             Update-Textbox $Text.TrimEnd() -color 'Orange'
             Update-Textbox ''
         }
-        elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
+        elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed') {
             Update-Textbox $Text.TrimEnd() -color 'Green'
         }
         elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
@@ -546,14 +543,7 @@ function Update-USMTTextBox {
         elseif ($Text.TrimEnd() -match 'WARNING') {
             Update-Textbox $Text.TrimEnd() -Color 'Yellow'
         }
-        elseif ($Text.TrimEnd() -match 'Waiting') {
-            if (!($wait)) {
-                $Wait = $true
-                update-Textbox $Text.TrimEnd()
-            }
-        }
         else {
-            $Wait = $false
             Update-Textbox $Text.TrimEnd()
         }
     }
