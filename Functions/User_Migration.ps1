@@ -310,8 +310,14 @@ function Invoke-USMT {
         if (!(Test-Path $Destination)) {
             New-Item -ItemType Directory -Path $Destination | Out-Null
         }
+
+
+
+
+
+
         $RunLog = "$ScriptPath\logs\Robocopy.txt"
-        $Arguments = "`"\\$SourceComputer\c$\usmtfiles\$SourceComputer\`" `"$Destination`" *.* /s" 
+        $Arguments = "\\$SourceComputer\c$\usmtfiles\$SourceComputer\ $Destination\ *.* /s" 
 
         Start-Sleep -Seconds 3
 
