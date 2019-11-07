@@ -284,7 +284,95 @@ function Invoke-USMT {
         $job = Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
             &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$SourceComputer\listfiles.txt /l:c:\usmtfiles\$SourceComputer\scan.txt /progress:c:\usmtfiles\$SourceComputer\scan_progress.txt
         } -asjob # -ArgumentList {$SourceComputer, $bit}
-        Get-ProgressBar -Runlog "USMT:\usmtfiles\$SourceComputer\scan_progress.txt" -Job $job.id -Tracker
+
+        # Give the process time to start before checking for its existence
+        Start-Sleep -Seconds 3
+
+
+        if ($CurrentFile.visible -eq $false) {
+            $CurrentFile.Value = 0
+            $CurrentFile.Visible = $true
+        }
+        while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
+            if ($Lastline) {
+                Clear-Variable -name LastLine
+            }
+            if ($Promptcheck) {
+                Clear-Variable -name Promptcheck
+            }
+
+            if (!($Promptcheck)) {
+                foreach ($line in ($lines = Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"})) {
+                    if (!($promptcheck -contains $line)) {
+                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                            $line = ($Line.Split(',', 4)[3]).TrimStart()
+                        }
+                        $lastline += "$line`n"
+                    }
+                }
+                $Promptcheck = $lines
+            } 
+            else {
+                Clear-Variable -name LastLine
+                foreach ($line in ($lines = ($lines = Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"}))) {
+                    if (!($promptcheck -contains $line)) {
+                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                            $line = ($Line.Split(',', 4)[3]).TrimStart()
+                        }
+                        $lastline += "$line`n"
+                    }
+                }
+                $Promptcheck = $lines
+            }
+            
+            if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
+                if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
+                    Update-Textbox $lastline.TrimEnd() -Color 'Red'
+                }
+                elseif ($lastline.TrimEnd() -match 'WARNING') {
+                    Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
+                }
+                elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
+                    Update-Textbox $lastline.TrimEnd() -color 'Green'
+                }
+                elseif ($lastline.TrimEnd() -match 'Waiting') {
+                    if (!($wait)) {
+                        $Wait = $true
+                        update-Textbox $lastline.TrimEnd()
+                    }
+                }
+                else {
+                    $Wait = $false
+                    Update-Textbox $lastline.TrimEnd()
+                }
+            }
+            start-sleep -seconds 3
+        }
+        if ($CurrentFile.Visible -eq $true) {
+            $CurrentFile.Visible = $false
+        }
+        if ($TotalProgress.Visible -eq $true) {
+            $TotalProgress.Visible = $false
+        }
+
+
+
+
+
+
+
+
+
+        #Get-ProgressBar -Runlog "USMT:\usmtfiles\$SourceComputer\scan_progress.txt" -Job $job.id -Tracker
         #
         <#
         #Start loadscan on destination
