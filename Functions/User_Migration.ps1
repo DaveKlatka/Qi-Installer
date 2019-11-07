@@ -304,10 +304,26 @@ function Invoke-USMT {
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
         Get-USMTProgress -ActionType "NetworkScan"
-        #Get-ProgressBar -Runlog "USMT:\usmtfiles\$SourceComputer\scan_progress.txt" -Job $job.id -Tracker
+
+        #Copy Backup to local machine
+        $Destination = "$ScriptPath\$SourceComputer"
+        if (!(Test-Path $Destination)) {
+            New-Item -ItemType Directory -Path $Destination | Out-Null
+        }
+        Copy-Item -Path "USMT:\usmtfiles\$SourceComputer" -Destination $Destination -ErrorAction Stop -Recurse -force
+
+        #Start loadscan on destination
+        # Get the location of the save state data
+        $LocalAccountOptions = '/all'
+        $Logs = "`"/l:$Destination\load.txt`" `"/progress:$Destination\load_progress.txt`""
+        $ContinueCommand = "/c"
+        $Arguments = "`"$Destination`" i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml $LocalAccountOptions $Logs $ContinueCommand /v:13"
+        $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
+
+        Get-USMTProgress -Runlog "$Destination\load_progress.txt" -processID $Process.ID -ActionType "LoadState"
         #
         <#
-        #Start loadscan on destination
+        
         Invoke-Command -ComputerName $DestinationComputer -Authentication Credssp -Credential $Credential -Scriptblock {
             $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Using:SecureKey)
             $Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
@@ -320,7 +336,7 @@ function Invoke-USMT {
 
         #Disable CredSSP on remote computers
         Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Disable-WSManCredSSP -Role server }
-        #Disable-WSManCredSSP -Role client        
+        Disable-WSManCredSSP -Role client        
     }
 }
 
@@ -440,8 +456,8 @@ function Get-USMT {
 
 function Get-USMTProgress {
     param(
-        [string] $Destination,
-
+        [String] $Runlog,
+        [String] $ProcessID,
         [string] $ActionType
     )
 
@@ -459,7 +475,7 @@ function Get-USMTProgress {
         while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
         
             if (!($Promptcheck)) {
-                foreach ($line in ($lines = Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue })) {
+                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue }))) {
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
@@ -467,10 +483,15 @@ function Get-USMTProgress {
                         Update-USMTTextBox -Text $Line
                     }
                 }
-                $Promptcheck = $lines
+                $Promptcheck = $Lines
             } 
-            else {
-                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" }))) {
+            start-sleep -Milliseconds 50
+        }
+    }
+    if ($ActionType = 'LoadState') {
+        while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
+            if (!($Promptcheck)) {
+                foreach ($line in ($lines = get-content $RunLog)){
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
@@ -478,9 +499,8 @@ function Get-USMTProgress {
                         Update-USMTTextBox -Text $Line
                     }
                 }
-                $Promptcheck = $lines
-            }
-            
+                $Promptcheck = $Lines
+            } 
             start-sleep -Milliseconds 50
         }
     }
