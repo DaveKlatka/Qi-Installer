@@ -214,7 +214,7 @@ Function Get-ProgressBar {
             $TotalProgress.Visible = $true
         }
     
-        while ((get-process -id $ProcessID -ErrorAction SilentlyContinue) -or ($job.id -eq 'Running')) {
+        while ((get-process -id $ProcessID -ErrorAction SilentlyContinue) -or ((get-job -id $job).jobstate -eq 'Running')) {
             if ($Runlog -match '.xml') {
                 if (!($Promptcheck)) {
                     foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
@@ -294,7 +294,7 @@ Function Get-ProgressBar {
             $CurrentFile.Value = 0
             $CurrentFile.Visible = $true
         }
-        while ((get-process -id $ProcessID -ErrorAction SilentlyContinue) -or ($Job.ID -eq 'Running')) {
+        while ((get-process -id $ProcessID -ErrorAction SilentlyContinue) -or ((get-job -id $job).jobstate -eq 'Running')) {
             if ($Runlog -match '.xml') {
                 if (!($Promptcheck)) {
                     foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
