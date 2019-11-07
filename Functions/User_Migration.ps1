@@ -298,7 +298,7 @@ function Invoke-USMT {
             New-Item -ItemType Directory -Path "USMT:\usmtfiles\$SourceComputer" | Out-Null
         }
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:4 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
+            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
         } -asjob
 
         # Give the process time to start before checking for its existence
@@ -473,34 +473,31 @@ function Get-USMTProgress {
     }
     if ($ActionType = 'NetworkScan') {
         while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
-        
-            if (!($Promptcheck)) {
-                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue }))) {
-                    if (!($promptcheck -contains $line)) {
-                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                            $line = ($Line.Split(',', 4)[3]).TrimStart()
-                        }
-                        Update-USMTTextBox -Text $Line
+            foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue }))) {
+                if (!($promptcheck -contains $line)) {
+                    if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                        $line = ($Line.Split(',', 4)[3]).TrimStart()
                     }
+                    Update-USMTTextBox -Text $Line
                 }
-                $Promptcheck = $Lines
-            } 
+            }
+            $Promptcheck = $Lines
+            
             start-sleep -Milliseconds 50
         }
     }
     if ($ActionType = 'LoadState') {
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
-            if (!($Promptcheck)) {
-                foreach ($line in ($lines = get-content $RunLog)){
-                    if (!($promptcheck -contains $line)) {
-                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                            $line = ($Line.Split(',', 4)[3]).TrimStart()
-                        }
-                        Update-USMTTextBox -Text $Line
+            foreach ($line in ($lines = get-content $RunLog)) {
+                if (!($promptcheck -contains $line)) {
+                    if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                        $line = ($Line.Split(',', 4)[3]).TrimStart()
                     }
+                    Update-USMTTextBox -Text $Line
                 }
-                $Promptcheck = $Lines
-            } 
+            }
+            $Promptcheck = $Lines
+            
             start-sleep -Milliseconds 50
         }
     }
