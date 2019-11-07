@@ -273,16 +273,25 @@ function Invoke-USMT {
             Update-Textbox "Failed to copy $USMTPath to $SourceComputer" -color 'Red'
             Return
         }
+
         #Enable CredSSP
         Enable-WSManCredSSP -Role client -DelegateComputer $SourceComputer -Force
-        if ((get-item wsman:\localhost\client\trustedhosts).value -eq '') {
-            Set-Item WSMan:\localhost\Client\TrustedHosts -Value $SourceComputer -force
-        }
-        else {
-            Set-Item WSMan:\localhost\Client\TrustedHosts -Concatenate -Value $SourceComputer -force
-        }
-        Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force } 
         
+        try {
+            Invoke-Command -ComputerName $SourceComputer -ErrorAction stop -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force }
+        }
+        catch {
+            if (!((get-service -name WinRM).status -eq 'Running')) {
+                start-service -name WinRM
+            }
+            if ((get-item wsman:\localhost\client\trustedhosts).value -eq '') {
+                Set-Item WSMan:\localhost\Client\TrustedHosts -Value $SourceComputer -force
+            }
+            else {
+                Set-Item WSMan:\localhost\Client\TrustedHosts -Concatenate -Value $SourceComputer -force
+            }
+            Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force } 
+        }
         
         #Start scanstate on source
         if (!(Test-Path "USMT:\usmtfiles\$SourceComputer")) {
