@@ -287,90 +287,7 @@ function Invoke-USMT {
 
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
-
-        if ($CurrentFile.visible -eq $false) {
-            $CurrentFile.Value = 0
-            $CurrentFile.Visible = $true
-        }
-        while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
-            if ($Lastline) {
-                Clear-Variable -name LastLine
-            }
-            if ($Promptcheck) {
-                Clear-Variable -name Promptcheck
-            }
-
-            if (!($Promptcheck)) {
-                foreach ($line in (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"})) {
-                    if (!($promptcheck -contains $line)) {
-                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                            $line = ($Line.Split(',', 4)[3]).TrimStart()
-                        }
-                        $lastline += "$line`n"
-                    }
-                }
-                $Promptcheck = $lines
-            } 
-            else {
-                Clear-Variable -name LastLine
-                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock {get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt"}))) {
-                    if (!($promptcheck -contains $line)) {
-                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                            $line = ($Line.Split(',', 4)[3]).TrimStart()
-                        }
-                        $lastline += "$line`n"
-                    }
-                }
-                $Promptcheck = $lines
-            }
-            
-            if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
-                if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Red'
-                }
-                elseif ($lastline.TrimEnd() -match 'WARNING') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
-                }
-                elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
-                    Update-Textbox $lastline.TrimEnd() -color 'Green'
-                }
-                elseif ($lastline.TrimEnd() -match 'Waiting') {
-                    if (!($wait)) {
-                        $Wait = $true
-                        update-Textbox $lastline.TrimEnd()
-                    }
-                }
-                else {
-                    $Wait = $false
-                    Update-Textbox $lastline.TrimEnd()
-                }
-            }
-            start-sleep -seconds 3
-        }
-        if ($CurrentFile.Visible -eq $true) {
-            $CurrentFile.Visible = $false
-        }
-        if ($TotalProgress.Visible -eq $true) {
-            $TotalProgress.Visible = $false
-        }
-
-
-
-
-
-
-
-
-
+        Get-USMTProgress -ActionType "NetworkScan"
         #Get-ProgressBar -Runlog "USMT:\usmtfiles\$SourceComputer\scan_progress.txt" -Job $job.id -Tracker
         #
         <#
@@ -512,15 +429,83 @@ function Get-USMTProgress {
         [string] $ActionType
     )
 
-    try {
-        # Get the most recent entry in the progress log
-        $LastLine = Get-Content "$Destination\$($ActionType)_progress.log" -Tail 1 -ErrorAction SilentlyContinue | Out-String
-        if ((($LastLine.Split(',', 4)[3]).TrimStart()) -ne $Promptcheck) {
-            Update-Textbox ($LastLine.Split(',', 4)[3]).TrimStart()
-            $Script:Promptcheck = ($LastLine.Split(',', 4)[3]).TrimStart()
+    if ($Lastline) {
+        Clear-Variable -name LastLine
+    }
+    if ($Promptcheck) {
+        Clear-Variable -name Promptcheck
+    }
+    if ($CurrentFile.visible -eq $false) {
+        $CurrentFile.Value = 0
+        $CurrentFile.Visible = $true
+    }
+    if ($ActionType = 'NetworkScan') {
+        while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
+        
+            if (!($Promptcheck)) {
+                foreach ($line in (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue })) {
+                    if (!($promptcheck -contains $line)) {
+                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                            $line = ($Line.Split(',', 4)[3]).TrimStart()
+                        }
+                        $lastline += "$line`n"
+                    }
+                }
+                $Promptcheck = $lines
+            } 
+            else {
+                Clear-Variable -name LastLine
+                foreach ($line in ($lines = (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" }))) {
+                    if (!($promptcheck -contains $line)) {
+                        if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
+                            $line = ($Line.Split(',', 4)[3]).TrimStart()
+                        }
+                        $lastline += "$line`n"
+                    }
+                }
+                $Promptcheck = $lines
+            }
+            
+            if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
+                if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
+                    $CurrentFile.Value = $matches[1]
+                }
+                elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
+                    Update-Textbox $lastline.TrimEnd() -Color 'Red'
+                }
+                elseif ($lastline.TrimEnd() -match 'WARNING') {
+                    Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
+                }
+                elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
+                    Update-Textbox $lastline.TrimEnd() -color 'Green'
+                }
+                elseif ($lastline.TrimEnd() -match 'Waiting') {
+                    if (!($wait)) {
+                        $Wait = $true
+                        update-Textbox $lastline.TrimEnd()
+                    }
+                }
+                else {
+                    $Wait = $false
+                    Update-Textbox $lastline.TrimEnd()
+                }
+            }
+            start-sleep -seconds 3
         }
     }
-    catch { Update-Textbox '.' -NoNewLine }
+    
+    if ($CurrentFile.Visible -eq $true) {
+        $CurrentFile.Visible = $false
+    }
+    if ($TotalProgress.Visible -eq $true) {
+        $TotalProgress.Visible = $false
+    }
 }
 
 function Get-USMTResults {
