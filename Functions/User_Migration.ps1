@@ -443,7 +443,7 @@ function Get-USMTProgress {
         while (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { Get-process scanstate -ErrorAction SilentlyContinue }) {
         
             if (!($Promptcheck)) {
-                foreach ($line in (Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue })) {
+                foreach ($line in ($lines = Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBLock { get-content "C:\usmtfiles\$using:SourceComputer\scan_progress.txt" -ErrorAction SilentlyContinue })) {
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
@@ -496,7 +496,7 @@ function Get-USMTProgress {
                     Update-Textbox $lastline.TrimEnd()
                 }
             }
-            start-sleep -seconds 3
+            start-sleep -Milliseconds 50
         }
     }
     
