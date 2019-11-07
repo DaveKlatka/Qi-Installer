@@ -275,15 +275,15 @@ function Invoke-USMT {
         }
 
         #Enable CredSSP
+        if (!((get-service -name WinRM).status -eq 'Running')) {
+            start-service -name WinRM
+        }
         Enable-WSManCredSSP -Role client -DelegateComputer $SourceComputer -Force
         
         try {
             Invoke-Command -ComputerName $SourceComputer -ErrorAction stop -Credential $Credential -ScriptBlock { Enable-WSManCredSSP -Role server -Force }
         }
         catch {
-            if (!((get-service -name WinRM).status -eq 'Running')) {
-                start-service -name WinRM
-            }
             if ((get-item wsman:\localhost\client\trustedhosts).value -eq '') {
                 Set-Item WSMan:\localhost\Client\TrustedHosts -Value $SourceComputer -force
             }
@@ -298,7 +298,7 @@ function Invoke-USMT {
             New-Item -ItemType Directory -Path "USMT:\usmtfiles\$SourceComputer" | Out-Null
         }
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:0 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
+            &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:1 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
         } -asjob
 
         # Give the process time to start before checking for its existence
