@@ -310,7 +310,15 @@ function Invoke-USMT {
         if (!(Test-Path $Destination)) {
             New-Item -ItemType Directory -Path $Destination | Out-Null
         }
-        Copy-Item -Path "USMT:\usmtfiles\$SourceComputer" -Destination $Destination -ErrorAction Stop -Recurse -force
+        $RunLog = "$ScriptPath\logs\Robocopy.txt"
+        $Arguments = "`"\\$SourceComputer\c$\usmtfiles\$SourceComputer\`" `"$Destination`" *.* /s" 
+
+        Start-Sleep -Seconds 3
+        
+        $Process = (start-process Robocopy.exe -ArgumentList $Arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+
+        Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID -Tracker
+        #Copy-Item -Path "USMT:\usmtfiles\$SourceComputer\" -Destination $ScriptPath -ErrorAction Stop -Recurse -force
 
         #Start loadscan on destination
         # Get the location of the save state data
@@ -319,7 +327,7 @@ function Invoke-USMT {
         $ContinueCommand = "/c"
         $Arguments = "`"$Destination`" i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml $LocalAccountOptions $Logs $ContinueCommand /v:13"
         $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
-
+        start-sleep 100
         Get-USMTProgress -Runlog "$Destination\load_progress.txt" -processID $Process.ID -ActionType "LoadState"
         #
         <#
