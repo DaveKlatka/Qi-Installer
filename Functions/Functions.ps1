@@ -215,16 +215,13 @@ Function Get-ProgressBar {
     
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
-                if (!($promptcheck -contains $line)) {
                     foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
                         Update-ProgressTextBox -Text $line
                     }
                     $Promptcheck = $lines
-                    start-sleep -Milliseconds 5
-                }   
+                    start-sleep -Milliseconds 5  
             }
             else {
-                if (!($Promptcheck)) {
                     foreach ($line in ($lines = get-content $RunLog)) {
                         if (!($promptcheck -contains $line)) {
                             Update-ProgressTextBox -Text $line
@@ -232,7 +229,6 @@ Function Get-ProgressBar {
                     } 
                     $Promptcheck = $lines
                     start-sleep -Milliseconds 5
-                } 
             }
 
             if ($CurrentFile.Value -lt 100) {
@@ -263,7 +259,6 @@ Function Get-ProgressBar {
         }
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
-                if (!($Promptcheck)) {
                     foreach ($line in ($lines = ([xml](get-content $RunLog -ErrorAction SilentlyContinue)).logentries.logentry.message)) {
                         if (!($promptcheck -contains $line)) {
                             Update-ProgressTextBox -Text $line -Tracker
@@ -271,10 +266,8 @@ Function Get-ProgressBar {
                     }
                     $Promptcheck = $lines
                     start-sleep -Milliseconds 50
-                }
             }
             else {
-                if (!($Promptcheck)) {
                     foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
                         if (!($promptcheck -contains $line)) {
                             if ($line -match '([\d]+)\.\d\%' -or $line -match '([\d]+)%') {
@@ -285,7 +278,6 @@ Function Get-ProgressBar {
                     }
                     $Promptcheck = $lines
                     start-sleep -Milliseconds 50
-                } 
             }
             
             
