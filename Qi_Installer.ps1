@@ -6,7 +6,7 @@ function Enable-Debug {
         }
 
         $DebugCommandButton_Click = {
-            $DebugResult = $DebugCommand.Text
+            $DebugResult = $DebugCommand.Text | Invoke-Expression
             Update-Textbox $DebugResult
         }
 }
