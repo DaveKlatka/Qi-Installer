@@ -220,6 +220,7 @@ Function Get-ProgressBar {
                         Update-ProgressTextBox -Text $line
                     }
                     $Promptcheck = $lines
+                    start-sleep -Milliseconds 5
                 }   
             }
             else {
@@ -230,6 +231,7 @@ Function Get-ProgressBar {
                         }
                     } 
                     $Promptcheck = $lines
+                    start-sleep -Milliseconds 5
                 } 
             }
 
@@ -245,7 +247,7 @@ Function Get-ProgressBar {
                 }
                 $CurrentFile.Value = 0
             }
-            start-sleep -Milliseconds 5
+            
         }
         if ($CurrentFile.Visible -eq $true) {
             $CurrentFile.Visible = $false
@@ -268,6 +270,7 @@ Function Get-ProgressBar {
                         }
                     }
                     $Promptcheck = $lines
+                    start-sleep -Milliseconds 50
                 }
             }
             else {
@@ -281,10 +284,11 @@ Function Get-ProgressBar {
                         }
                     }
                     $Promptcheck = $lines
+                    start-sleep -Milliseconds 50
                 } 
             }
             
-            start-sleep -Milliseconds 50
+            
         }
         if ($CurrentFile.Visible -eq $true) {
             $CurrentFile.Visible = $false
