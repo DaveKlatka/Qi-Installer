@@ -34,8 +34,10 @@ function Start-QiInstaller {
     }
 
     $DebugCommandButton_Click = {
-        Update-Textbox Invoke-Expression $DebugCommand.Text
+        $DebugResult = Invoke-Expression $DebugCommand.Text
         $DebugCommand.Text = ''
+        Update-Textbox "$($DebugResult.value)"
+
     }
 
     #Authenticator
