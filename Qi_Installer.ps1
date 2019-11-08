@@ -28,9 +28,6 @@ function Start-QiInstaller {
         New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
     }
     #Debug Options
-    if ($QiDebug) {
-        $DebugConsole.Visible = -not $DebugCommandButton.Visible
-    }
     $DebugConsole_Click = {
         $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
         $DebugCommand.Visible = -not $DebugCommand.Visible
@@ -42,7 +39,7 @@ function Start-QiInstaller {
         Update-Textbox $DebugResult
 
     }
-    
+
     #Authenticator
     $AuthSubmit_Click = {
         #https://github.com/gavsto/AutomateAPI
@@ -339,6 +336,11 @@ function Start-QiInstaller {
     }
     else {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
+    }
+    
+    #Debug Options
+    if ($QiDebug) {
+        $DebugConsole.Visible = -not $DebugCommandButton.Visible
     }
     
     #Check Automate Installed
