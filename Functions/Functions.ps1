@@ -301,7 +301,7 @@ function Update-ProgressTextBox {
     )
     if (-not $Tracker) {
         if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
-            if ($Text.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
+            if ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
                 Update-Textbox $Text.TrimEnd() -Color 'Red'
             }
             elseif ($Text.TrimEnd() -match 'WARNING') {
@@ -323,37 +323,37 @@ function Update-ProgressTextBox {
         }
     }
     else {
-        if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
-            if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
+        if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
+            if ($Text.TrimEnd() -match '([\d]+)\.\d\%') {
                 $CurrentFile.Value = $matches[1]
             }
-            elseif ($lastline.TrimEnd() -match '([\d]+)%') {
+            elseif ($Text.TrimEnd() -match '([\d]+)%') {
                 $CurrentFile.Value = $matches[1]
             }
-            elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
+            elseif ($Text.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
                 $CurrentFile.Value = $matches[1]
             }
-            elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
+            elseif ($Text.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
                 $CurrentFile.Value = $matches[1]
             }
-            elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
-                Update-Textbox $lastline.TrimEnd() -Color 'Red'
+            elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
+                Update-Textbox $Text.TrimEnd() -Color 'Red'
             }
-            elseif ($lastline.TrimEnd() -match 'WARNING') {
-                Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
+            elseif ($Text.TrimEnd() -match 'WARNING') {
+                Update-Textbox $Text.TrimEnd() -Color 'Yellow'
             }
-            elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
-                Update-Textbox $lastline.TrimEnd() -color 'Green'
+            elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
+                Update-Textbox $Text.TrimEnd() -color 'Green'
             }
-            elseif ($lastline.TrimEnd() -match 'Waiting') {
+            elseif ($Text.TrimEnd() -match 'Waiting') {
                 if (!($wait)) {
                     $Wait = $true
-                    update-Textbox $lastline.TrimEnd()
+                    update-Textbox $Text.TrimEnd()
                 }
             }
             else {
                 $Wait = $false
-                Update-Textbox $lastline.TrimEnd()
+                Update-Textbox $Text.TrimEnd()
             }
         }
     } 
