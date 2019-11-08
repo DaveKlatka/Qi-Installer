@@ -36,7 +36,6 @@ function Start-QiInstaller {
         }
         else {
             (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
-
         }
         Try {
             $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
@@ -370,8 +369,19 @@ function Start-QiInstaller {
     foreach ($row in $SystemInfo.Rows) {
         $row.DefaultCellStyle.BackColor = $SystemInfo.BackgroundColor
     }
-    
-    
+
+    if ($QiDebug) {
+        $DebugConsole.Visible = $true
+        $DebugConsole_Click = {
+            $DebugCommandButton.Visible = !$DebugCommandButton.Visible
+            $DebugCommand.Visible = !$DebugCommand.Visible
+        }
+
+        $DebugCommandButton_Click = {
+        
+        }
+    }
+
     $ExtraDataGridView.ColumnCount = 1
     $TechInstaller.icon = $ico
     $picturebox1.imageLocation = $png

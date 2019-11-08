@@ -74,6 +74,9 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Label]$AuthError = $null
 [System.Windows.Forms.TextBox]$AuthUser = $null
 [System.Windows.Forms.Label]$Label1 = $null
+[System.Windows.Forms.Button]$DebugConsole = $null
+[System.Windows.Forms.TextBox]$DebugCommand = $null
+[System.Windows.Forms.Button]$DebugCommandButton = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -116,12 +119,16 @@ $GroupBox4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $USMTCheckList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $Profiles = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage6 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$BetaButton2 = (New-Object -TypeName System.Windows.Forms.Button)
 $ImportButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox7 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $ImportSelect = (New-Object -TypeName System.Windows.Forms.Button)
 $ImportLocation = (New-Object -TypeName System.Windows.Forms.TextBox)
 $TabPage7 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$Beta3 = (New-Object -TypeName System.Windows.Forms.Button)
+$RunNetMig = (New-Object -TypeName System.Windows.Forms.Button)
 $ComputerInfo = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$UNCVerified = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $ConnectionCheckBox = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $TestConnection = (New-Object -TypeName System.Windows.Forms.Button)
 $NewIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
@@ -147,10 +154,9 @@ $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthError = (New-Object -TypeName System.Windows.Forms.Label)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
-$UNCVerified = (New-Object -TypeName System.Windows.Forms.CheckBox)
-$RunNetMig = (New-Object -TypeName System.Windows.Forms.Button)
-$BetaButton2 = (New-Object -TypeName System.Windows.Forms.Button)
-$Beta3 = (New-Object -TypeName System.Windows.Forms.Button)
+$DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
+$DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
+$DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -659,6 +665,20 @@ $TabPage6.TabIndex = [System.Int32]1
 $TabPage6.Text = [System.String]'Import'
 $TabPage6.UseVisualStyleBackColor = $true
 #
+#BetaButton2
+#
+$BetaButton2.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$BetaButton2.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
+
+$BetaButton2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
+$BetaButton2.Name = [System.String]'BetaButton2'
+$BetaButton2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
+$BetaButton2.TabIndex = [System.Int32]2
+$BetaButton2.Text = [System.String]'Beta'
+$BetaButton2.UseCompatibleTextRendering = $true
+$BetaButton2.UseVisualStyleBackColor = $true
+$BetaButton2.add_Click($BetaButton2_Click)
+#
 #ImportButton
 #
 $ImportButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]210,[System.Int32]381))
@@ -714,6 +734,31 @@ $TabPage7.Text = [System.String]'Network Migration'
 $TabPage7.UseVisualStyleBackColor = $true
 $TabPage7.Visible = $false
 #
+#Beta3
+#
+$Beta3.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$Beta3.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
+
+$Beta3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
+$Beta3.Name = [System.String]'Beta3'
+$Beta3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
+$Beta3.TabIndex = [System.Int32]2
+$Beta3.Text = [System.String]'Beta'
+$Beta3.UseCompatibleTextRendering = $true
+$Beta3.UseVisualStyleBackColor = $true
+$Beta3.add_Click($Beta3_Click)
+#
+#RunNetMig
+#
+$RunNetMig.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]381))
+$RunNetMig.Name = [System.String]'RunNetMig'
+$RunNetMig.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]23))
+$RunNetMig.TabIndex = [System.Int32]1
+$RunNetMig.Text = [System.String]'Network Migration'
+$RunNetMig.UseCompatibleTextRendering = $true
+$RunNetMig.UseVisualStyleBackColor = $true
+$RunNetMig.add_Click($RunNetMig_Click)
+#
 #ComputerInfo
 #
 $ComputerInfo.Controls.Add($UNCVerified)
@@ -734,6 +779,17 @@ $ComputerInfo.TabIndex = [System.Int32]0
 $ComputerInfo.TabStop = $false
 $ComputerInfo.Text = [System.String]'Computer Info'
 $ComputerInfo.UseCompatibleTextRendering = $true
+#
+#UNCVerified
+#
+$UNCVerified.Enabled = $false
+$UNCVerified.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]123))
+$UNCVerified.Name = [System.String]'UNCVerified'
+$UNCVerified.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]104,[System.Int32]19))
+$UNCVerified.TabIndex = [System.Int32]8
+$UNCVerified.Text = [System.String]'UNC Verified'
+$UNCVerified.UseCompatibleTextRendering = $true
+$UNCVerified.UseVisualStyleBackColor = $true
 #
 #ConnectionCheckBox
 #
@@ -864,7 +920,7 @@ $TotalProgress.Visible = $false
 #
 $AuthPanel.BackColor = [System.Drawing.Color]::Transparent
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]427))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]723,[System.Int32]470))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]5
@@ -986,61 +1042,46 @@ $Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
 #
-#UNCVerified
+#DebugConsole
 #
-$UNCVerified.Enabled = $false
-$UNCVerified.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]123))
-$UNCVerified.Name = [System.String]'UNCVerified'
-$UNCVerified.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]104,[System.Int32]19))
-$UNCVerified.TabIndex = [System.Int32]8
-$UNCVerified.Text = [System.String]'UNC Verified'
-$UNCVerified.UseCompatibleTextRendering = $true
-$UNCVerified.UseVisualStyleBackColor = $true
+$DebugConsole.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]315,[System.Int32]450))
+$DebugConsole.Name = [System.String]'DebugConsole'
+$DebugConsole.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]108,[System.Int32]23))
+$DebugConsole.TabIndex = [System.Int32]23
+$DebugConsole.Text = [System.String]'Debug Console'
+$DebugConsole.UseCompatibleTextRendering = $true
+$DebugConsole.UseVisualStyleBackColor = $true
+$DebugConsole.Visible = $false
+$DebugConsole.add_Click($DebugConsole_Click)
 #
-#RunNetMig
+#DebugCommand
 #
-$RunNetMig.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]381))
-$RunNetMig.Name = [System.String]'RunNetMig'
-$RunNetMig.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]23))
-$RunNetMig.TabIndex = [System.Int32]1
-$RunNetMig.Text = [System.String]'Network Migration'
-$RunNetMig.UseCompatibleTextRendering = $true
-$RunNetMig.UseVisualStyleBackColor = $true
-$RunNetMig.add_Click($RunNetMig_Click)
+$DebugCommand.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]315,[System.Int32]397))
+$DebugCommand.Name = [System.String]'DebugCommand'
+$DebugCommand.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]488,[System.Int32]21))
+$DebugCommand.TabIndex = [System.Int32]24
+$DebugCommand.Visible = $false
 #
-#BetaButton2
+#DebugCommandButton
 #
-$BetaButton2.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$BetaButton2.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
-
-$BetaButton2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
-$BetaButton2.Name = [System.String]'BetaButton2'
-$BetaButton2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
-$BetaButton2.TabIndex = [System.Int32]2
-$BetaButton2.Text = [System.String]'Beta'
-$BetaButton2.UseCompatibleTextRendering = $true
-$BetaButton2.UseVisualStyleBackColor = $true
-$BetaButton2.add_Click($BetaButton2_Click)
-#
-#Beta3
-#
-$Beta3.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$Beta3.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
-
-$Beta3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
-$Beta3.Name = [System.String]'Beta3'
-$Beta3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
-$Beta3.TabIndex = [System.Int32]2
-$Beta3.Text = [System.String]'Beta'
-$Beta3.UseCompatibleTextRendering = $true
-$Beta3.UseVisualStyleBackColor = $true
-$Beta3.add_Click($Beta3_Click)
+$DebugCommandButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]315,[System.Int32]424))
+$DebugCommandButton.Name = [System.String]'DebugCommandButton'
+$DebugCommandButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]108,[System.Int32]23))
+$DebugCommandButton.TabIndex = [System.Int32]25
+$DebugCommandButton.Text = [System.String]'Submit Command'
+$DebugCommandButton.UseCompatibleTextRendering = $true
+$DebugCommandButton.UseVisualStyleBackColor = $true
+$DebugCommandButton.Visible = $false
+$DebugCommandButton.add_Click($DebugCommandButton_Click)
 #
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($DebugCommandButton)
+$TechInstaller.Controls.Add($DebugCommand)
+$TechInstaller.Controls.Add($DebugConsole)
 $TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($TotalProgress)
 $TechInstaller.Controls.Add($CurrentFile)
@@ -1081,6 +1122,7 @@ $AuthPanel.ResumeLayout($false)
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
 $TechInstaller.ResumeLayout($false)
+$TechInstaller.PerformLayout()
 Add-Member -InputObject $TechInstaller -Name base -Value $base -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox1 -Value $GroupBox1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name 365Checkbox -Value $365Checkbox -MemberType NoteProperty
@@ -1157,5 +1199,8 @@ Add-Member -InputObject $TechInstaller -Name AuthSubmit -Value $AuthSubmit -Memb
 Add-Member -InputObject $TechInstaller -Name AuthError -Value $AuthError -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthUser -Value $AuthUser -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Label1 -Value $Label1 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 }
 . InitializeComponent
