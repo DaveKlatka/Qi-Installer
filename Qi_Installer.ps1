@@ -378,7 +378,8 @@ function Start-QiInstaller {
         }
 
         $DebugCommandButton_Click = {
-        
+            $DebugResult = $DebugCommand.Text
+            Update-Textbox $DebugResult
         }
     }
 
