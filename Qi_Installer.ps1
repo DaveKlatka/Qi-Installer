@@ -383,7 +383,9 @@ function Start-QiInstaller {
 
     $DebugCommandButton_Click = {
         $DebugResult = $DebugCommand.Text | Invoke-Expression
+        $DebugCommand.Text = ''
         Update-Textbox $DebugResult
+
     }
 
     $ExtraDataGridView.ColumnCount = 1
