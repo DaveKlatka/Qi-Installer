@@ -39,6 +39,9 @@ function Start-QiInstaller {
         invoke-expression $test.value | out-file "$Scriptpath\logs\debugger.txt"
         Update-Textbox (Get-content -Path "$Scriptpath\logs\debugger.txt")
         Remove-Item -path "$Scriptpath\logs\debugger.txt" -force
+        
+        Update-Textbox $Test.value
+        
         $DebugCommand.Text = ''
         
 
