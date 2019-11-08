@@ -373,8 +373,8 @@ function Start-QiInstaller {
     if ($QiDebug) {
         $DebugConsole.Visible = $true
         $DebugConsole_Click = {
-            $DebugCommandButton.Visible = !$DebugCommandButton.Visible
-            $DebugCommand.Visible = !$DebugCommand.Visible
+            $DebugCommandButton.Visible = !($DebugCommandButton.Visible)
+            $DebugCommand.Visible = !($DebugCommand.Visible)
         }
 
         $DebugCommandButton_Click = {
