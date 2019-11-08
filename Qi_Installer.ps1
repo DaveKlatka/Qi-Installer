@@ -34,7 +34,7 @@ function Start-QiInstaller {
     }
 
     $DebugCommandButton_Click = {
-        $DebugResult = $DebugCommand.Text | Invoke-Expression
+        $DebugResult = Invoke-Expression $DebugCommand.Text
         $DebugCommand.Text = ''
         Update-Textbox $DebugResult
 
@@ -337,7 +337,7 @@ function Start-QiInstaller {
     else {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
     }
-    
+
     #Debug Options
     if ($QiDebug) {
         $DebugConsole.Visible = -not $DebugCommandButton.Visible
