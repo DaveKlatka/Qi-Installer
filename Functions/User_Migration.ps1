@@ -262,8 +262,8 @@ function Invoke-USMT {
     
     process {
         #Copy USMT files to remote computers
+        Get-USMT
         Try {
-            Get-USMT
             if (!(Test-Path "USMT:\usmtfiles")) {
                 New-Item -ItemType Directory -Path "USMT:\usmtfiles"# | Out-Null
             }
