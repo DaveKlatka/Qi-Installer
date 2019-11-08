@@ -318,9 +318,9 @@ function Invoke-USMT {
 
         $RunLog = "$ScriptPath\logs\Robocopy.txt"
         $Arguments = "\\$SourceComputer\c$\usmtfiles\$SourceComputer\ $Destination\ *.* /s" 
-
+        Update-TextBox $Arguments
         Start-Sleep -Seconds 3
-
+        
         $Process = (start-process Robocopy.exe -ArgumentList $Arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
 
         Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID -Tracker
