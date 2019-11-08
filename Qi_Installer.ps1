@@ -1,6 +1,3 @@
-function Enable-Debug {
-    $DebugConsole.Visible = -not $DebugCommandButton.Visible
-}
 function Start-QiInstaller {
     param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
@@ -374,7 +371,7 @@ function Start-QiInstaller {
     }
 
     if ($QiDebug) {
-        Enable-Debug
+        $DebugConsole.Visible = -not $DebugCommandButton.Visible
     }
     $DebugConsole_Click = {
         $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
