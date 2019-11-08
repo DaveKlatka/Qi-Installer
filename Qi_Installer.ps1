@@ -36,7 +36,7 @@ function Start-QiInstaller {
     $DebugCommandButton_Click = {
         $DebugResult = Invoke-Expression $DebugCommand.Text
         $DebugCommand.Text = ''
-        Update-Textbox $DebugResult.value
+        write-output $DebugResult.value
 
     }
 
