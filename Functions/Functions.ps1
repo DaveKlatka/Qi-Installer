@@ -215,20 +215,20 @@ Function Get-ProgressBar {
     
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
-                    foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
-                        Update-ProgressTextBox -Text $line
-                    }
-                    $Promptcheck = $lines
-                    start-sleep -Milliseconds 5  
+                foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
+                    Update-ProgressTextBox -Text $line
+                }
+                $Promptcheck = $lines
+                start-sleep -Milliseconds 5  
             }
             else {
-                    foreach ($line in ($lines = get-content $RunLog)) {
-                        if (!($promptcheck -contains $line)) {
-                            Update-ProgressTextBox -Text $line
-                        }
-                    } 
-                    $Promptcheck = $lines
-                    start-sleep -Milliseconds 5
+                foreach ($line in ($lines = get-content $RunLog)) {
+                    if (!($promptcheck -contains $line)) {
+                        Update-ProgressTextBox -Text $line
+                    }
+                } 
+                $Promptcheck = $lines
+                start-sleep -Milliseconds 5
             }
 
             if ($CurrentFile.Value -lt 100) {
@@ -259,25 +259,22 @@ Function Get-ProgressBar {
         }
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
-                    foreach ($line in ($lines = ([xml](get-content $RunLog -ErrorAction SilentlyContinue)).logentries.logentry.message)) {
-                        if (!($promptcheck -contains $line)) {
-                            Update-ProgressTextBox -Text $line -Tracker
-                        }
+                foreach ($line in ($lines = ([xml](get-content $RunLog -ErrorAction SilentlyContinue)).logentries.logentry.message)) {
+                    if (!($promptcheck -contains $line)) {
+                        Update-ProgressTextBox -Text $line -Tracker
                     }
-                    $Promptcheck = $lines
-                    start-sleep -Milliseconds 50
+                }
+                $Promptcheck = $lines
+                start-sleep -Milliseconds 50
             }
             else {
-                    foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
-                        if (!($promptcheck -contains $line)) {
-                            if ($line -match '([\d]+)\.\d\%' -or $line -match '([\d]+)%') {
-                                ((Get-Content -path $RunLog -Raw) -replace $line, '') | Set-Content -Path $Runlog
-                            }
-                            Update-ProgressTextBox -Text $line -Tracker
-                        }
+                foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
+                    if (!($promptcheck -contains $line)) {
+                        Update-ProgressTextBox -Text $line -Tracker
                     }
-                    $Promptcheck = $lines
-                    start-sleep -Milliseconds 50
+                }
+                $Promptcheck = $lines
+                start-sleep -Milliseconds 50
             }
             
             
