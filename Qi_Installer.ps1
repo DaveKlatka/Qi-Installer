@@ -40,7 +40,7 @@ function Start-QiInstaller {
         Write-Error (ivnoke-expression $($DebugCommand.Text))
         Write-Error "$($DebugCommand.Text)"
         $test = invoke-expression $DebugCommand.Text
-        Update-Textbox "$($test.value)"
+        Update-Textbox $($test.value)
 
         $DebugCommand.Text = ''
         
