@@ -41,7 +41,7 @@ function Start-QiInstaller {
             Update-Textbox $line
         }
         
-        #Remove-Item -path "$Scriptpath\logs\debugger.txt" -force
+        Remove-Item -path "$Scriptpath\logs\debugger.txt" -force
         $DebugCommand.Text = ''
 
     }
