@@ -1,16 +1,5 @@
 function Enable-Debug {
     $DebugConsole.Visible = -not $DebugCommandButton.Visible
-    $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
-    $DebugCommand.Visible = -not $DebugCommand.Visible
-        $DebugConsole_Click = {
-            $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
-            $DebugCommand.Visible = -not $DebugCommand.Visible
-        }
-
-        $DebugCommandButton_Click = {
-            $DebugResult = $DebugCommand.Text | Invoke-Expression
-            Update-Textbox $DebugResult
-        }
 }
 function Start-QiInstaller {
     param(
@@ -386,6 +375,15 @@ function Start-QiInstaller {
 
     if ($QiDebug) {
         Enable-Debug
+    }
+    $DebugConsole_Click = {
+        $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
+        $DebugCommand.Visible = -not $DebugCommand.Visible
+    }
+
+    $DebugCommandButton_Click = {
+        $DebugResult = $DebugCommand.Text | Invoke-Expression
+        Update-Textbox $DebugResult
     }
 
     $ExtraDataGridView.ColumnCount = 1
