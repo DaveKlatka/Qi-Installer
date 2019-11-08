@@ -35,8 +35,8 @@ function Start-QiInstaller {
 
     $DebugCommandButton_Click = {
         #$DebugResult = Invoke-Expression $DebugCommand.Text
-      
-        invoke-expression $DebugCommand.Text | out-file "$Scriptpath\logs\debugger.txt"
+        $test = @{value=$DebugCommand.Text}
+        invoke-expression $test.value | out-file "$Scriptpath\logs\debugger.txt"
         Update-Textbox (Get-content -Path "$Scriptpath\logs\debugger.txt")
         Remove-Item -path "$Scriptpath\logs\debugger.txt" -force
         $DebugCommand.Text = ''
