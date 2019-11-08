@@ -215,56 +215,22 @@ Function Get-ProgressBar {
     
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
-                if (!($Promptcheck)) {
+                if (!($promptcheck -contains $line)) {
                     foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
-                        $lastline += "$line`n"
+                        Update-ProgressTextBox -Text $line
                     }
-                }
-                else {
-                    Clear-Variable -name LastLine
-                    foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
-                        if (!($promptcheck -contains $line)) {
-                            $lastline += "$line`n"
-                        }
-                    } 
-                }
-                $Promptcheck = $lines
+                    $Promptcheck = $lines
+                }   
             }
             else {
                 if (!($Promptcheck)) {
-                    $LastLine = get-content $RunLog
-                    $Promptcheck = $lastline
-                } 
-                else {
-                    Clear-Variable -name LastLine
                     foreach ($line in ($lines = get-content $RunLog)) {
                         if (!($promptcheck -contains $line)) {
-                            $lastline += "$line`n"
+                            Update-ProgressTextBox -Text $line
                         }
-                    }
+                    } 
                     $Promptcheck = $lines
-                }
-            }
-            if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
-                if ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Red'
-                }
-                elseif ($lastline.TrimEnd() -match 'WARNING') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
-                }
-                elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
-                    Update-Textbox $lastline.TrimEnd() -color 'Green'
-                }
-                elseif ($lastline.TrimEnd() -match 'Waiting') {
-                    if (!($wait)) {
-                        $Wait = $true
-                        update-Textbox $lastline.TrimEnd()
-                    }
-                }
-                else {
-                    $Wait = $false
-                    Update-Textbox $lastline.TrimEnd()
-                }
+                } 
             }
 
             if ($CurrentFile.Value -lt 100) {
@@ -296,75 +262,28 @@ Function Get-ProgressBar {
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
                 if (!($Promptcheck)) {
-                    foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
-                        $lastline += "$line`n"
-                    }
-                }
-                else {
-                    Clear-Variable -name LastLine
-                    foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
+                    foreach ($line in ($lines = ([xml](get-content $RunLog -ErrorAction SilentlyContinue)).logentries.logentry.message)) {
                         if (!($promptcheck -contains $line)) {
-                            $lastline += "$line`n"
+                            Update-ProgressTextBox -Text $line -Tracker
                         }
-                    } 
+                    }
+                    $Promptcheck = $lines
                 }
-                $Promptcheck = $lines
             }
             else {
                 if (!($Promptcheck)) {
-                    foreach ($line in ($lines = get-content $RunLog)) {
+                    foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
                         if (!($promptcheck -contains $line)) {
-                            if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                                $line = ($Line.Split(',', 4)[3]).TrimStart()
+                            if ($line -match '([\d]+)\.\d\%' -or $line -match '([\d]+)%') {
+                                ((Get-Content -path $RunLog -Raw) -replace $line, '') | Set-Content -Path $Runlog
                             }
-                            $lastline += "$line`n"
+                            Update-ProgressTextBox -Text $line -Tracker
                         }
                     }
                     $Promptcheck = $lines
                 } 
-                else {
-                    Clear-Variable -name LastLine
-                    foreach ($line in ($lines = get-content $RunLog)) {
-                        if (!($promptcheck -contains $line)) {
-                            if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
-                                $line = ($Line.Split(',', 4)[3]).TrimStart()
-                            }
-                            $lastline += "$line`n"
-                        }
-                    }
-                    $Promptcheck = $lines
-                }
             }
-            if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
-                if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
-                    $CurrentFile.Value = $matches[1]
-                }
-                elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Red'
-                }
-                elseif ($lastline.TrimEnd() -match 'WARNING') {
-                    Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
-                }
-                elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
-                    Update-Textbox $lastline.TrimEnd() -color 'Green'
-                }
-                elseif ($lastline.TrimEnd() -match 'Waiting') {
-                    if (!($wait)) {
-                        $Wait = $true
-                        update-Textbox $lastline.TrimEnd()
-                    }
-                }
-                else {
-                    $Wait = $false
-                    Update-Textbox $lastline.TrimEnd()
-                }
-            }
+            
             start-sleep -Milliseconds 50
         }
         if ($CurrentFile.Visible -eq $true) {
@@ -374,6 +293,70 @@ Function Get-ProgressBar {
             $TotalProgress.Visible = $false
         }
     }  
+}
+function Update-ProgressTextBox {
+    Param (
+        [string] $Text,
+        [switch] $Tracker
+    )
+    if (-not $Tracker) {
+        if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
+            if ($Text.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
+                Update-Textbox $Text.TrimEnd() -Color 'Red'
+            }
+            elseif ($Text.TrimEnd() -match 'WARNING') {
+                Update-Textbox $Text.TrimEnd() -Color 'Yellow'
+            }
+            elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
+                Update-Textbox $Text.TrimEnd() -color 'Green'
+            }
+            elseif ($Text.TrimEnd() -match 'Waiting') {
+                if (!($wait)) {
+                    $Wait = $true
+                    update-Textbox $Text.TrimEnd()
+                }
+            }
+            else {
+                $Wait = $false
+                Update-Textbox $Text.TrimEnd()
+            }
+        }
+    }
+    else {
+        if (!($null -eq $lastline) -and $lastline.TrimEnd() -ne '.') {
+            if ($lastline.TrimEnd() -match '([\d]+)\.\d\%') {
+                $CurrentFile.Value = $matches[1]
+            }
+            elseif ($lastline.TrimEnd() -match '([\d]+)%') {
+                $CurrentFile.Value = $matches[1]
+            }
+            elseif ($lastline.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
+                $CurrentFile.Value = $matches[1]
+            }
+            elseif ($lastline.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
+                $CurrentFile.Value = $matches[1]
+            }
+            elseif ($lastline.TrimEnd() -match 'ERROR' -or $lastline.TrimEnd() -match 'not successful') {
+                Update-Textbox $lastline.TrimEnd() -Color 'Red'
+            }
+            elseif ($lastline.TrimEnd() -match 'WARNING') {
+                Update-Textbox $lastline.TrimEnd() -Color 'Yellow'
+            }
+            elseif ($lastline.TrimEnd() -match 'successful' -or $lastline.TrimEnd() -match 'completed' -or $lastline.TrimEnd() -match 'installed') {
+                Update-Textbox $lastline.TrimEnd() -color 'Green'
+            }
+            elseif ($lastline.TrimEnd() -match 'Waiting') {
+                if (!($wait)) {
+                    $Wait = $true
+                    update-Textbox $lastline.TrimEnd()
+                }
+            }
+            else {
+                $Wait = $false
+                Update-Textbox $lastline.TrimEnd()
+            }
+        }
+    } 
 }
 
 function Set-RestorePoint {

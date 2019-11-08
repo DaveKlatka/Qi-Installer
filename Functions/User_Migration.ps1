@@ -313,32 +313,20 @@ function Invoke-USMT {
 
         $RunLog = "$ScriptPath\logs\Robocopy.txt"
         $Arguments = "\\$SourceComputer\c$\usmtfiles\$SourceComputer\ $Destination\ *.* /s" 
-        
-        Start-Sleep -Seconds 3
-        
         $Process = (start-process Robocopy.exe -ArgumentList $Arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
 
         Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID -Tracker
-        #Copy-Item -Path "USMT:\usmtfiles\$SourceComputer\" -Destination $ScriptPath -ErrorAction Stop -Recurse -force
 
         #Start loadscan on destination
         # Get the location of the save state data
         $LocalAccountOptions = '/all'
         $Logs = "`"/l:$Destination\load.txt`" `"/progress:$Destination\load_progress.txt`""
         $ContinueCommand = "/c"
-        $Arguments = "`"$Destination`" i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml $LocalAccountOptions $Logs $ContinueCommand /v:13"
+        $Arguments = "`"$Destination`" i:$USMTPath\migdocs.xml /i:$USMTPath\migapp.xml $LocalAccountOptions $Logs $ContinueCommand /v:13"
         $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
         
         Get-USMTProgress -Runlog "$Destination\load_progress.txt" -processID $Process.ID -ActionType "LoadState"
-        #
-        <#
-        
-        Invoke-Command -ComputerName $DestinationComputer -Authentication Credssp -Credential $Credential -Scriptblock {
-            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Using:SecureKey)
-            $Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-            c:\USMTFiles\loadstate.exe "$Using:SharePath\$Using:Username" /i:c:\usmtfiles\printers.xml /i:c:\usmtfiles\custom.xml /i:c:\usmtfiles\migdocs.xml /i:c:\usmtfiles\migapp.xml /v:13 /ui:$Using:Domain\$Using:username /c /decrypt /key:$Key
-        } -ArgumentList { $UserName, $SharePath, $SecureKey, $DestinationComputer, $Domain }
-#>
+ 
         #Remove USMT files on remote computers
         #Remove-Item \\$SourceComputer\C$\USMTFiles -Force -Recurse
         #Remove-Item \\$DestinationComputer\C$\USMTFiles -Force -Recurse
