@@ -27,6 +27,21 @@ function Start-QiInstaller {
     if (!(Test-Path $ScriptPath\logs)) {
         New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
     }
+    #Debug Options
+    if ($QiDebug) {
+        $DebugConsole.Visible = -not $DebugCommandButton.Visible
+    }
+    $DebugConsole_Click = {
+        $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
+        $DebugCommand.Visible = -not $DebugCommand.Visible
+    }
+
+    $DebugCommandButton_Click = {
+        $DebugResult = $DebugCommand.Text | Invoke-Expression
+        $DebugCommand.Text = ''
+        Update-Textbox $DebugResult
+
+    }
     
     #Authenticator
     $AuthSubmit_Click = {
@@ -368,21 +383,6 @@ function Start-QiInstaller {
     $SystemInfo.DefaultCellStyle.SelectionForeColor = 'Black'
     foreach ($row in $SystemInfo.Rows) {
         $row.DefaultCellStyle.BackColor = $SystemInfo.BackgroundColor
-    }
-
-    if ($QiDebug) {
-        $DebugConsole.Visible = -not $DebugCommandButton.Visible
-    }
-    $DebugConsole_Click = {
-        $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
-        $DebugCommand.Visible = -not $DebugCommand.Visible
-    }
-
-    $DebugCommandButton_Click = {
-        $DebugResult = $DebugCommand.Text | Invoke-Expression
-        $DebugCommand.Text = ''
-        Update-Textbox $DebugResult
-
     }
 
     $ExtraDataGridView.ColumnCount = 1
