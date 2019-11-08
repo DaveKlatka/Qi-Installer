@@ -1,8 +1,8 @@
 function Enable-Debug {
     $DebugConsole.Visible = $true
         $DebugConsole_Click = {
-            $DebugCommandButton.Visible = !($DebugCommandButton.Visible)
-            $DebugCommand.Visible = !($DebugCommand.Visible)
+            $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
+            $DebugCommand.Visible = -not $DebugCommand.Visible
         }
 
         $DebugCommandButton_Click = {
