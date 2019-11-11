@@ -58,10 +58,11 @@ function Start-QiInstaller {
     #Authenticator
     $AuthSubmit_Click = {
         #https://github.com/gavsto/AutomateAPI
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
+        
         if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
             get-DebugValues
         }
-        $InvokeConnectAutomateAPI
 
         Try {
             $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
@@ -340,7 +341,6 @@ function Start-QiInstaller {
     $TechInstaller.ShowDialog()
 }
 function get-DebugValues {
-    $Script:InvokeConnectAutomateAPI = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;"
     $Script:InvokeAutomate = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Automate.ps1') | Invoke-Expression;"
     $Script:InvokeDotnet = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/dotnet.ps1') | Invoke-Expression;"
     $Script:InvokePowershell = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Powershell.ps1') | Invoke-Expression;"
@@ -349,6 +349,8 @@ function get-DebugValues {
     $Script:InvokeDell = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/DellCommandUpdate.ps1') | Invoke-Expression;"
     $Script:InvokeWin10 = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/UpgradeWin10.ps1') | Invoke-Expression;"
     $Script:InvokeRename = "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Rename.ps1') | Invoke-Expression;"
+    #Authenticator
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
     #GUI
     (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.designer.ps1') | Invoke-Expression;
     #USMT Functions
