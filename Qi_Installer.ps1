@@ -58,10 +58,8 @@ function Start-QiInstaller {
     #Authenticator
     $AuthSubmit_Click = {
         #https://github.com/gavsto/AutomateAPI
-        if ($AuthUser.Text -eq 'Debug') {
-            if ($2FAAuth.Text = '123456') {
-                get-DebugValues
-            }
+        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
+            get-DebugValues
         }
         $ConnectAutomateAPI
 
@@ -278,7 +276,7 @@ function Start-QiInstaller {
 
     #USMT Functions
     #. (Join-Path $PSScriptRoot 'Functions/User_Migration.ps1')
-        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JTVAbJ') | Invoke-Expression; 
+    (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JTVAbJ') | Invoke-Expression; 
     
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
