@@ -6,6 +6,8 @@ function Start-QiInstaller {
         [string] $AutomatePass,
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $DownloadHost,
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
+        [string] $ScriptPath,
         [switch] $QiDebug
     )
 
@@ -31,7 +33,9 @@ function Start-QiInstaller {
     $DebugConsole_Click = {
         $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
         $DebugCommand.Visible = -not $DebugCommand.Visible
-        $AuthPanel.Visible = -not $authPanel.Visible
+        if ($AuthPanel.Visible) {
+            $AuthPanel.Visible = $false
+        }
     }
 
     $DebugCommandButton_Click = {
@@ -56,10 +60,13 @@ function Start-QiInstaller {
         else {
             (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
         }
-        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
+        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456' -and $QiDebug -eq $true) {
             #Debug Options
             $DebugConsole.Visible = -not $DebugCommandButton.Visible
-            
+        }
+        elseif ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
+            start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command $ScriptPath = $ScriptPath;(New-Object System.Net.WebClient).DownloadString('http://bit.ly/34uSuCU') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
+            $TechInstaller.Close()
         }
         else {
             Try {
@@ -351,6 +358,10 @@ function Start-QiInstaller {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
     }
     
+    if ($QiDebug) {
+        $DebugConsole.Visible = -not $DebugCommandButton.Visible
+    }
+
     #Check Automate Installed
     if (Test-Path $env:windir\LTSVC) {
         $ReInstall_Automate.Enabled = $true
