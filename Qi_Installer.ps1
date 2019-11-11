@@ -72,10 +72,10 @@ function Start-QiInstaller {
                 $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
                 Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
                 if ($AuthUser.text -eq 'dklatkaadm') {
-                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations?").id
+                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
                 }
                 else {
-                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations?").id
+                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
                 }
                 $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
         
