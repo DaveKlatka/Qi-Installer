@@ -62,6 +62,8 @@ function Start-QiInstaller {
         
         if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
             get-DebugValues
+            #Debug Options
+            $DebugConsole.Visible = -not $DebugCommandButton.Visible
         }
 
         Try {
@@ -282,11 +284,6 @@ function Start-QiInstaller {
     #Univeral Functions
     #. (Join-Path $PSScriptRoot 'Functions/Functions.ps1')
     (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
-
-    #Debug Options
-    if ($QiDebug) {
-        $DebugConsole.Visible = -not $DebugCommandButton.Visible
-    }
     
     #Check Automate Installed
     if (Test-Path $env:windir\LTSVC) {
