@@ -53,14 +53,6 @@ function Start-QiInstaller {
 
     #Authenticator
     $AuthSubmit_Click = {
-        #https://github.com/gavsto/AutomateAPI
-        if ($QiDebug) {
-            (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
-        }
-        else {
-            (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
-        }
-
         if ($AuthUser.Text -eq 'Debug') {
             #Debug Options
             $DebugConsole.Visible = $true
@@ -75,15 +67,23 @@ function Start-QiInstaller {
             $TechInstaller.Close()
         }
         else {
+            #https://github.com/gavsto/AutomateAPI
+            if ($QiDebug) {
+                (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
+            }
+            else {
+                (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
+            }
+            
             Try {
                 $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
                 $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
                 Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
                 if ($AuthUser.text -eq 'dklatkaadm') {
-                    $Script:Location = (get-automateclient -clientname "QualityIP").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
+                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations?").id
                 }
                 else {
-                    $Script:Location = (get-automateclient -clientname "1_Technician Catchall").Locations | Where-Object { $_.ScriptExtra1 -eq $AuthUser.text }
+                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations?").id
                 }
                 $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
         
