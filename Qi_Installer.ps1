@@ -7,15 +7,15 @@ function Start-QiInstaller {
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $DownloadHost
     )
-    $ConnectAutomateAPI = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;"
-    $Automate = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pIY85I') | Invoke-Expression;"
-    $Dotnet = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/34BQtET') | Invoke-Expression;"
-    $powershell = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/33jsDh9') | Invoke-Expression;"
-    $office = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pHCBKw') | Invoke-Expression;"
-    $Power = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/36EXy9U') | Invoke-Expression;"
-    $Dell = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2NLQ6kF') | Invoke-Expression;"
-    $Win10 = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/33vEKHO') | Invoke-Expression;"
-    $Rename = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/32fCO56') | Invoke-Expression;"
+    $InvokeConnectAutomateAPI = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;"
+    $InvokeAutomate = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pIY85I') | Invoke-Expression;"
+    $InvokeDotnet = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/34BQtET') | Invoke-Expression;"
+    $Invokepowershell = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/33jsDh9') | Invoke-Expression;"
+    $Invokeoffice = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pHCBKw') | Invoke-Expression;"
+    $InvokePower = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/36EXy9U') | Invoke-Expression;"
+    $InvokeDell = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2NLQ6kF') | Invoke-Expression;"
+    $InvokeWin10 = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/33vEKHO') | Invoke-Expression;"
+    $InvokeRename = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/32fCO56') | Invoke-Expression;"
 
     $TechInstaller_Load = {
     }
@@ -61,7 +61,7 @@ function Start-QiInstaller {
         if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
             get-DebugValues
         }
-        $ConnectAutomateAPI
+        $InvokeConnectAutomateAPI
 
         Try {
             $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
@@ -103,23 +103,23 @@ function Start-QiInstaller {
     #Run Automate Buttons
     $ReInstall_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        $Automate
+        $InvokeAutomate
         Invoke-ReInstall_Automate  
     }
     $UnInstall_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        $Automate
+        $InvokeAutomate
         Invoke-UnInstall_Automate
     }
     $Install_Automate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Automate.ps1')
-        $Automate
+        $InvokeAutomate
         Invoke-Install_Automate
     }
     
     $dotnet35_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/dotnet.ps1')
-        Invoke-Expression $Dotnet
+        Invoke-Expression $InvokeDotnet
     }
     
     $InstallSoftware_Click = {
@@ -139,7 +139,7 @@ function Start-QiInstaller {
             switch ($msgBoxInput) {
                 'Yes' {
                     #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-                    Invoke-Expression $powershell
+                    Invoke-Expression $Invokepowershell
                 }
             
                 'No' {
@@ -154,26 +154,26 @@ function Start-QiInstaller {
         
         if ($365checkbox.checked -and $365checkbox.enabled) {
             #. (Join-Path $PSScriptRoot 'Functions/Office.ps1')
-            Invoke-Expression $Office
+            Invoke-Expression $InvokeOffice
         }
     }
     
     #Qi Power Policy
     $PowerPolicy_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/PowerPolicy.ps1')
-        Invoke-Expression $Power
+        Invoke-Expression $InvokePower
     }
     
     #Dell Command Update
     $DellUpdate_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/DellCommandUpdate.ps1')
-        Invoke-Expression $Dell
+        Invoke-Expression $InvokeDell
     }
     
     #Powershell 5
     $Powershell5_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Powershell.ps1')
-        Invoke-Expression $powershell
+        Invoke-Expression $Invokepowershell
     }
     
     #Win10 Upgrade
@@ -183,7 +183,7 @@ function Start-QiInstaller {
         switch ($msgBoxInput) {
             'Yes' {
                 #. (Join-Path $PSScriptRoot 'Functions/UpgradeWin10.ps1')
-                Invoke-Expression $Win10
+                Invoke-Expression $InvokeWin10
             }
             
             'No' {
@@ -199,7 +199,7 @@ function Start-QiInstaller {
     #Rename Computer/ Join Domain
     $RenameDomain_Click = {
         #. (Join-Path $PSScriptRoot 'Functions/Rename.ps1')
-        Invoke-Expression $Rename
+        Invoke-Expression $InvokeRename
     }
     
     #Download Icons
