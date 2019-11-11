@@ -67,14 +67,6 @@ function Start-QiInstaller {
             $TechInstaller.Close()
         }
         else {
-            #https://github.com/gavsto/AutomateAPI
-            if ($QiDebug) {
-                (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
-            }
-            else {
-                (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
-            }
-            
             Try {
                 $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
                 $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
@@ -364,6 +356,13 @@ function Start-QiInstaller {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
     }
 
+    #https://github.com/gavsto/AutomateAPI
+    if ($QiDebug) {
+        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Functions/Connect-AutomateAPI.ps1') | Invoke-Expression;
+    }
+    else {
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
+    }
     <# 
     if ($QiDebug) {
         $DebugConsole.Visible = -not $DebugCommandButton.Visible
