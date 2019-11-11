@@ -5,8 +5,7 @@ function Start-QiInstaller {
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $AutomatePass,
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
-        [string] $DownloadHost,
-        [switch] $QiDebug
+        [string] $DownloadHost
     )
     $ConnectAutomateAPI = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;"
     $Automate = "(New-Object System.Net.WebClient).DownloadString('http://bit.ly/2pIY85I') | Invoke-Expression;"
@@ -59,8 +58,10 @@ function Start-QiInstaller {
     #Authenticator
     $AuthSubmit_Click = {
         #https://github.com/gavsto/AutomateAPI
-        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text = '123456') {
-            get-DebugValues
+        if ($AuthUser.Text -eq 'Debug') {
+            if ($2FAAuth.Text = '123456') {
+                get-DebugValues
+            }
         }
         $ConnectAutomateAPI
 
