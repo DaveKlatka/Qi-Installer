@@ -67,10 +67,10 @@ function Start-QiInstaller {
         }
         elseif ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
             if ($QiDebug) {
-                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.ps1') | Invoke-Expression; Start-QiInstaller -ScriptPath $($ScriptPath) -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
+                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.ps1') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com' -QiDebug"
             }
             else {
-                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/34uSuCU') | Invoke-Expression; Start-QiInstaller -ScriptPath $($ScriptPath) -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
+                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/34uSuCU') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
             }
             $TechInstaller.Close()
         }
