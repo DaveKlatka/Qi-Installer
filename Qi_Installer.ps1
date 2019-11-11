@@ -60,12 +60,13 @@ function Start-QiInstaller {
         else {
             (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2WIZQzW') | Invoke-Expression;
         }
-        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456' -and $QiDebug -eq $true) {
+
+        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456' -and $AuthPanel.Visible -eq $false) {
             #Debug Options
-            $DebugConsole.Visible = -not $DebugCommandButton.Visible
+            $DebugConsole.Visible = -not $DebugConsole.Visible
         }
         elseif ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '123456') {
-            start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command $ScriptPath = $ScriptPath;(New-Object System.Net.WebClient).DownloadString('http://bit.ly/34uSuCU') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
+            start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/34uSuCU') | Invoke-Expression; Start-QiInstaller -ScriptPath $($ScriptPath) -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
             $TechInstaller.Close()
         }
         else {
@@ -357,10 +358,12 @@ function Start-QiInstaller {
     else {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
     }
-    
+
+    <# 
     if ($QiDebug) {
         $DebugConsole.Visible = -not $DebugCommandButton.Visible
     }
+    #>
 
     #Check Automate Installed
     if (Test-Path $env:windir\LTSVC) {
