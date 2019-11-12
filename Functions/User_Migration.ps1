@@ -342,8 +342,8 @@ function Test-ComputerConnection {
     $UNCVerified.Checked = $false
 
     # Try and use the IP if the user filled that out, otherwise use the name
-    if ($ComputerIPTextBox.Text -ne '') {
-        $Computer = $ComputerIPTextBox.Text
+    if ($SourceIPAddressText.Text -ne '') {
+        $Computer = $SourceIPAddressText.Text
         # Try to update the computer's name with its IP address
         if ($SourceComputerText.Text -eq '') {
             try {
