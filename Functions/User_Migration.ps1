@@ -323,7 +323,7 @@ function Invoke-USMT {
         $Logs = "`"/l:$Destination\load.txt`" `"/progress:$Destination\load_progress.txt`""
         $ContinueCommand = "/c"
         $Arguments = "`"$Destination`" $LocalAccountOptions $Logs $ContinueCommand /v:13"
-        $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
+        $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -Credential $creds -WindowStyle Hidden -PassThru)
         
         Get-USMTProgress -Runlog "$Destination\load_progress.txt" -processID $Process.ID -ActionType "LoadState"
  
