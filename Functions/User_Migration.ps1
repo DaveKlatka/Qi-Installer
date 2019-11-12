@@ -1,7 +1,7 @@
 #USMT Functions
 
-$NewComputerText.Text = $env:COMPUTERNAME
-$NewIpAddressText.Text = (Test-Connection -ComputerName (hostname) -Count 1).IPV4Address.IPAddressToString
+$DestComputerText.Text = $env:COMPUTERNAME
+$DestIpAddressText.Text = (Test-Connection -ComputerName (hostname) -Count 1).IPV4Address.IPAddressToString
 $ExportLocation.Text = $ScriptPath
 function Save-UserState {
     param(
@@ -338,26 +338,18 @@ function Invoke-USMT {
 }
 
 function Test-ComputerConnection {
-    param(
-        [System.Windows.Forms.TextBox] $ComputerNameTextBox,
-
-        [System.Windows.Forms.TextBox] $ComputerIPTextBox,
-
-        [System.Windows.Forms.CheckBox] $ConnectionCheckBox
-    )
-
     $ConnectionCheckBox.Checked = $false
     $UNCVerified.Checked = $false
 
     # Try and use the IP if the user filled that out, otherwise use the name
     if ($ComputerIPTextBox.Text -ne '') {
-        $Script:Computer = $ComputerIPTextBox.Text
+        $Computer = $ComputerIPTextBox.Text
         # Try to update the computer's name with its IP address
-        if ($ComputerNameTextBox.Text -eq '') {
+        if ($SourceComputerText.Text -eq '') {
             try {
                 Update-Textbox 'Computer name is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
                 $HostName = ([System.Net.Dns]::GetHostEntry($Computer)).HostName
-                $ComputerNameTextBox.Text = $HostName
+                $SourceComputerText.Text = $HostName
                 Update-Textbox "Computer name set to $HostName."
             }
             catch {
@@ -366,8 +358,8 @@ function Test-ComputerConnection {
             }
         }
     }
-    elseif ($ComputerNameTextBox.Text -ne '') {
-        $Script:Computer = $ComputerNameTextBox.Text
+    elseif ($SourceComputerText.Text -ne '') {
+        $Computer = $SourceComputerText.Text
         # Try to update the computer's IP address using its DNS name
         try {
             Update-Textbox 'Computer IP address is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
@@ -375,7 +367,7 @@ function Test-ComputerConnection {
             $IPAddress = ([System.Net.Dns]::GetHostEntry($Computer)).AddressList.IPAddressToString.Split('.', 1)[0]
 
             # Set IP address in text box
-            $ComputerIPTextBox.Text = $IPAddress
+            $SourceIPAddressText.Text = $IPAddress
             Update-Textbox "Computer IP address set to $IPAddress."
         }
         catch {
@@ -384,7 +376,7 @@ function Test-ComputerConnection {
         }
     }
     else {
-        $Script:Computer = $null
+        $Computer = $null
     }
 
     # Don't even try if both fields are empty
@@ -404,7 +396,7 @@ function Test-ComputerConnection {
         }
         else {
             Update-Textbox "Unable to reach $Computer." -Color 'Red'
-            if ($ComputerIPTextBox.Text -eq '') {
+            if ($SourceIPAddressText.Text -eq '') {
                 Update-Textbox "Try entering $Computer's IP address." -Color 'Yellow'
             }
         }

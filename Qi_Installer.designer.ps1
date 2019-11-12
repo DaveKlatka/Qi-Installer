@@ -52,12 +52,12 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.CheckBox]$ConnectionCheckBox = $null
 [System.Windows.Forms.Button]$TestConnection = $null
 [System.Windows.Forms.Label]$NewIPLabel = $null
-[System.Windows.Forms.TextBox]$OldIPAddressText = $null
+[System.Windows.Forms.TextBox]$SourceIPAddressText = $null
 [System.Windows.Forms.Label]$NewComputerLabel = $null
 [System.Windows.Forms.Label]$OldIPLabel = $null
 [System.Windows.Forms.TextBox]$NewIpAddressText = $null
-[System.Windows.Forms.TextBox]$OldComputerText = $null
-[System.Windows.Forms.TextBox]$NewComputerText = $null
+[System.Windows.Forms.TextBox]$SourceComputerText = $null
+[System.Windows.Forms.TextBox]$DestComputerText = $null
 [System.Windows.Forms.Label]$OldComputerLabel = $null
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
@@ -134,12 +134,12 @@ $UNCVerified = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $ConnectionCheckBox = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $TestConnection = (New-Object -TypeName System.Windows.Forms.Button)
 $NewIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
-$OldIPAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
+$SourceIPAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $NewComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $OldIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $NewIpAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
-$OldComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
-$NewComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
+$SourceComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
+$DestComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $LogBox = (New-Object -TypeName System.Windows.Forms.RichTextBox)
 $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
@@ -769,12 +769,12 @@ $ComputerInfo.Controls.Add($UNCVerified)
 $ComputerInfo.Controls.Add($ConnectionCheckBox)
 $ComputerInfo.Controls.Add($TestConnection)
 $ComputerInfo.Controls.Add($NewIPLabel)
-$ComputerInfo.Controls.Add($OldIPAddressText)
+$ComputerInfo.Controls.Add($SourceIPAddressText)
 $ComputerInfo.Controls.Add($NewComputerLabel)
 $ComputerInfo.Controls.Add($OldIPLabel)
 $ComputerInfo.Controls.Add($NewIpAddressText)
-$ComputerInfo.Controls.Add($OldComputerText)
-$ComputerInfo.Controls.Add($NewComputerText)
+$ComputerInfo.Controls.Add($SourceComputerText)
+$ComputerInfo.Controls.Add($DestComputerText)
 $ComputerInfo.Controls.Add($OldComputerLabel)
 $ComputerInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]3,[System.Int32]3))
 $ComputerInfo.Name = [System.String]'ComputerInfo'
@@ -827,12 +827,12 @@ $NewIPLabel.Text = [System.String]'Destination IP Address'
 $NewIPLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
 $NewIPLabel.UseCompatibleTextRendering = $true
 #
-#OldIPAddressText
+#SourceIPAddressText
 #
-$OldIPAddressText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]36))
-$OldIPAddressText.Name = [System.String]'OldIPAddressText'
-$OldIPAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
-$OldIPAddressText.TabIndex = [System.Int32]1
+$SourceIPAddressText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]36))
+$SourceIPAddressText.Name = [System.String]'SourceIPAddressText'
+$SourceIPAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
+$SourceIPAddressText.TabIndex = [System.Int32]1
 #
 #NewComputerLabel
 #
@@ -862,20 +862,20 @@ $NewIpAddressText.ReadOnly = $true
 $NewIpAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
 $NewIpAddressText.TabIndex = [System.Int32]3
 #
-#OldComputerText
+#SourceComputerText
 #
-$OldComputerText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]36))
-$OldComputerText.Name = [System.String]'OldComputerText'
-$OldComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
-$OldComputerText.TabIndex = [System.Int32]0
+$SourceComputerText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]36))
+$SourceComputerText.Name = [System.String]'SourceComputerText'
+$SourceComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
+$SourceComputerText.TabIndex = [System.Int32]0
 #
-#NewComputerText
+#DestComputerText
 #
-$NewComputerText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]77))
-$NewComputerText.Name = [System.String]'NewComputerText'
-$NewComputerText.ReadOnly = $true
-$NewComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
-$NewComputerText.TabIndex = [System.Int32]2
+$DestComputerText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]77))
+$DestComputerText.Name = [System.String]'DestComputerText'
+$DestComputerText.ReadOnly = $true
+$DestComputerText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]21))
+$DestComputerText.TabIndex = [System.Int32]2
 #
 #OldComputerLabel
 #
@@ -1084,7 +1084,7 @@ $Logout.add_Click($Logout_Click)
 #
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]2,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]695,[System.Int32]452))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]814,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
@@ -1205,12 +1205,12 @@ Add-Member -InputObject $TechInstaller -Name UNCVerified -Value $UNCVerified -Me
 Add-Member -InputObject $TechInstaller -Name ConnectionCheckBox -Value $ConnectionCheckBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TestConnection -Value $TestConnection -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewIPLabel -Value $NewIPLabel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name OldIPAddressText -Value $OldIPAddressText -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name SourceIPAddressText -Value $SourceIPAddressText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewComputerLabel -Value $NewComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldIPLabel -Value $OldIPLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewIpAddressText -Value $NewIpAddressText -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name OldComputerText -Value $OldComputerText -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name NewComputerText -Value $NewComputerText -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name SourceComputerText -Value $SourceComputerText -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DestComputerText -Value $DestComputerText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty

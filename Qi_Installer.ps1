@@ -319,16 +319,11 @@ function Start-QiInstaller {
         Restore-UserState
     }
     $TestConnection_Click = {
-        $TestComputerConnectionParams = @{
-            ComputerNameTextBox = $OldComputerText
-            ComputerIPTextBox   = $OldIPAddressText
-            ConnectionCheckBox  = $ConnectionCheckBox
-        }
-        Test-ComputerConnection @TestComputerConnectionParams
+        Test-ComputerConnection
     }
     $RunNetMig_Click = {
         if ($ConnectionCheckBox.Checked -and $UNCVerified.Checked) {
-            Invoke-USMT -SourceComputer $computer -Credential $Creds
+            Invoke-USMT -SourceComputer $SourceComputerText.Text -Credential $Creds
         }
         else {
             Update-Textbox "Connection not Verified. Please Test Connection first" -color 'Orange'
