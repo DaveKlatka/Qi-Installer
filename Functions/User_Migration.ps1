@@ -323,7 +323,7 @@ function Invoke-USMT {
         $Logs = "`"/l:$Destination\load.txt`" `"/progress:$Destination\load_progress.txt`""
         $ContinueCommand = "/c"
         $Arguments = "`"$Destination`" $LocalAccountOptions $Logs $ContinueCommand /v:13"
-        $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -Credential $creds -WindowStyle Hidden -PassThru)
+        $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
         
         Get-USMTProgress -Runlog "$Destination\load_progress.txt" -processID $Process.ID -ActionType "LoadState"
  
@@ -351,7 +351,7 @@ function Test-ComputerConnection {
 
     # Try and use the IP if the user filled that out, otherwise use the name
     if ($ComputerIPTextBox.Text -ne '') {
-        $Computer = $ComputerIPTextBox.Text
+        $Script:Computer = $ComputerIPTextBox.Text
         # Try to update the computer's name with its IP address
         if ($ComputerNameTextBox.Text -eq '') {
             try {
@@ -367,7 +367,7 @@ function Test-ComputerConnection {
         }
     }
     elseif ($ComputerNameTextBox.Text -ne '') {
-        $Computer = $ComputerNameTextBox.Text
+        $Script:Computer = $ComputerNameTextBox.Text
         # Try to update the computer's IP address using its DNS name
         try {
             Update-Textbox 'Computer IP address is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
@@ -384,7 +384,7 @@ function Test-ComputerConnection {
         }
     }
     else {
-        $Computer = $null
+        $Script:Computer = $null
     }
 
     # Don't even try if both fields are empty
