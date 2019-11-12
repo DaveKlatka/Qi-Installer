@@ -265,9 +265,9 @@ function Invoke-USMT {
         Get-USMT
         Try {
             if (!(Test-Path "USMT:\usmtfiles")) {
-                New-Item -ItemType Directory -Path "USMT:\usmtfiles"# | Out-Null
+                New-Item -ItemType Directory -Path "$SourceComputer\C$\usmtfiles"# | Out-Null
             }
-            Copy-Item -Path $USMTPath -Destination "USMT:\usmtfiles\" -ErrorAction Stop -Recurse -force
+            Copy-Item -Path $USMTPath -Destination "$SourceComputer\C$\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
         Catch {
             Update-Textbox "Failed to copy $USMTPath to $SourceComputer" -color 'Red'
@@ -294,8 +294,8 @@ function Invoke-USMT {
         }
         
         #Start scanstate on source
-        if (!(Test-Path "USMT:\usmtfiles\$SourceComputer")) {
-            New-Item -ItemType Directory -Path "USMT:\usmtfiles\$SourceComputer" | Out-Null
+        if (!(Test-Path "\\$SourceComputer\C$\usmtfiles\$SourceComputer")) {
+            New-Item -ItemType Directory -Path "$SourceComputer\C$\usmtfiles\$SourceComputer" | Out-Null
         }
         Invoke-Command -ComputerName $SourceComputer -Authentication Credssp -Credential $Credential -Scriptblock {
             &C:\usmtfiles\$using:bit\scanstate.exe "C:\usmtfiles\$using:SourceComputer" /i:c:\usmtfiles\$using:bit\migdocs.xml /i:c:\usmtfiles\$using:bit\migapp.xml /v:13 /uel:90 /c /localonly /listfiles:c:\usmtfiles\$using:SourceComputer\listfiles.txt /l:c:\usmtfiles\$using:SourceComputer\scan.txt /progress:c:\usmtfiles\$using:SourceComputer\scan_progress.txt
