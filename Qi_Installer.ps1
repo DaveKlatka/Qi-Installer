@@ -59,10 +59,11 @@ function Start-QiInstaller {
 
     #Authenticator
     $AuthSubmit_Click = {
-        if ($AuthUser.Text -eq 'Debug') {
+        if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '136590') {
             #Debug Options
             $DebugConsole.Visible = $true
             $AuthDebugButton.Visible = $true
+            $AuthUser.Text = ''
         }
         elseif ($AuthUser.Text -eq 'Console') {
             if ($QiDebug) {
