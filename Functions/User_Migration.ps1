@@ -264,10 +264,10 @@ function Invoke-USMT {
         #Copy USMT files to remote computers
         Get-USMT
         Try {
-            if (!(Test-Path "USMT:\usmtfiles")) {
-                New-Item -ItemType Directory -Path "$SourceComputer\C$\usmtfiles"# | Out-Null
+            if (!(Test-Path "A:\usmtfiles")) {
+                New-Item -ItemType Directory -Path "A:\usmtfiles"# | Out-Null
             }
-            Copy-Item -Path $USMTPath -Destination "$SourceComputer\C$\usmtfiles\" -ErrorAction Stop -Recurse -force
+            Copy-Item -Path $USMTPath -Destination "A:\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
         Catch {
             Update-Textbox "Failed to copy $USMTPath to $SourceComputer" -color 'Red'
@@ -312,7 +312,7 @@ function Invoke-USMT {
         }
 
         $RunLog = "$ScriptPath\logs\Robocopy.txt"
-        $Arguments = "\\$SourceComputer\c$\usmtfiles\$SourceComputer\ $Destination\ *.* /s" 
+        $Arguments = "A:\usmtfiles\$SourceComputer\ $Destination\ *.* /s" 
         $Process = (start-process Robocopy.exe -ArgumentList $Arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
 
         Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID -Tracker

@@ -323,7 +323,7 @@ function Start-QiInstaller {
     }
     $RunNetMig_Click = {
         if ($ConnectionCheckBox.Checked -and $UNCVerified.Checked) {
-            Invoke-USMT -SourceComputer $SourceComputerText.Text -Credential $Creds
+            Invoke-USMT -SourceComputer $SourceComputerText.Text\ -Credential $Creds
         }
         else {
             Update-Textbox "Connection not Verified. Please Test Connection first" -color 'Orange'
