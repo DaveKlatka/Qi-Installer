@@ -340,7 +340,7 @@ function Start-QiInstaller {
             $AuthError.Visible = $false
         }
         $AuthUser.Text = ''
-        $AuthPassword.Text = ''
+        $AuthPass.Text = ''
         $2FAAuth.Text = ''
         $AuthPanel.Visible = $true
     }
