@@ -473,7 +473,7 @@ function Get-USMTProgress {
          }
          "LoadState" {
             while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
-                foreach ($line in ($lines = get-content $RunLog)) {
+                foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
                     if (!($promptcheck -contains $line)) {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()

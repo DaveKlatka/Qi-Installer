@@ -20,6 +20,9 @@ function Start-QiInstaller {
     if (($ScriptPath -match $env:SystemDrive)) {
         $ScriptPath = "$env:systemDrive\QiInstaller"
     }
+    elseif ($ScriptPath -match 'QiInstaller'){
+        write-host $ScriptPath
+    }
     else {
         $ScriptPath = "$ScriptPath\QiInstaller"
     }
