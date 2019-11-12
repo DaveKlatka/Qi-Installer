@@ -62,7 +62,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
-[System.Windows.Forms.Panel]$AuthPanel = $null
 [System.Windows.Forms.GroupBox]$GroupBox6 = $null
 [System.Windows.Forms.Label]$Label4 = $null
 [System.Windows.Forms.Label]$Label3 = $null
@@ -78,6 +77,8 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$DebugCommand = $null
 [System.Windows.Forms.Button]$DebugCommandButton = $null
 [System.Windows.Forms.Button]$Logout = $null
+[System.Windows.Forms.Panel]$AuthPanel = $null
+[System.Windows.Forms.Button]$AuthDebugButton = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -143,7 +144,6 @@ $OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $LogBox = (New-Object -TypeName System.Windows.Forms.RichTextBox)
 $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
 $TotalProgress = (New-Object -TypeName System.Windows.Forms.ProgressBar)
-$AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
 $GroupBox6 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $Label4 = (New-Object -TypeName System.Windows.Forms.Label)
 $Label3 = (New-Object -TypeName System.Windows.Forms.Label)
@@ -159,6 +159,8 @@ $DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
 $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
+$AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
+$AuthDebugButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -179,8 +181,8 @@ $TabPage6.SuspendLayout()
 $GroupBox7.SuspendLayout()
 $TabPage7.SuspendLayout()
 $ComputerInfo.SuspendLayout()
-$AuthPanel.SuspendLayout()
 $GroupBox6.SuspendLayout()
+$AuthPanel.SuspendLayout()
 $TechInstaller.SuspendLayout()
 #
 #GroupBox1
@@ -918,15 +920,6 @@ $TotalProgress.Style = [System.Windows.Forms.ProgressBarStyle]::Continuous
 $TotalProgress.TabIndex = [System.Int32]22
 $TotalProgress.Visible = $false
 #
-#AuthPanel
-#
-$AuthPanel.BackColor = [System.Drawing.Color]::Transparent
-$AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]4))
-$AuthPanel.Name = [System.String]'AuthPanel'
-$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]805,[System.Int32]477))
-$AuthPanel.TabIndex = [System.Int32]5
-#
 #GroupBox6
 #
 $GroupBox6.Controls.Add($Label4)
@@ -939,7 +932,7 @@ $GroupBox6.Controls.Add($AuthSubmit)
 $GroupBox6.Controls.Add($AuthError)
 $GroupBox6.Controls.Add($AuthUser)
 $GroupBox6.Controls.Add($Label1)
-$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]284,[System.Int32]101))
+$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]297,[System.Int32]110))
 $GroupBox6.Name = [System.String]'GroupBox6'
 $GroupBox6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]255))
 $GroupBox6.TabIndex = [System.Int32]1
@@ -1087,16 +1080,37 @@ $Logout.UseCompatibleTextRendering = $true
 $Logout.UseVisualStyleBackColor = $true
 $Logout.add_Click($Logout_Click)
 #
+#AuthPanel
+#
+$AuthPanel.Controls.Add($AuthDebugButton)
+$AuthPanel.Controls.Add($GroupBox6)
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]2,[System.Int32]4))
+$AuthPanel.Name = [System.String]'AuthPanel'
+$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]814,[System.Int32]477))
+$AuthPanel.TabIndex = [System.Int32]2
+#
+#AuthDebugButton
+#
+$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]370,[System.Int32]371))
+$AuthDebugButton.Name = [System.String]'AuthDebugButton'
+$AuthDebugButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$AuthDebugButton.TabIndex = [System.Int32]2
+$AuthDebugButton.Text = [System.String]'Debug'
+$AuthDebugButton.UseCompatibleTextRendering = $true
+$AuthDebugButton.UseVisualStyleBackColor = $true
+$AuthDebugButton.Visible = $false
+$AuthDebugButton.add_Click($AuthDebugButton_Click)
+#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
 $TechInstaller.Controls.Add($DebugCommand)
 $TechInstaller.Controls.Add($DebugConsole)
-$TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($TotalProgress)
 $TechInstaller.Controls.Add($CurrentFile)
 $TechInstaller.Controls.Add($LogBox)
@@ -1132,9 +1146,9 @@ $GroupBox7.PerformLayout()
 $TabPage7.ResumeLayout($false)
 $ComputerInfo.ResumeLayout($false)
 $ComputerInfo.PerformLayout()
-$AuthPanel.ResumeLayout($false)
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
+$AuthPanel.ResumeLayout($false)
 $TechInstaller.ResumeLayout($false)
 $TechInstaller.PerformLayout()
 Add-Member -InputObject $TechInstaller -Name base -Value $base -MemberType NoteProperty
@@ -1201,7 +1215,6 @@ Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldCompute
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox6 -Value $GroupBox6 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Label4 -Value $Label4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Label3 -Value $Label3 -MemberType NoteProperty
@@ -1217,5 +1230,7 @@ Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -
 Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthDebugButton -Value $AuthDebugButton -MemberType NoteProperty
 }
 . InitializeComponent

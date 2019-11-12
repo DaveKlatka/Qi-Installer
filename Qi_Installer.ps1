@@ -33,9 +33,6 @@ function Start-QiInstaller {
     $DebugConsole_Click = {
         $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
         $DebugCommand.Visible = -not $DebugCommand.Visible
-        if ($AuthPanel.Visible) {
-            $AuthPanel.Visible = $false
-        }
     }
 
     $DebugCommandButton_Click = {
@@ -56,6 +53,7 @@ function Start-QiInstaller {
         if ($AuthUser.Text -eq 'Debug') {
             #Debug Options
             $DebugConsole.Visible = $true
+            $AuthDebugButton.Visible = $true
         }
         elseif ($AuthUser.Text -eq 'Console') {
             if ($QiDebug) {
@@ -332,6 +330,12 @@ function Start-QiInstaller {
     }
 
     $Logout_Click = {
+        if ($AuthError.Visible -eq $True) {
+            $AuthError.Visible = $false
+        }
+        $AuthUser.Text = ''
+        $AuthPassword.Text = ''
+        $2FAAuth.Text = ''
         $AuthPanel.Visible = $true
     }
 
@@ -365,6 +369,12 @@ function Start-QiInstaller {
     }
     else {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
+    }
+
+    $AuthDebugButton_Click = {
+        if ($AuthPanel.Visible) {
+            $AuthPanel.Visible = $false
+        }
     }
 
     <# 
