@@ -55,7 +55,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$SourceIPAddressText = $null
 [System.Windows.Forms.Label]$NewComputerLabel = $null
 [System.Windows.Forms.Label]$OldIPLabel = $null
-[System.Windows.Forms.TextBox]$NewIpAddressText = $null
+[System.Windows.Forms.TextBox]$DestIpAddressText = $null
 [System.Windows.Forms.TextBox]$SourceComputerText = $null
 [System.Windows.Forms.TextBox]$DestComputerText = $null
 [System.Windows.Forms.Label]$OldComputerLabel = $null
@@ -137,7 +137,7 @@ $NewIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $SourceIPAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $NewComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $OldIPLabel = (New-Object -TypeName System.Windows.Forms.Label)
-$NewIpAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
+$DestIpAddressText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $SourceComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DestComputerText = (New-Object -TypeName System.Windows.Forms.TextBox)
 $OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
@@ -772,7 +772,7 @@ $ComputerInfo.Controls.Add($NewIPLabel)
 $ComputerInfo.Controls.Add($SourceIPAddressText)
 $ComputerInfo.Controls.Add($NewComputerLabel)
 $ComputerInfo.Controls.Add($OldIPLabel)
-$ComputerInfo.Controls.Add($NewIpAddressText)
+$ComputerInfo.Controls.Add($DestIpAddressText)
 $ComputerInfo.Controls.Add($SourceComputerText)
 $ComputerInfo.Controls.Add($DestComputerText)
 $ComputerInfo.Controls.Add($OldComputerLabel)
@@ -854,13 +854,13 @@ $OldIPLabel.Text = [System.String]'Source IP Address'
 $OldIPLabel.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
 $OldIPLabel.UseCompatibleTextRendering = $true
 #
-#NewIpAddressText
+#DestIpAddressText
 #
-$NewIpAddressText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]77))
-$NewIpAddressText.Name = [System.String]'NewIpAddressText'
-$NewIpAddressText.ReadOnly = $true
-$NewIpAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
-$NewIpAddressText.TabIndex = [System.Int32]3
+$DestIpAddressText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]161,[System.Int32]77))
+$DestIpAddressText.Name = [System.String]'DestIpAddressText'
+$DestIpAddressText.ReadOnly = $true
+$DestIpAddressText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]21))
+$DestIpAddressText.TabIndex = [System.Int32]3
 #
 #SourceComputerText
 #
@@ -1084,9 +1084,9 @@ $Logout.add_Click($Logout_Click)
 #
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]695,[System.Int32]452))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
 $AuthPanel.Name = [System.String]'AuthPanel'
-$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]814,[System.Int32]477))
+$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]810,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
 #
 #AuthDebugButton
@@ -1208,7 +1208,7 @@ Add-Member -InputObject $TechInstaller -Name NewIPLabel -Value $NewIPLabel -Memb
 Add-Member -InputObject $TechInstaller -Name SourceIPAddressText -Value $SourceIPAddressText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name NewComputerLabel -Value $NewComputerLabel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldIPLabel -Value $OldIPLabel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name NewIpAddressText -Value $NewIpAddressText -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DestIpAddressText -Value $DestIpAddressText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SourceComputerText -Value $SourceComputerText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DestComputerText -Value $DestComputerText -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldComputerLabel -MemberType NoteProperty
