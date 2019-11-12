@@ -342,6 +342,7 @@ function Start-QiInstaller {
         $AuthUser.Text = ''
         $AuthPass.Text = ''
         $2FAAuth.Text = ''
+        $TechInstaller.Text = [System.String]"Tech Installer"
         $AuthPanel.Visible = $true
     }
 
