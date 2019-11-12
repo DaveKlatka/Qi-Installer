@@ -408,8 +408,8 @@ function Test-ComputerConnection {
     if ($ConnectionCheckBox.Checked) {
         Update-Textbox "Testing UNC path to $Computer..." -NoNewLine
         $Script:Creds = Get-Credential
-        new-psdrive -name "USMT" -PSProvider "FileSystem" -Root "\\$Computer\C$" -Credential $Creds -scope global
-        if (Test-Path -Path "USMT:") {
+        new-psdrive -name "A" -PSProvider "FileSystem" -Root "\\$Computer\C$" -Credential $Creds -scope global
+        if (Test-Path -Path "A:") {
             $UNCVerified.Checked = $true
             Update-Textbox "Connection established." -Color 'Green'
         }
