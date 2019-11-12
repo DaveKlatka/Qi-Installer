@@ -26,24 +26,25 @@ function Start-QiInstaller {
     else {
         $ScriptPath = "$ScriptPath\QiInstaller"
     }
+
+    #Create local files folder
     if (!(Test-Path $ScriptPath)) {
         New-Item -ItemType Directory -Path $ScriptPath | Out-Null
     }
     if (!(Test-Path $ScriptPath\logs)) {
         New-Item -ItemType Directory -Path $ScriptPath\logs | Out-Null
     }
+
     #Debug Options
     $AuthDebugButton_Click = {
         if ($AuthPanel.Visible) {
             $AuthPanel.Visible = $false
         }
     }
-    
     $DebugConsole_Click = {
         $DebugCommandButton.Visible = -not $DebugCommandButton.Visible
         $DebugCommand.Visible = -not $DebugCommand.Visible
     }
-
     $DebugCommandButton_Click = {
         #$DebugResult = Invoke-Expression $DebugCommand.Text
         $test = @{value = $DebugCommand.Text }
