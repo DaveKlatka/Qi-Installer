@@ -426,7 +426,7 @@ function Start-QiInstaller {
         $row.DefaultCellStyle.BackColor = $SystemInfo.BackgroundColor
     }
 
-    $ExtraDataGridView.ColumnCount = 1
+    $AdditionalLocations.ColumnCount = 1
     $TechInstaller.icon = $ico
     $picturebox1.imageLocation = $png
     

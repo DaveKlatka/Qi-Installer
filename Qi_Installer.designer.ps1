@@ -34,7 +34,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.GroupBox]$GroupBox5 = $null
 [System.Windows.Forms.Button]$AddDirectory = $null
 [System.Windows.Forms.Button]$RemoveDirectory = $null
-[System.Windows.Forms.DataGridView]$ExtraDataGridView = $null
+[System.Windows.Forms.DataGridView]$AdditionalLocations = $null
 [System.Windows.Forms.GroupBox]$GroupBox4 = $null
 [System.Windows.Forms.CheckedListBox]$USMTCheckList = $null
 [System.Windows.Forms.Button]$Profiles = $null
@@ -116,7 +116,7 @@ $ExportLocation = (New-Object -TypeName System.Windows.Forms.TextBox)
 $GroupBox5 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $AddDirectory = (New-Object -TypeName System.Windows.Forms.Button)
 $RemoveDirectory = (New-Object -TypeName System.Windows.Forms.Button)
-$ExtraDataGridView = (New-Object -TypeName System.Windows.Forms.DataGridView)
+$AdditionalLocations = (New-Object -TypeName System.Windows.Forms.DataGridView)
 $GroupBox4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $USMTCheckList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $Profiles = (New-Object -TypeName System.Windows.Forms.Button)
@@ -175,7 +175,7 @@ $TabControl2.SuspendLayout()
 $TabPage5.SuspendLayout()
 $SaveDestination.SuspendLayout()
 $GroupBox5.SuspendLayout()
-([System.ComponentModel.ISupportInitialize]$ExtraDataGridView).BeginInit()
+([System.ComponentModel.ISupportInitialize]$AdditionalLocations).BeginInit()
 $GroupBox4.SuspendLayout()
 $TabPage6.SuspendLayout()
 $GroupBox7.SuspendLayout()
@@ -323,7 +323,7 @@ $SystemInfo.AllowUserToAddRows = $false
 $SystemInfo.AllowUserToDeleteRows = $false
 $SystemInfo.AllowUserToResizeColumns = $false
 $SystemInfo.AllowUserToResizeRows = $false
-$SystemInfo.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::DisplayedCells
+$SystemInfo.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
 $SystemInfo.BackgroundColor = [System.Drawing.SystemColors]::Control
 $SystemInfo.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $SystemInfo.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode]::AutoSize
@@ -574,7 +574,7 @@ $ExportLocation.TabIndex = [System.Int32]4
 #
 $GroupBox5.Controls.Add($AddDirectory)
 $GroupBox5.Controls.Add($RemoveDirectory)
-$GroupBox5.Controls.Add($ExtraDataGridView)
+$GroupBox5.Controls.Add($AdditionalLocations)
 $GroupBox5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]156))
 $GroupBox5.Name = [System.String]'GroupBox5'
 $GroupBox5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]130))
@@ -605,23 +605,23 @@ $RemoveDirectory.UseCompatibleTextRendering = $true
 $RemoveDirectory.UseVisualStyleBackColor = $true
 $RemoveDirectory.add_Click($RemoveDirectory_Click)
 #
-#ExtraDataGridView
+#AdditionalLocations
 #
-$ExtraDataGridView.AllowUserToAddRows = $false
-$ExtraDataGridView.AllowUserToDeleteRows = $false
-$ExtraDataGridView.AllowUserToResizeColumns = $false
-$ExtraDataGridView.AllowUserToResizeRows = $false
-$ExtraDataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
-$ExtraDataGridView.BackgroundColor = [System.Drawing.Color]::White
-$ExtraDataGridView.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode]::AutoSize
-$ExtraDataGridView.ColumnHeadersVisible = $false
-$ExtraDataGridView.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
-$ExtraDataGridView.MultiSelect = $false
-$ExtraDataGridView.Name = [System.String]'ExtraDataGridView'
-$ExtraDataGridView.ReadOnly = $true
-$ExtraDataGridView.RowHeadersVisible = $false
-$ExtraDataGridView.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]104))
-$ExtraDataGridView.TabIndex = [System.Int32]3
+$AdditionalLocations.AllowUserToAddRows = $false
+$AdditionalLocations.AllowUserToDeleteRows = $false
+$AdditionalLocations.AllowUserToResizeColumns = $false
+$AdditionalLocations.AllowUserToResizeRows = $false
+$AdditionalLocations.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+$AdditionalLocations.BackgroundColor = [System.Drawing.Color]::White
+$AdditionalLocations.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode]::AutoSize
+$AdditionalLocations.ColumnHeadersVisible = $false
+$AdditionalLocations.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
+$AdditionalLocations.MultiSelect = $false
+$AdditionalLocations.Name = [System.String]'AdditionalLocations'
+$AdditionalLocations.ReadOnly = $true
+$AdditionalLocations.RowHeadersVisible = $false
+$AdditionalLocations.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]104))
+$AdditionalLocations.TabIndex = [System.Int32]3
 #
 #GroupBox4
 #
@@ -1140,7 +1140,7 @@ $TabPage5.ResumeLayout($false)
 $SaveDestination.ResumeLayout($false)
 $SaveDestination.PerformLayout()
 $GroupBox5.ResumeLayout($false)
-([System.ComponentModel.ISupportInitialize]$ExtraDataGridView).EndInit()
+([System.ComponentModel.ISupportInitialize]$AdditionalLocations).EndInit()
 $GroupBox4.ResumeLayout($false)
 $TabPage6.ResumeLayout($false)
 $GroupBox7.ResumeLayout($false)
@@ -1189,7 +1189,7 @@ Add-Member -InputObject $TechInstaller -Name ExportLocation -Value $ExportLocati
 Add-Member -InputObject $TechInstaller -Name GroupBox5 -Value $GroupBox5 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AddDirectory -Value $AddDirectory -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name RemoveDirectory -Value $RemoveDirectory -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name ExtraDataGridView -Value $ExtraDataGridView -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AdditionalLocations -Value $AdditionalLocations -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox4 -Value $GroupBox4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name USMTCheckList -Value $USMTCheckList -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Profiles -Value $Profiles -MemberType NoteProperty
