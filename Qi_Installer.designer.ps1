@@ -330,12 +330,14 @@ $SystemInfo.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColu
 $SystemInfo.ColumnHeadersVisible = $false
 $SystemInfo.EditMode = [System.Windows.Forms.DataGridViewEditMode]::EditProgrammatically
 $SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]1,[System.Int32]218))
+$SystemInfo.MaximumSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
+$SystemInfo.MinimumSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.MultiSelect = $false
 $SystemInfo.Name = [System.String]'SystemInfo'
 $SystemInfo.ReadOnly = $true
 $SystemInfo.RowHeadersVisible = $false
 $SystemInfo.RowTemplate.Height = [System.Int32]20
-$SystemInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]205))
+$SystemInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.TabIndex = [System.Int32]5
 #
 #RenameDomain
@@ -1084,7 +1086,7 @@ $Logout.add_Click($Logout_Click)
 #
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]682,[System.Int32]464))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]810,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
