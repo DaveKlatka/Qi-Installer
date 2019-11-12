@@ -268,6 +268,9 @@ Function Get-ProgressBar {
             }
             else {
                 foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
+                    if ($line -match 'password is incorrect') {
+                        return
+                    }
                     if (!($promptcheck -contains $line)) {
                         Update-ProgressTextBox -Text $line -Tracker
                     }
