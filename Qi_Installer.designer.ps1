@@ -77,6 +77,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$DebugConsole = $null
 [System.Windows.Forms.TextBox]$DebugCommand = $null
 [System.Windows.Forms.Button]$DebugCommandButton = $null
+[System.Windows.Forms.Button]$Logout = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -157,6 +158,7 @@ $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
 $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
+$Logout = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -393,7 +395,7 @@ $PowerPolicy.add_Click($PowerPolicy_Click)
 #Cancel
 #
 $Cancel.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
-$Cancel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]437))
+$Cancel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]452))
 $Cancel.Name = [System.String]'Cancel'
 $Cancel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]94,[System.Int32]27))
 $Cancel.TabIndex = [System.Int32]17
@@ -1074,11 +1076,23 @@ $DebugCommandButton.UseVisualStyleBackColor = $true
 $DebugCommandButton.Visible = $false
 $DebugCommandButton.add_Click($DebugCommandButton_Click)
 #
+#Logout
+#
+$Logout.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]422))
+$Logout.Name = [System.String]'Logout'
+$Logout.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]94,[System.Int32]27))
+$Logout.TabIndex = [System.Int32]26
+$Logout.Text = [System.String]'Logout'
+$Logout.UseCompatibleTextRendering = $true
+$Logout.UseVisualStyleBackColor = $true
+$Logout.add_Click($Logout_Click)
+#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
 $TechInstaller.Controls.Add($DebugCommand)
 $TechInstaller.Controls.Add($DebugConsole)
@@ -1202,5 +1216,6 @@ Add-Member -InputObject $TechInstaller -Name Label1 -Value $Label1 -MemberType N
 Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
 }
 . InitializeComponent

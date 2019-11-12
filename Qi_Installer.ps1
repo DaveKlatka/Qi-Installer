@@ -331,6 +331,10 @@ function Start-QiInstaller {
         }
     }
 
+    $Logout_Click = {
+        $AuthPanel.Visible = $true
+    }
+
     $Cancel_Click = {
         $TechInstaller.Close()
     }
