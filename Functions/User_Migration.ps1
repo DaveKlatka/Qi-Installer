@@ -310,12 +310,7 @@ function Invoke-USMT {
         if (!(Test-Path $Destination)) {
             New-Item -ItemType Directory -Path $Destination | Out-Null
         }
-
-        $RunLog = "$ScriptPath\logs\Robocopy.txt"
-        $Arguments = "A:\usmtfiles\$SourceComputer\ $Destination\ *.* /s" 
-        $Process = (start-process Robocopy.exe -ArgumentList $Arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
-
-        Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID -Tracker
+        Get-Files -Source (Get-Childitem -Path "A:\usmtfiles\$SourceComputer" -include *.MIG -recurse).FullName -Destination "$Destination\USMT\USMT.MIG" -NumberOfFiles 1 -Software "USMT.MIG"
 
         #Start loadscan on destination
         # Get the location of the save state data
