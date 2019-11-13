@@ -1088,7 +1088,7 @@ $Logout.add_Click($Logout_Click)
 #
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]473))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]810,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
@@ -1108,6 +1108,7 @@ $AuthDebugButton.add_Click($AuthDebugButton_Click)
 #PercentText
 #
 $PercentText.BackColor = [System.Drawing.Color]::Transparent
+$PercentText.ForeColor = [System.Drawing.Color]::White
 $PercentText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]324,[System.Int32]12))
 $PercentText.Name = [System.String]'PercentText'
 $PercentText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]469,[System.Int32]23))
