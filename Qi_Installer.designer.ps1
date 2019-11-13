@@ -79,6 +79,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$Logout = $null
 [System.Windows.Forms.Panel]$AuthPanel = $null
 [System.Windows.Forms.Button]$AuthDebugButton = $null
+[System.Windows.Forms.Label]$PercentText = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -161,6 +162,7 @@ $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
 $AuthDebugButton = (New-Object -TypeName System.Windows.Forms.Button)
+$PercentText = (New-Object -TypeName System.Windows.Forms.Label)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -358,7 +360,7 @@ $Win10Upgrade.Location = (New-Object -TypeName System.Drawing.Point -ArgumentLis
 $Win10Upgrade.Name = [System.String]'Win10Upgrade'
 $Win10Upgrade.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
 $Win10Upgrade.TabIndex = [System.Int32]6
-$Win10Upgrade.Text = [System.String]'Win10 1903 Upgrade'
+$Win10Upgrade.Text = [System.String]'Win10 1909 Upgrade'
 $Win10Upgrade.UseCompatibleTextRendering = $true
 $Win10Upgrade.UseVisualStyleBackColor = $true
 $Win10Upgrade.add_Click($Win10Upgrade_Click)
@@ -1086,7 +1088,7 @@ $Logout.add_Click($Logout_Click)
 #
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]709,[System.Int32]473))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]810,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
@@ -1103,11 +1105,24 @@ $AuthDebugButton.UseVisualStyleBackColor = $true
 $AuthDebugButton.Visible = $false
 $AuthDebugButton.add_Click($AuthDebugButton_Click)
 #
+#PercentText
+#
+$PercentText.BackColor = [System.Drawing.Color]::Transparent
+$PercentText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]324,[System.Int32]12))
+$PercentText.Name = [System.String]'PercentText'
+$PercentText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]469,[System.Int32]23))
+$PercentText.TabIndex = [System.Int32]27
+$PercentText.Text = [System.String]'Label5'
+$PercentText.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
+$PercentText.UseCompatibleTextRendering = $true
+$PercentText.Visible = $false
+#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($PercentText)
 $TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
@@ -1234,5 +1249,6 @@ Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCom
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthDebugButton -Value $AuthDebugButton -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name PercentText -Value $PercentText -MemberType NoteProperty
 }
 . InitializeComponent

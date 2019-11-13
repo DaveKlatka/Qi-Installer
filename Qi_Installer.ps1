@@ -400,7 +400,7 @@ function Start-QiInstaller {
         $Powershell5.Enabled = $false
     }
     #Check Win 10 Version
-    $Win10Version = "1903"
+    $Win10Version = "1909"
     if (((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ReleaseID -erroraction SilentlyContinue).ReleaseID) -eq $Win10Version -and (Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue).producttype -eq 1) {
         $Win10Upgrade.Enabled = $false
     }

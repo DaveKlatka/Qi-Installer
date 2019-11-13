@@ -255,6 +255,8 @@ Function Get-ProgressBar {
         if ($CurrentFile.visible -eq $false) {
             $CurrentFile.Value = 0
             $CurrentFile.Visible = $true
+            $PercentText.Parent = $CurrentFile
+            $PercentText.Visible = $true
         }
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
@@ -284,6 +286,9 @@ Function Get-ProgressBar {
         }
         if ($TotalProgress.Visible -eq $true) {
             $TotalProgress.Visible = $false
+        }
+        if ($PercentText.Visible = $true) {
+            $PercentText.Visible = $false
         }
     }  
 }
@@ -319,15 +324,19 @@ function Update-ProgressTextBox {
         if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
             if ($Text.TrimEnd() -match '([\d]+)\.\d\%') {
                 $CurrentFile.Value = $matches[1]
+                $PercentText.Text = $matches[1]
             }
             elseif ($Text.TrimEnd() -match '([\d]+)%') {
                 $CurrentFile.Value = $matches[1]
+                $PercentText.Text = $matches[1]
             }
             elseif ($Text.TrimEnd() -match 'totalPercentageCompleted. ([\d]+)') {
                 $CurrentFile.Value = $matches[1]
+                $PercentText.Text = $matches[1]
             }
             elseif ($Text.TrimEnd() -match 'Progress.+\s([\d]+)\%') {
                 $CurrentFile.Value = $matches[1]
+                $PercentText.Text = $matches[1]
             }
             elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
                 Update-Textbox $Text.TrimEnd() -Color 'Red'
