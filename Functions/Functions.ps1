@@ -255,9 +255,13 @@ Function Get-ProgressBar {
         if ($CurrentFile.visible -eq $false) {
             $CurrentFile.Value = 0
             $CurrentFile.Visible = $true
+        }
+        if ($PercentText -eq $false){
             $PercentText.Parent = $CurrentFile
+            $PercentText.BackColor = [System.Drawing.SystemColors]::Transparent
             $PercentText.Visible = $true
         }
+        
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
                 foreach ($line in ($lines = ([xml](get-content $RunLog -ErrorAction SilentlyContinue)).logentries.logentry.message)) {

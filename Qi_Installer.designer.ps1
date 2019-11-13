@@ -1107,7 +1107,7 @@ $AuthDebugButton.add_Click($AuthDebugButton_Click)
 #
 #PercentText
 #
-$PercentText.BackColor = [System.Drawing.Color]::Transparent
+$PercentText.BackColor = [System.Drawing.SystemColors]::ActiveBorder
 $PercentText.ForeColor = [System.Drawing.Color]::White
 $PercentText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]324,[System.Int32]12))
 $PercentText.Name = [System.String]'PercentText'
