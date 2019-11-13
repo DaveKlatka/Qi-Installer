@@ -1109,9 +1109,9 @@ $AuthDebugButton.add_Click($AuthDebugButton_Click)
 #
 $PercentText.BackColor = [System.Drawing.SystemColors]::ActiveBorder
 $PercentText.ForeColor = [System.Drawing.Color]::White
-$PercentText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]324,[System.Int32]12))
+$PercentText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]336,[System.Int32]12))
 $PercentText.Name = [System.String]'PercentText'
-$PercentText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]469,[System.Int32]23))
+$PercentText.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]439,[System.Int32]23))
 $PercentText.TabIndex = [System.Int32]27
 $PercentText.Text = [System.String]'Label5'
 $PercentText.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter

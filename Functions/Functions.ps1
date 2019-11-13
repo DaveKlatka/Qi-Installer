@@ -257,8 +257,9 @@ Function Get-ProgressBar {
             $CurrentFile.Visible = $true
         }
         if ($PercentText -eq $false){
-            $PercentText.Parent = $CurrentFile
-            $PercentText.BackColor = [System.Drawing.SystemColors]::Transparent
+            $CurrentFile.Controls.Add($PercentText) = $CurrentFile
+            $PercentText.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]25,[System.Int32]0))
+            $PercentText.BackColor = [System.Drawing.Color]::FromName("Transparent")
             $PercentText.Visible = $true
         }
         
