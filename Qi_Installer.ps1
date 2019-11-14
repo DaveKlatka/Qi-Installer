@@ -21,6 +21,9 @@ function Start-QiInstaller {
         $ScriptPath = "$env:systemDrive\QiInstaller"
     }
     elseif ($ScriptPath -match 'QiInstaller'){
+        if ($ScriptPath -match '\\\\') {
+            $ScriptPath = $ScriptPath.replace('\\','\')
+        }
         write-host $ScriptPath
     }
     else {
