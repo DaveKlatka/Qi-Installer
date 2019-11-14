@@ -1139,7 +1139,6 @@ $TechInstaller.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSi
 $TechInstaller.MaximizeBox = $false
 $TechInstaller.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
 $TechInstaller.Text = [System.String]'Tech Installer'
-$TechInstaller.TopMost = $true
 $TechInstaller.add_Load($TechInstaller_Load)
 $GroupBox1.ResumeLayout($false)
 $GroupBox2.ResumeLayout($false)
