@@ -68,6 +68,7 @@ function Start-QiInstaller {
             $DebugConsole.Visible = $true
             $AuthDebugButton.Visible = $true
             $AuthUser.Text = ''
+            $2FAAuth.Text = ''
         }
         elseif ($AuthUser.Text -eq 'Console') {
             if ($QiDebug) {
