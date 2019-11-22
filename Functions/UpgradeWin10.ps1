@@ -1,5 +1,5 @@
 if (((Get-Host).version).major -gt 2) {
-    $version = $Win10Version
+    $version = "1909"
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
         $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
         $Destination = "$($ScriptPath)\Win10_Upgrade\$($Version)_x64.zip"
