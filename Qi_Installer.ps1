@@ -911,7 +911,7 @@ function Repair-PowerShellOutputRedirectionBug {
             $field2.SetValue($consoleHost, [Console]::Error)
         }
         catch {
-            Write-Output "Unable to apply redirection fix."
+            Update-Textbox "Unable to apply redirection fix." -Color 'red'
         }
     }
 }
@@ -950,7 +950,7 @@ function Get-ChocoDownloader {
   
     $ignoreProxy = $env:chocolateyIgnoreProxy
     if ($null -ne $ignoreProxy -and $ignoreProxy -eq 'true') {
-        Write-Debug "Explicitly bypassing proxy due to user environment variable"
+        Update-Textbox "Explicitly bypassing proxy due to user environment variable"
         $downloader.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy()
     }
     else {
@@ -966,7 +966,7 @@ function Get-ChocoDownloader {
                 $proxy.Credentials = New-Object System.Management.Automation.PSCredential ($explicitProxyUser, $passwd)
             }
   
-            Write-Debug "Using explicit proxy server '$explicitProxy'."
+            Update-Textbox "Using explicit proxy server '$explicitProxy'."
             $downloader.Proxy = $proxy
   
         }
@@ -974,13 +974,13 @@ function Get-ChocoDownloader {
             # system proxy (pass through)
             $creds = $defaultCreds
             if ($null -eq $creds) {
-                Write-Debug "Default credentials were null. Attempting backup method"
+                Update-Textbox "Default credentials were null. Attempting backup method"
                 $cred = get-credential
                 $creds = $cred.GetNetworkCredential();
             }
   
             $proxyaddress = $downloader.Proxy.GetProxy($url).Authority
-            Write-Debug "Using system proxy server '$proxyaddress'."
+            Update-Textbox "Using system proxy server '$proxyaddress'."
             $proxy = New-Object System.Net.WebProxy($proxyaddress)
             $proxy.Credentials = $creds
             $downloader.Proxy = $proxy
@@ -994,13 +994,13 @@ function Install-Chocolatey {
 
     $chocolateyVersion = $env:chocolateyVersion
     if (![string]::IsNullOrEmpty($chocolateyVersion)) {
-        Write-Output "Downloading specific version of Chocolatey: $chocolateyVersion"
+        Update-Textbox "Downloading specific version of Chocolatey: $chocolateyVersion"
         $url = "https://chocolatey.org/api/v2/package/chocolatey/$chocolateyVersion"
     }
     
     $chocolateyDownloadUrl = $env:chocolateyDownloadUrl
     if (![string]::IsNullOrEmpty($chocolateyDownloadUrl)) {
-        Write-Output "Downloading Chocolatey from : $chocolateyDownloadUrl"
+        Update-Textbox "Downloading Chocolatey from : $chocolateyDownloadUrl"
         $url = "$chocolateyDownloadUrl"
     }
     
@@ -1026,18 +1026,18 @@ function Install-Chocolatey {
         [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48
     }
     catch {
-        Write-Output 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to do one or more of the following: (1) upgrade to .NET Framework 4.5+ and PowerShell v3, (2) specify internal Chocolatey package location (set $env:chocolateyDownloadUrl prior to install or host the package internally), (3) use the Download + PowerShell method of install. See https://chocolatey.org/install for all install options.'
+        Update-Textbox 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to do one or more of the following: (1) upgrade to .NET Framework 4.5+ and PowerShell v3, (2) specify internal Chocolatey package location (set $env:chocolateyDownloadUrl prior to install or host the package internally), (3) use the Download + PowerShell method of install. See https://chocolatey.org/install for all install options.' -Color 'red'
     }
     
     if ($null -eq $url -or $url -eq '') {
-        Write-Output "Getting latest version of the Chocolatey package for download."
+        Update-Textbox "Getting latest version of the Chocolatey package for download."
         $url = 'https://chocolatey.org/api/v2/Packages()?$filter=((Id%20eq%20%27chocolatey%27)%20and%20(not%20IsPrerelease))%20and%20IsLatestVersion'
         [xml]$result = Get-ChocoString $url
         $url = $result.feed.entry.content.src
     }
     
     # Download the Chocolatey package
-    Write-Output "Getting Chocolatey from $url."
+    Update-Textbox "Getting Chocolatey from $url."
     Get-ChocoFile $url $file
     
     # Determine unzipping method
@@ -1046,17 +1046,17 @@ function Install-Chocolatey {
     $unzipMethod = '7zip'
     $useWindowsCompression = $env:chocolateyUseWindowsCompression
     if ($null -ne $useWindowsCompression -and $useWindowsCompression -eq 'true') {
-        Write-Output 'Using built-in compression to unzip'
+        Update-Textbox 'Using built-in compression to unzip'
         $unzipMethod = 'builtin'
     }
     elseif (-Not (Test-Path ($7zaExe))) {
-        Write-Output "Downloading 7-Zip commandline tool prior to extraction."
+        Update-Textbox "Downloading 7-Zip commandline tool prior to extraction."
         # download 7zip
         Get-ChocoFile 'https://chocolatey.org/7za.exe' "$7zaExe"
     }
     
     # unzip the package
-    Write-Output "Extracting $file to $tempDir..."
+    Update-Textbox "Extracting $file to $tempDir..."
     if ($unzipMethod -eq '7zip') {
         $params = "x -o`"$tempDir`" -bd -y `"$file`""
         # use more robust Process as compared to Start-Process -Wait (which doesn't
@@ -1101,13 +1101,13 @@ function Install-Chocolatey {
     }
     
     # Call chocolatey install
-    Write-Output "Installing chocolatey on this machine"
+    Update-Textbox "Installing chocolatey on this machine"
     $toolsFolder = Join-Path $tempDir "tools"
     $chocInstallPS1 = Join-Path $toolsFolder "chocolateyInstall.ps1"
     
     & $chocInstallPS1
     
-    Write-Output 'Ensuring chocolatey commands are on the path'
+    Update-Textbox 'Ensuring chocolatey commands are on the path'
     $chocInstallVariableName = "ChocolateyInstall"
     $chocoPath = [Environment]::GetEnvironmentVariable($chocInstallVariableName)
     if ($null -eq $chocoPath -or $chocoPath -eq '') {
@@ -1124,7 +1124,7 @@ function Install-Chocolatey {
         $env:Path = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine);
     }
     
-    Write-Output 'Ensuring chocolatey.nupkg is in the lib folder'
+    Update-Textbox 'Ensuring chocolatey.nupkg is in the lib folder'
     $chocoPkgDir = Join-Path $chocoPath 'lib\chocolatey'
     $nupkg = Join-Path $chocoPkgDir 'chocolatey.nupkg'
     if (![System.IO.Directory]::Exists($chocoPkgDir)) { [System.IO.Directory]::CreateDirectory($chocoPkgDir); }
@@ -1455,6 +1455,7 @@ Function Request-Reboot {
         }
     }
 }
+<#
 function Test-Cred {
            
     [CmdletBinding()]
@@ -1516,7 +1517,7 @@ function Test-Cred {
         }
     }
 }
-
+#>
 function Update-Win10 {
     if (((Get-Host).version).major -gt 2) {
         $version = "1909"
