@@ -179,9 +179,10 @@ function Install-Software {
             New-Item $env:ALLUSERSPROFILE\choco-cache -ItemType Directory -Force 
             $env:TEMP = "$env:ALLUSERSPROFILE\choco-cache" 
             $RunLog = "$ScriptPath\logs\Chocolatey log.txt"
-            $process = (start-process powershell -ArgumentList "Invoke-Expression Install-Chocolatey" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
-            Start-Sleep -Seconds 1
-            Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
+            Install-Chocolatey
+            #$process = (start-process powershell -ArgumentList "Invoke-Expression Install-Chocolatey" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+            #Start-Sleep -Seconds 1
+            #Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
         }
         $RunLog = "$ScriptPath\logs\$Application Install.txt"
         $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
