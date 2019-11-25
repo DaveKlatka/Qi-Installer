@@ -216,7 +216,9 @@ Function Get-ProgressBar {
         while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
             if ($Runlog -match '.xml') {
                 foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
-                    Update-ProgressTextBox -Text $line
+                    if (!($promptcheck -contains $line)) {
+                        Update-ProgressTextBox -Text $line
+                    }
                 }
                 $Promptcheck = $lines
                 start-sleep -Milliseconds 500 
