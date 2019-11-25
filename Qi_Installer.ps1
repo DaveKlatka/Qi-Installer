@@ -903,7 +903,7 @@ Function Invoke-UnInstall_Automate {
 # position is not what FileStream expected. Do not use a handle
 # simultaneously in one FileStream and in Win32 code or another
 # FileStream."
-function Fix-PowerShellOutputRedirectionBug {
+function Repair-PowerShellOutputRedirectionBug {
     $poshMajorVerion = $PSVersionTable.PSVersion.Major
   
     if ($poshMajorVerion -lt 4) {
@@ -927,27 +927,27 @@ function Fix-PowerShellOutputRedirectionBug {
     }
 }
 
-function Download-String {
+function Get-ChocoString {
     param (
         [string]$url
     )
-    $downloader = Get-Downloader $url
+    $downloader = Get-ChocoDownloader $url
   
     return $downloader.DownloadString($url)
 }
 
-function Download-File {
+function Get-ChocoFile {
     param (
         [string]$url,
         [string]$file
     )
     #Write-Output "Downloading $url to $file"
-    $downloader = Get-Downloader $url
+    $downloader = Get-ChocoDownloader $url
   
     $downloader.DownloadFile($url, $file)
 }
 
-function Get-Downloader {
+function Get-ChocoDownloader {
     param (
         [string]$url
     )
@@ -955,7 +955,7 @@ function Get-Downloader {
     $downloader = new-object System.Net.WebClient
   
     $defaultCreds = [System.Net.CredentialCache]::DefaultCredentials
-    if ($defaultCreds -ne $null) {
+    if ($null -ne $defaultCreds) {
         $downloader.Credentials = $defaultCreds
     }
   
@@ -984,7 +984,7 @@ function Get-Downloader {
         elseif (!$downloader.Proxy.IsBypassed($url)) {
             # system proxy (pass through)
             $creds = $defaultCreds
-            if ($creds -eq $null) {
+            if ($null -eq $creds) {
                 Write-Debug "Default credentials were null. Attempting backup method"
                 $cred = get-credential
                 $creds = $cred.GetNetworkCredential();
@@ -1015,7 +1015,7 @@ function Install-Chocolatey {
         $url = "$chocolateyDownloadUrl"
     }
     
-    if ($env:TEMP -eq $null) {
+    if ($null -eq $env:TEMP) {
         $env:TEMP = Join-Path $env:SystemDrive 'temp'
     }
     $chocTempDir = Join-Path $env:TEMP "chocolatey"
@@ -1023,7 +1023,7 @@ function Install-Chocolatey {
     if (![System.IO.Directory]::Exists($tempDir)) { [void][System.IO.Directory]::CreateDirectory($tempDir) }
     $file = Join-Path $tempDir "chocolatey.zip"
     
-    Fix-PowerShellOutputRedirectionBug
+    Repair-PowerShellOutputRedirectionBug
     
     # Attempt to set highest encryption available for SecurityProtocol.
     # PowerShell will not set this by default (until maybe .NET 4.6.x). This
@@ -1043,27 +1043,27 @@ function Install-Chocolatey {
     if ($null -eq $url -or $url -eq '') {
         Write-Output "Getting latest version of the Chocolatey package for download."
         $url = 'https://chocolatey.org/api/v2/Packages()?$filter=((Id%20eq%20%27chocolatey%27)%20and%20(not%20IsPrerelease))%20and%20IsLatestVersion'
-        [xml]$result = Download-String $url
+        [xml]$result = Get-ChocoString $url
         $url = $result.feed.entry.content.src
     }
     
     # Download the Chocolatey package
     Write-Output "Getting Chocolatey from $url."
-    Download-File $url $file
+    Get-ChocoFile $url $file
     
     # Determine unzipping method
     # 7zip is the most compatible so use it by default
     $7zaExe = Join-Path $tempDir '7za.exe'
     $unzipMethod = '7zip'
     $useWindowsCompression = $env:chocolateyUseWindowsCompression
-    if ($useWindowsCompression -ne $null -and $useWindowsCompression -eq 'true') {
+    if ($null -ne $useWindowsCompression -and $useWindowsCompression -eq 'true') {
         Write-Output 'Using built-in compression to unzip'
         $unzipMethod = 'builtin'
     }
     elseif (-Not (Test-Path ($7zaExe))) {
         Write-Output "Downloading 7-Zip commandline tool prior to extraction."
         # download 7zip
-        Download-File 'https://chocolatey.org/7za.exe' "$7zaExe"
+        Get-ChocoFile 'https://chocolatey.org/7za.exe' "$7zaExe"
     }
     
     # unzip the package
@@ -1121,7 +1121,7 @@ function Install-Chocolatey {
     Write-Output 'Ensuring chocolatey commands are on the path'
     $chocInstallVariableName = "ChocolateyInstall"
     $chocoPath = [Environment]::GetEnvironmentVariable($chocInstallVariableName)
-    if ($chocoPath -eq $null -or $chocoPath -eq '') {
+    if ($null -eq $chocoPath -or $chocoPath -eq '') {
         $chocoPath = "$env:ALLUSERSPROFILE\Chocolatey"
     }
     
@@ -1268,7 +1268,7 @@ function Install-DotNet {
             if ($dotnet35.Enabled -eq $true) {
                 $dotnet35.Enabled = $false
             } 
-            $DotNetInstalled = $true
+            $Script:DotNetInstalled = $true
         }
         else {
             update-Textbox ".net 3.5 failed to install" -color 'Red'
@@ -1489,7 +1489,7 @@ function Test-Cred {
     $Username = $null
     $Password = $null
       
-    If ($Credentials -eq $null) {
+    If ($null -eq $Credentials) {
         Try {
             $Credentials = Get-Credential "domain\$env:username" -ErrorAction Stop
         }
@@ -1519,7 +1519,7 @@ function Test-Cred {
         Write-Warning "Something went wrong"
     }
     Else {
-        If ($domain.name -ne $null) {
+        If ($null -ne $domain.name) {
             return "Authenticated"
         }
         Else {
@@ -2042,8 +2042,8 @@ function Get-USMTProgress {
                 
                 start-sleep -Milliseconds 50
             }
-         }
-         "LoadState" {
+        }
+        "LoadState" {
             while (get-process -id $ProcessID -ErrorAction SilentlyContinue) {
                 foreach ($line in ($lines = get-content $RunLog -ErrorAction SilentlyContinue)) {
                     if (!($promptcheck -contains $line)) {
@@ -2057,7 +2057,7 @@ function Get-USMTProgress {
                 
                 start-sleep -Milliseconds 50
             }
-         }
+        }
     }
     
     if ($CurrentFile.Visible -eq $true) {
@@ -2918,7 +2918,21 @@ function Start-QiInstaller {
             $msgBoxInput = [System.Windows.MessageBox]::Show("Powershell $((Get-Host).Version.Major) detected. Would you like to upgrade Powershell?", 'Powershell Upgrade', 'YesNo', 'Warning')
             switch ($msgBoxInput) {
                 'Yes' {
-                    $Powershell5.performclick()
+                    Test-Compatibility
+                    if ($ReturnValue) {
+                        if (((Get-WmiObject win32_OperatingSystem).Caption) -match 'Windows 7') {
+                            Install-Software -Application 'Powershell'
+                            switch ($msgBoxInput) {
+                                'Yes' {
+                                    shutdown.exe -r -t 30
+                                    update-Textbox "System Rebooting" -color "Yellow"
+                                }
+                                'No' {
+                                    update-Textbox "Please reboot at your earliest convenience" -color "Yellow"
+                                }
+                            }
+                        }
+                    }
                 }
                 'No' {
                     update-Textbox "Wrong version of Powershell for install." -color 'Red'
