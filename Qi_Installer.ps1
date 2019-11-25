@@ -1552,10 +1552,6 @@ function Update-Win10 {
                 update-Textbox "$((Split-Path -path $Destination) + "\setup.exe") $ArgumentList"
                 Start-Process -FilePath ((Split-Path -path $Destination) + "\setup.exe") -ArgumentList $ArgumentList
                 Start-Sleep -Seconds 5
-                if ($ScriptPath -match $env:HOMEDRIVE) {
-                    Start-Cleanup -file (Split-Path -path $Destination)
-                }
-                Request-Reboot
             }
             else {
                 update-Textbox "Extraction Failed" -color "Red"
