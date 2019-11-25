@@ -1,14 +1,3 @@
-function Get-Form {
-    Add-Type -AssemblyName System.Windows.Forms
-    #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
-    if ($QiDebug) {
-        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.designer.ps1') | Invoke-Expression;
-    }
-    else {
-        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JRPhoW') | Invoke-Expression; 
-    }
-}
-
 function update-Textbox {
     param(
         [string] $Message,
@@ -3148,7 +3137,14 @@ function Start-QiInstaller {
     }
 
     #GUI
-    Get-Form
+    Add-Type -AssemblyName System.Windows.Forms
+    #. (Join-Path $PSScriptRoot 'Qi_Installer.designer.ps1')
+    if ($QiDebug) {
+        (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.designer.ps1') | Invoke-Expression;
+    }
+    else {
+        (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JRPhoW') | Invoke-Expression; 
+    }
 
     #USMT Variables
     $DestComputerText.Text = $env:COMPUTERNAME
