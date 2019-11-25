@@ -1415,6 +1415,7 @@ function Test-Compatibility {
         switch ($wmf3msgBoxInput) {
             'Yes' {
                 Install-Software -Application "powershell4"
+                Request-Reboot
             }
             'No' {
                 update-Textbox "Powershell Upgrade Canceled" -color "Yellow"
@@ -1547,11 +1548,14 @@ function Update-Win10 {
             if (Test-Path ((Split-Path -path $Destination) + "\setup.exe")) {
                 Set-RestorePoint -Description "Win 10 $($Version) Upgrade"
                 update-Textbox "Upgrading to Win10 $($Version)"
-                $ArgumentList = "/auto upgrade /Compat IgnoreWarning /DynamicUpdate disable /copylogs $env:SystemDrive\wti\Windows10UpgradeLogs /migratedrivers all"
+                $ArgumentList = "/auto upgrade /Compat IgnoreWarning /DynamicUpdate disable /copylogs $env:SystemDrive\wti\Windows10UpgradeLogs /migratedrivers alll /noreboot"
                 update-Textbox "$((Split-Path -path $Destination) + "\setup.exe") $ArgumentList"
                 Start-Process -FilePath ((Split-Path -path $Destination) + "\setup.exe") -ArgumentList $ArgumentList
                 Start-Sleep -Seconds 5
-    
+                if ($ScriptPath -match $env:HOMEDRIVE) {
+                    Start-Cleanup -file (Split-Path -path $Destination)
+                }
+                Request-Reboot
             }
             else {
                 update-Textbox "Extraction Failed" -color "Red"
