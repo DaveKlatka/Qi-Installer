@@ -179,7 +179,7 @@ function Install-Software {
             New-Item $env:ALLUSERSPROFILE\choco-cache -ItemType Directory -Force 
             $env:TEMP = "$env:ALLUSERSPROFILE\choco-cache" 
             $RunLog = "$ScriptPath\logs\Chocolatey log.txt"
-            $process = (start-process powershell -ArgumentList "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('http://bit.ly/2NjIHtz'))" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+            $process = (start-process powershell -ArgumentList "Invoke-Expression Install-Chocolatey" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
             Start-Sleep -Seconds 1
             Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
         }
@@ -1420,9 +1420,9 @@ function Test-Compatibility {
     if ($wmf3) {
         update-Textbox "WMF 5.1 is not supported when WMF 3.0 is installed." -color "Yellow"
         Add-Type -AssemblyName PresentationFramework
-        $msgBoxInput = [System.Windows.MessageBox]::Show('Powershell 3 detected. PS 4 Must be installed prior to 5 Would you like to install Powershell 4 now?', 'WMF 4.0', 'YesNo', 'Warning')
+        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('Powershell 3 detected. PS 4 Must be installed prior to 5 Would you like to install Powershell 4 now?', 'WMF 4.0', 'YesNo', 'Warning')
 
-        switch ($msgBoxInput) {
+        switch ($wmf3msgBoxInput) {
             'Yes' {
                 Install-Software -Application "powershell4"
             }
@@ -1439,11 +1439,11 @@ function Test-Compatibility {
     $installed = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' -Name Install -ErrorAction SilentlyContinue -ErrorVariable evInstalled).install
 
     if ($evRelease -or $evInstalled) {
-        Update-Text "WMF 5.1 requires .Net 4.5" -color 'Yellow'
+        Update-Textbox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
         $Script:ReturnValue = $false
     }
     elseif (($installed -ne 1) -or ($release -lt 378389)) {
-        Update-Text "WMF 5.1 requires .Net 4.5" -color 'Yellow'
+        Update-Textbox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
         $Script:ReturnValue = $false
     }
 }
