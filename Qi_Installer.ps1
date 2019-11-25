@@ -1011,7 +1011,7 @@ function Get-Downloader {
   
     return $downloader
 }
-fucntion Install-Chocolatey {
+function Install-Chocolatey {
     $url = ''
 
     $chocolateyVersion = $env:chocolateyVersion
