@@ -1,4 +1,4 @@
-function update-Textbox {
+function Update-LogBox {
     param(
         [string] $Message,
         [string] $Color = 'White',
@@ -15,7 +15,7 @@ function update-Textbox {
     $LogBox.ScrollToCaret()
 }
 
-function Get-Files {
+function Get-FilesDownload {
     param(
         [string] $Source,
         [string] $Destination,
@@ -24,7 +24,7 @@ function Get-Files {
     )
     $TotalProgress.Value = 0
     $CurrentFile.Value = 0
-    update-Textbox "Downloading Installer for $($Software) to $(Split-Path -path $Destination)"
+    Update-LogBox "Downloading Installer for $($Software) to $(Split-Path -path $Destination)"
     if (!(Test-Path (Split-Path -path $Destination))) { New-Item -ItemType Directory -Path (Split-Path -path $Destination) }
     Import-Module BitsTransfer
     $DCount = 0
@@ -124,7 +124,7 @@ function Get-Files {
     }
 }
 
-function Start-Extract {
+function Invoke-Extract {
     param(
         [string] $File,
         [string] $ExtractTo
@@ -132,7 +132,7 @@ function Start-Extract {
     $Source = "$DownloadHost/AutoMate/Tools/7za.exe"
     $7zip = "$Scriptpath\7za.exe"
     if (!(Test-Path $7zip)) {
-        update-Textbox "Downloading 7zip extractor"
+        Update-LogBox "Downloading 7zip extractor"
         $CurrentFile.Value = 0
         $CurrentFile.Visible = $true
         $bits = (Start-BitsTransfer -Source $Source -Destination $7zip -Asynchronous)
@@ -149,7 +149,7 @@ function Start-Extract {
             $bits.jobid | Remove-BitsTransfer
         }
     }
-    update-Textbox "Extracting $file to $ExtractTo"
+    Update-LogBox "Extracting $file to $ExtractTo"
     $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
     if ((Get-Host).Version.Major -gt 3) {
@@ -159,14 +159,14 @@ function Start-Extract {
         $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -RedirectStandardOutput $RunLog -PassThru)
     }
     start-sleep 1
-    Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
+    Update-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
 }
 
-function Start-CleanUp {
+function Invoke-CleanUp {
     param(
         [string] $File
     )
-    update-Textbox "Removing $File"
+    Update-LogBox "Removing $File"
     Remove-Item -Path "$File*" -Recurse
 }
 
@@ -180,18 +180,15 @@ function Install-Software {
             $env:TEMP = "$env:ALLUSERSPROFILE\choco-cache" 
             $RunLog = "$ScriptPath\logs\Chocolatey log.txt"
             Install-Chocolatey
-            #$process = (start-process powershell -ArgumentList "Invoke-Expression Install-Chocolatey" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
-            #Start-Sleep -Seconds 1
-            #Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID
         }
         $RunLog = "$ScriptPath\logs\$Application Install.txt"
         $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
         start-sleep 1
-        Get-ProgressBar -RunLog $RunLog -ProcessID $Process.ID -Tracker
+        Update-ProgressBar -RunLog $RunLog -ProcessID $Process.ID -Tracker
     }
 }
 
-Function Get-ProgressBar {
+Function Update-ProgressBar {
     Param(
         [String] $Runlog,
         [String] $ProcessID,
@@ -218,7 +215,7 @@ Function Get-ProgressBar {
             if ($Runlog -match '.xml') {
                 foreach ($line in ($lines = ([xml](get-content $RunLog)).logentries.logentry.message)) {
                     if (!($promptcheck -contains $line)) {
-                        Update-ProgressTextBox -Text $line
+                        Update-ProgressLogBox -Text $line
                     }
                 }
                 $Promptcheck = $lines
@@ -227,7 +224,7 @@ Function Get-ProgressBar {
             else {
                 foreach ($line in ($lines = get-content $RunLog)) {
                     if (!($promptcheck -contains $line)) {
-                        Update-ProgressTextBox -Text $line
+                        Update-ProgressLogBox -Text $line
                     }
                 } 
                 $Promptcheck = $lines
@@ -264,7 +261,7 @@ Function Get-ProgressBar {
             if ($Runlog -match '.xml') {
                 foreach ($line in ($lines = ([xml](get-content $RunLog -ErrorAction SilentlyContinue)).logentries.logentry.message)) {
                     if (!($promptcheck -contains $line)) {
-                        Update-ProgressTextBox -Text $line -Tracker
+                        Update-ProgressLogBox -Text $line -Tracker
                     }
                 }
                 $Promptcheck = $lines
@@ -276,7 +273,7 @@ Function Get-ProgressBar {
                         return
                     }
                     if (!($promptcheck -contains $line)) {
-                        Update-ProgressTextBox -Text $line -Tracker
+                        Update-ProgressLogBox -Text $line -Tracker
                     }
                 }
                 $Promptcheck = $lines
@@ -291,7 +288,7 @@ Function Get-ProgressBar {
         }
     }  
 }
-function Update-ProgressTextBox {
+function Update-ProgressLogBox {
     Param (
         [string] $Text,
         [switch] $Tracker
@@ -299,23 +296,23 @@ function Update-ProgressTextBox {
     if (-not $Tracker) {
         if (!($null -eq $Text) -and $Text.TrimEnd() -ne '.') {
             if ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
-                Update-Textbox $Text.TrimEnd() -Color 'Red'
+                Update-LogBox $Text.TrimEnd() -Color 'Red'
             }
             elseif ($Text.TrimEnd() -match 'WARNING') {
-                Update-Textbox $Text.TrimEnd() -Color 'Yellow'
+                Update-LogBox $Text.TrimEnd() -Color 'Yellow'
             }
             elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
-                Update-Textbox $Text.TrimEnd() -color 'Green'
+                Update-LogBox $Text.TrimEnd() -color 'Green'
             }
             elseif ($Text.TrimEnd() -match 'Waiting') {
                 if (!($wait)) {
                     $Wait = $true
-                    update-Textbox $Text.TrimEnd()
+                    Update-LogBox $Text.TrimEnd()
                 }
             }
             else {
                 $Wait = $false
-                Update-Textbox $Text.TrimEnd()
+                Update-LogBox $Text.TrimEnd()
             }
         }
     }
@@ -334,23 +331,23 @@ function Update-ProgressTextBox {
                 $CurrentFile.Value = $matches[1]
             }
             elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
-                Update-Textbox $Text.TrimEnd() -Color 'Red'
+                Update-LogBox $Text.TrimEnd() -Color 'Red'
             }
             elseif ($Text.TrimEnd() -match 'WARNING') {
-                Update-Textbox $Text.TrimEnd() -Color 'Yellow'
+                Update-LogBox $Text.TrimEnd() -Color 'Yellow'
             }
             elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed' -or $Text.TrimEnd() -match 'installed') {
-                Update-Textbox $Text.TrimEnd() -color 'Green'
+                Update-LogBox $Text.TrimEnd() -color 'Green'
             }
             elseif ($Text.TrimEnd() -match 'Waiting') {
                 if (!($wait)) {
                     $Wait = $true
-                    update-Textbox $Text.TrimEnd()
+                    Update-LogBox $Text.TrimEnd()
                 }
             }
             else {
                 $Wait = $false
-                Update-Textbox $Text.TrimEnd()
+                Update-LogBox $Text.TrimEnd()
             }
         }
     } 
@@ -365,12 +362,12 @@ function Set-RestorePoint {
     $VSSStorage = (vssadmin.exe list shadowstorage).split("`n")
     $VSS = Get-WmiObject -class win32_volume | Where-Object { $_.DriveLetter -eq $env:SystemDrive }
     if (!($VSSStorage -like "*$($VSS.DeviceID)*")) {
-        Update-Textbox "Enabling and configuring System Restore"
+        Update-LogBox "Enabling and configuring System Restore"
         Enable-ComputerRestore -drive $env:SystemDrive -ErrorAction stop
         vssadmin.exe resize shadowstorage /on=$env:SystemDrive /for=$env:SystemDrive /maxsize=5%
     }
 
-    Update-Textbox "Creating Restore Point '$Description'"
+    Update-LogBox "Creating Restore Point '$Description'"
     $RunLog = "$ScriptPath\logs\SystemRestorePoint.txt"
     if ((Get-Host).Version.Major -gt 3) {
         $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command Checkpoint-Computer -description '$Description' -RestorePointType MODIFY_SETTINGS" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
@@ -380,56 +377,17 @@ function Set-RestorePoint {
     }
 
     #start-sleep -Seconds 1
-    Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    Update-ProgressBarr -Runlog $RunLog -ProcessID $Process.ID
 
     if (!((get-content $RunLog) -match 'WARNING')) {
         $RestorePoint = Get-ComputerRestorePoint -ErrorAction stop | Where-Object { $_.creationtime -like "$date*" -and $_.__CLASS -eq "SystemRestore" -and $_.RestorePointType -eq "12" }
         if ($null -ne $RestorePoint) {
-            update-Textbox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
+            Update-LogBox "Restore Point '$($RestorePoint.Description)' has been created" -Color 'Green'
         }
     }
 }
 
 function Connect-AutomateAPI {
-    <#
-    .SYNOPSIS
-    Connect to the Automate API.
-    .DESCRIPTION
-    Connects to the Automate API and returns a bearer token which when passed with each requests grants up to an hours worth of access.
-    .PARAMETER Server
-    The address to your Automate Server. Example 'rancor.hostedrmm.com'
-    .PARAMETER Credentials
-    Takes a standard powershell credential object, this can be built with $CredentialsToPass = Get-Credential, then pass $CredentialsToPass
-    .PARAMETER TwoFactorToken
-    Takes a string that represents the 2FA number
-    .PARAMETER AuthorizationToken
-    Used internally when quietly refreshing the Token
-    .PARAMETER SkipCheck
-    Used internally when quietly refreshing the Token
-    .PARAMETER Verify
-    Specifies to test the current token, and if it is not valid attempt to obtain a new one using the current credentials. Does not refresh (re-issue) the current token.
-    .PARAMETER Force
-    Will not attempt to refresh a current session
-    .PARAMETER Quiet
-    Will not output any standard messages. Returns $True if connection was successful.
-    .OUTPUTS
-    Three strings into Script variables, $CWAServer containing the server address, $CWACredentials containing the bearer token and $CWACredentialsExpirationDate containing the date the credentials expire
-    .NOTES
-    Version:        1.1
-    Author:         Gavin Stone
-    Creation Date:  2019-01-20
-    Purpose/Change: Initial script development
-    
-    Update Date:    2019-02-12
-    Author:         Darren White
-    Purpose/Change: Credential and 2FA prompting is only if needed. Supports Token Refresh.
-    
-    .EXAMPLE
-    Connect-AutomateAPI -Server "rancor.hostedrmm.com" -Credentials $CredentialObject -TwoFactorToken "999999"
-    
-    .EXAMPLE
-    Connect-AutomateAPI -Quiet
-    #>
     [CmdletBinding(DefaultParameterSetName = 'refresh')]
     param (
         [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
@@ -633,44 +591,6 @@ function Connect-AutomateAPI {
 }
 
 function Get-AutomateAPIGeneric {
-    <#
-      .SYNOPSIS
-        Internal function used to make generic API calls
-      .DESCRIPTION
-        Internal function used to make generic API calls
-      .PARAMETER PageSize
-        The page size of the results that come back from the API - limit this when needed
-      .PARAMETER Page
-        Brings back a particular page as defined
-      .PARAMETER AllResults
-        Will bring back all results for a particular query with no concern for result set size
-      .PARAMETER Endpoint
-        The individial URI to post to for results, IE computers?
-      .PARAMETER OrderBy
-        Order by - Used to sort the results by a field. Can be sorted in ascending or descending order.
-        Example - fieldname asc
-        Example - fieldname desc
-      .PARAMETER Condition
-        Condition - the searches that can be used to search for specific things. Supported operators are '=', 'eq', '>', '>=', '<', '<=', 'and', 'or', '()', 'like', 'contains', 'in', 'not'.
-        The 'not' operator is only used with 'in', 'like', or 'contains'. The '=' and 'eq' operator are the same. String values can be surrounded with either single or double quotes.
-        Boolean values are specified as 'true' or 'false'. Parenthesis can be used to control the order of operations and group conditions.
-        The 'like' operator translates to the MySQL 'like' operator.
-      .PARAMETER IncludeFields
-        A comma delimited list of fields, when specified only these fields will be included in the result set
-      .PARAMETER ExcludeFields
-        A comma delimited list of fields, when specified these fields will be excluded from the final result set
-      .PARAMETER IDs
-        A comma delimited list of fields, when specified only these IDs will be returned
-      .OUTPUTS
-        The returned results from the API call
-      .NOTES
-        Version:        1.0
-        Author:         Gavin Stone
-        Creation Date:  20/01/2019
-        Purpose/Change: Initial script development
-      .EXAMPLE
-        Get-AutomateAPIGeneric -Page 1 -Condition "RemoteAgentLastContact <= 2019-12-18T00:50:19.575Z" -Endpoint "computers?"
-    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false, ParameterSetName = "Page")]
@@ -802,18 +722,7 @@ function Get-AutomateAPIGeneric {
     }
 }
 
-function Get-ConditionsStacked {
-    param (
-        [Parameter()]
-        [string[]]$ArrayOfConditions
-    )
-
-    $FinalString = ($ArrayOfConditions) -join " And "
-    Return $FinalString
-  
-}
-
-Function Invoke-Install_Automate {
+Function Invoke-Automate_Install {
     #Install Command
     $RunLog = "$ScriptPath\logs\Automate_Install.txt"
     if (!((Get-WMIObject win32_operatingsystem).name -like 'Server')) {
@@ -847,7 +756,7 @@ Function Invoke-Install_Automate {
         }
     }
     start-sleep -Seconds 1
-    Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
 
     if (Test-Path $env:windir\LTSVC) {
         $ReInstall_Automate.Enabled = $true
@@ -856,7 +765,7 @@ Function Invoke-Install_Automate {
     }
 }
 
-Function Invoke-ReInstall_Automate {
+Function Invoke-Automate_ReInstall {
     #Re-Install Command
     $RunLog = "$ScriptPath\logs\Automate_Re-Install.txt"
     if ((Get-Host).Version.Major -gt 3) {
@@ -866,10 +775,10 @@ Function Invoke-ReInstall_Automate {
         $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
     }
     start-sleep -Seconds 1
-    Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
 }
 
-Function Invoke-UnInstall_Automate {
+Function Invoke-Automate_UnInstall {
     #Un-Install Command
     $RunLog = "$ScriptPath\logs\Automate_Un-Install.txt"
     if ((Get-Host).Version.Major -gt 3) {
@@ -879,7 +788,7 @@ Function Invoke-UnInstall_Automate {
         $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; UnInstall-LTService -Server $AutomateServer" -RedirectStandardOutput $RunLog -PassThru)
     }
     start-sleep -Seconds 1
-    Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
 
     if (!(Test-Path $env:windir\LTSVC)) {
         $ReInstall_Automate.Enabled = $false
@@ -912,7 +821,7 @@ function Repair-PowerShellOutputRedirectionBug {
             $field2.SetValue($consoleHost, [Console]::Error)
         }
         catch {
-            Update-Textbox "Unable to apply redirection fix." -Color 'red'
+            Update-LogBox "Unable to apply redirection fix." -Color 'red'
         }
     }
 }
@@ -951,7 +860,7 @@ function Get-ChocoDownloader {
   
     $ignoreProxy = $env:chocolateyIgnoreProxy
     if ($null -ne $ignoreProxy -and $ignoreProxy -eq 'true') {
-        Update-Textbox "Explicitly bypassing proxy due to user environment variable"
+        Update-LogBox "Explicitly bypassing proxy due to user environment variable"
         $downloader.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy()
     }
     else {
@@ -967,7 +876,7 @@ function Get-ChocoDownloader {
                 $proxy.Credentials = New-Object System.Management.Automation.PSCredential ($explicitProxyUser, $passwd)
             }
   
-            Update-Textbox "Using explicit proxy server '$explicitProxy'."
+            Update-LogBox "Using explicit proxy server '$explicitProxy'."
             $downloader.Proxy = $proxy
   
         }
@@ -975,13 +884,13 @@ function Get-ChocoDownloader {
             # system proxy (pass through)
             $creds = $defaultCreds
             if ($null -eq $creds) {
-                Update-Textbox "Default credentials were null. Attempting backup method"
+                Update-LogBox "Default credentials were null. Attempting backup method"
                 $cred = get-credential
                 $creds = $cred.GetNetworkCredential();
             }
   
             $proxyaddress = $downloader.Proxy.GetProxy($url).Authority
-            Update-Textbox "Using system proxy server '$proxyaddress'."
+            Update-LogBox "Using system proxy server '$proxyaddress'."
             $proxy = New-Object System.Net.WebProxy($proxyaddress)
             $proxy.Credentials = $creds
             $downloader.Proxy = $proxy
@@ -995,13 +904,13 @@ function Install-Chocolatey {
 
     $chocolateyVersion = $env:chocolateyVersion
     if (![string]::IsNullOrEmpty($chocolateyVersion)) {
-        Update-Textbox "Downloading specific version of Chocolatey: $chocolateyVersion"
+        Update-LogBox "Downloading specific version of Chocolatey: $chocolateyVersion"
         $url = "https://chocolatey.org/api/v2/package/chocolatey/$chocolateyVersion"
     }
     
     $chocolateyDownloadUrl = $env:chocolateyDownloadUrl
     if (![string]::IsNullOrEmpty($chocolateyDownloadUrl)) {
-        Update-Textbox "Downloading Chocolatey from : $chocolateyDownloadUrl"
+        Update-LogBox "Downloading Chocolatey from : $chocolateyDownloadUrl"
         $url = "$chocolateyDownloadUrl"
     }
     
@@ -1027,18 +936,18 @@ function Install-Chocolatey {
         [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48
     }
     catch {
-        Update-Textbox 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to do one or more of the following: (1) upgrade to .NET Framework 4.5+ and PowerShell v3, (2) specify internal Chocolatey package location (set $env:chocolateyDownloadUrl prior to install or host the package internally), (3) use the Download + PowerShell method of install. See https://chocolatey.org/install for all install options.' -Color 'red'
+        Update-LogBox 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to do one or more of the following: (1) upgrade to .NET Framework 4.5+ and PowerShell v3, (2) specify internal Chocolatey package location (set $env:chocolateyDownloadUrl prior to install or host the package internally), (3) use the Download + PowerShell method of install. See https://chocolatey.org/install for all install options.' -Color 'red'
     }
     
     if ($null -eq $url -or $url -eq '') {
-        Update-Textbox "Getting latest version of the Chocolatey package for download."
+        Update-LogBox "Getting latest version of the Chocolatey package for download."
         $url = 'https://chocolatey.org/api/v2/Packages()?$filter=((Id%20eq%20%27chocolatey%27)%20and%20(not%20IsPrerelease))%20and%20IsLatestVersion'
         [xml]$result = Get-ChocoString $url
         $url = $result.feed.entry.content.src
     }
     
     # Download the Chocolatey package
-    Update-Textbox "Getting Chocolatey from $url."
+    Update-LogBox "Getting Chocolatey from $url."
     Get-ChocoFile $url $file
     
     # Determine unzipping method
@@ -1047,17 +956,17 @@ function Install-Chocolatey {
     $unzipMethod = '7zip'
     $useWindowsCompression = $env:chocolateyUseWindowsCompression
     if ($null -ne $useWindowsCompression -and $useWindowsCompression -eq 'true') {
-        Update-Textbox 'Using built-in compression to unzip'
+        Update-LogBox 'Using built-in compression to unzip'
         $unzipMethod = 'builtin'
     }
     elseif (-Not (Test-Path ($7zaExe))) {
-        Update-Textbox "Downloading 7-Zip commandline tool prior to extraction."
+        Update-LogBox "Downloading 7-Zip commandline tool prior to extraction."
         # download 7zip
         Get-ChocoFile 'https://chocolatey.org/7za.exe' "$7zaExe"
     }
     
     # unzip the package
-    Update-Textbox "Extracting $file to $tempDir..."
+    Update-LogBox "Extracting $file to $tempDir..."
     if ($unzipMethod -eq '7zip') {
         $params = "x -o`"$tempDir`" -bd -y `"$file`""
         # use more robust Process as compared to Start-Process -Wait (which doesn't
@@ -1102,13 +1011,13 @@ function Install-Chocolatey {
     }
     
     # Call chocolatey install
-    Update-Textbox "Installing chocolatey on this machine"
+    Update-LogBox "Installing chocolatey on this machine"
     $toolsFolder = Join-Path $tempDir "tools"
     $chocInstallPS1 = Join-Path $toolsFolder "chocolateyInstall.ps1"
     
     & $chocInstallPS1
     
-    Update-Textbox 'Ensuring chocolatey commands are on the path'
+    Update-LogBox 'Ensuring chocolatey commands are on the path'
     $chocInstallVariableName = "ChocolateyInstall"
     $chocoPath = [Environment]::GetEnvironmentVariable($chocInstallVariableName)
     if ($null -eq $chocoPath -or $chocoPath -eq '') {
@@ -1125,14 +1034,14 @@ function Install-Chocolatey {
         $env:Path = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine);
     }
     
-    Update-Textbox 'Ensuring chocolatey.nupkg is in the lib folder'
+    Update-LogBox 'Ensuring chocolatey.nupkg is in the lib folder'
     $chocoPkgDir = Join-Path $chocoPath 'lib\chocolatey'
     $nupkg = Join-Path $chocoPkgDir 'chocolatey.nupkg'
     if (![System.IO.Directory]::Exists($chocoPkgDir)) { [System.IO.Directory]::CreateDirectory($chocoPkgDir); }
     Copy-Item "$file" "$nupkg" -Force -ErrorAction SilentlyContinue
 }
 
-Function Get-DellCommandexe {
+Function Set-DellCommandexe {
 
     if ($null -ne (Get-ChildItem 'C:\Program Files (x86)\Dell\CommandUpdate\dcu-cli.exe' -ErrorAction SilentlyContinue)) {
         $Script:Executable = "C:\Program Files (x86)\Dell\CommandUpdate\dcu-cli.exe"
@@ -1146,12 +1055,12 @@ Function Get-DellCommandexe {
 }
 Function Install-DellCommand { 
 
-    Uninstall-DellCommand
+    Remove-DellCommand
     Install-Software -Application "DellCommandUpdate"
-    Get-DellCommandexe
+    Set-DellCommandexe
 }
 
-Function Uninstall-DellCommand {
+Function Remove-DellCommand {
 
     $WinVersion = ([System.Environment]::OSVersion.Version).Major
     if ($WinVersion -eq "10") {
@@ -1190,92 +1099,43 @@ Function Uninstall-DellCommand {
     }
 }
 
-function Invoke-DriverUpdate {  
+function Invoke-DellDriverUpdate {  
     $Log = "$ScriptPath\logs\DellCommand"
     $Arguments = "/log" + [char]32 + [char]34 + $Log + [char]34
     $Process = (start-process -FilePath $Executable -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
     start-sleep -Seconds 1
-    Get-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
 } 
-
-Function Get-Logs {
-    if ((Test-Path "$Log\ActivityLog.xml") -eq $true) {
-        [xml]$Results = Get-Content "$Log\ActivityLog.xml"
-        if ($null -ne (($Results.LogEntries.LogEntry | Where-Object { $_.message -like "*Install*" }).data | Where-Object { $_.type -eq "install" })) {
-            update-Textbox "(($($Results.LogEntries.LogEntry) | Where-Object { $($_.message) -like "*Install*" }).data | Where-Object { $($_.type) -eq "install" }).name"
-        }
-        else {
-            update-Textbox "No Updates availaible"
-        }
-    }
-}
 
 function Install-DotNet {
     if (!((Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse | Get-ItemProperty -name Version -EA 0 | Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } | Select-Object -ExpandProperty Version) -match '(3\.5.+)\.')) {
-        update-Textbox ".NET 3.5 installation needed."
-        #Install-WindowsFeature Net-Framework-Core
-    
-        if ([version][System.Environment]::OSVersion.Version -gt [version]'6.2') {
-            try {
-                
-                $output = $ScriptPath + '\dotnet3_5'
-                if (!(Test-Path $output)) {
-                    New-Item -ItemType Directory -Path $output | Out-Null
-                }
-                
-                Get-Files -Source "$DownloadHost/AutoMate/Microsoft/Windows/DotNet/Win10_sxs.zip" -Destination "$output\Win10_sxs.zip" -NumberOfFiles 1 -Software '.NET 3.5'
-                Start-Extract -File "$output\Win10_sxs.zip" -ExtractTo $output
-    
-                #Install Command
-                $RunLog = "$ScriptPath\logs\DotNet3_5_Install.txt"
-                $arguments = '/online /enable-feature /featurename:NetFX3 /All /source:' + $output + '\sxs'
-                $Process = (Start-Process -filepath $env:windir\system32\dism.exe -ArgumentList $arguments -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
-                start-sleep 1
-                Get-ProgressBar -Runlog $RunLog -ProcessID $Process.id -Tracker
-                
-            }
-            catch {
-                if (!((Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse | Get-ItemProperty -name Version -EA 0 | Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } | Select-Object -ExpandProperty Version) -match '(3\.5.+)\.')) {
-                    update-Textbox "ERROR: .NET 3.5 install failed." -Color 'Red'
-                }
-            }
-        }
-        Else {
-    
-            Try { $Result = (Start-Process -FilePath "$env:windir\system32\Dism.exe" -ArgumentList '/online Enable /get-featureinfo /featurename:NetFx3') } 
-            Catch { update-Textbox "Error calling Dism.exe." -Color 'Red'; $Result = $Null }
-            If ($Result -contains "State : Enabled") {
-                update-Textbox ".Net Framework 3.5 has been installed and enabled." -Color 'Green'
-            }
-            Else { 
-                update-Textbox "ERROR: .NET 3.5 install failed." -Color 'Red'
-            }#End If
-            
-        }#End If
-    
+        Update-LogBox ".NET 3.5 installation needed."
+
+        Install-Software "dotnet3.5"
+
         if ((Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse | Get-ItemProperty -name Version -EA 0 | Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } | Select-Object -ExpandProperty Version) -match '(3\.5.+)\.') {
-            update-Textbox ".net 3.5 installed succesfully" -Color 'Green'
+            Update-LogBox ".net 3.5 installed succesfully" -Color 'Green'
             if ($dotnet35.Enabled -eq $true) {
                 $dotnet35.Enabled = $false
             } 
             $Script:DotNetInstalled = $true
         }
         else {
-            update-Textbox ".net 3.5 failed to install" -color 'Red'
+            Update-LogBox ".net 3.5 failed to install" -color 'Red'
         }
     }
     else {
-        update-Textbox ".Net 3.5 already installed" -color 'Yellow'
+        Update-LogBox ".Net 3.5 already installed" -color 'Yellow'
         if ($dotnet35.Enabled -eq $true) {
             $dotnet35.Enabled = $false
         } 
-        $DotNetInstalled = $true
+        $Script:DotNetInstalled = $true
     }
 }
 
 function Install-Office {
     if ($365ComboBox.Text -eq '--Select--') {
-        update-Textbox "Please select an office product"
+        Update-LogBox "Please select an office product"
     }
     else {
         if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
@@ -1316,19 +1176,19 @@ function Install-Office {
                     $NumberOfFiles = 18
                 }
                 "Office 2019 Standard" {
-                    update-Textbox "No Installer for 32 bit Office 2019 Standard"
+                    Update-LogBox "No Installer for 32 bit Office 2019 Standard"
                     $NumberOfFiles = 0
                 }
             }
         }
         if ((Get-ChildItem -path (Split-Path -path $Destination) -ErrorAction SilentlyContinue).count -lt $NumberOfFiles) {
-            Get-Files -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $365ComboBox.Text
+            Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $365ComboBox.Text
         }
         if ($NumberOfFiles -gt 0) {
             if (!(Test-Path "$env:systemDrive\office365")) { New-Item -ItemType Directory -Path "$env:systemDrive\office365" }
-            Start-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+            Invoke-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
             Start-Sleep -seconds 1
-            update-Textbox "Installing $($365ComboBox.Text)"
+            Update-LogBox "Installing $($365ComboBox.Text)"
             Start-Process -filepath "$env:systemDrive\office365\setup.exe" -ArgumentList $ArgumentList
         }
         
@@ -1358,8 +1218,8 @@ function Set-PowerPolicy {
         else {
             $Output = $ScriptPath + '\PowerPolicy'
             if (!(Test-Path $output)) { New-Item -ItemType Directory -Path $output | Out-Null }
-            get-files -source "$DownloadHost/Standalone_Installer/Tech_Installer/PowerPolicy/Qi%20-%20Power%20Policy.zip" -Destination "$Output\Qi - Power Policy.zip" -NumberOfFiles 1 -Software "PowerPolicy"
-            Start-Extract -File "$Output\Qi - Power Policy.zip" -ExtractTo $Output
+            Get-FilesDownload -source "$DownloadHost/Standalone_Installer/Tech_Installer/PowerPolicy/Qi%20-%20Power%20Policy.zip" -Destination "$Output\Qi - Power Policy.zip" -NumberOfFiles 1 -Software "PowerPolicy"
+            Invoke-Extract -File "$Output\Qi - Power Policy.zip" -ExtractTo $Output
             
             if (Test-Path -path "$output\Qi - $comp Power Policy.pow") {
                 $import = [string](powercfg.exe import "$output\Qi - $comp Power Policy.pow") -match 'Imported Power Scheme Successfully. GUID: ([0-f]+-[0-f]+-[0-f]+-[0-f]+-[0-f]+)'
@@ -1372,35 +1232,35 @@ function Set-PowerPolicy {
     Finally {
         $match = [string](powercfg.exe -list) -match "([0-f]+-[0-f]+-[0-f]+-[0-f]+-[0-f]+\s+.Qi - $comp Power Policy.\s*)"
         if ($match) {
-            update-Textbox "Qi - $comp Power Policy configured" -color "Green"
+            Update-LogBox "Qi - $comp Power Policy configured" -color "Green"
         }
     }
 }
 
-function Test-Compatibility {
+function Test-Powershell_Compatibility {
     $Script:ReturnValue = $true
 
     $BuildVersion = [System.Environment]::OSVersion.Version
 
     if ($BuildVersion.Major -ge '10') {
-        update-Textbox 'WMF 5.1 is not supported for Windows 10 and above.' -color "Yellow"
+        Update-LogBox 'WMF 5.1 is not supported for Windows 10 and above.' -color "Yellow"
         $Script:ReturnValue = $false
     }
 
     ## OS is below Windows Vista
     if ($BuildVersion.Major -lt '6') {
-        update-Textbox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
+        Update-LogBox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
         $Script:ReturnValue = $false
     }
 
     ## OS is Windows Vista
     if ($BuildVersion.Major -eq '6' -and $BuildVersion.Minor -le '0') {
-        update-Textbox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
+        Update-LogBox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
         $Script:ReturnValue = $false
     }
     ## OS 7 is missing Service Pack 1
     if ($BuildVersion.Major -eq '6' -and $BuildVersion.Build -eq '7600') {
-        update-Textbox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
+        Update-LogBox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
         $Script:ReturnValue = $false
     }
 
@@ -1408,7 +1268,7 @@ function Test-Compatibility {
     $wmf3 = Get-WmiObject -Query "select * from Win32_QuickFixEngineering where HotFixID = 'KB2506143'"
 
     if ($wmf3) {
-        update-Textbox "WMF 5.1 is not supported when WMF 3.0 is installed." -color "Yellow"
+        Update-LogBox "WMF 5.1 is not supported when WMF 3.0 is installed." -color "Yellow"
         Add-Type -AssemblyName PresentationFramework
         $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('Powershell 3 detected. PS 4 Must be installed prior to 5 Would you like to install Powershell 4 now?', 'WMF 4.0', 'YesNo', 'Warning')
 
@@ -1418,7 +1278,7 @@ function Test-Compatibility {
                 Request-Reboot
             }
             'No' {
-                update-Textbox "Powershell Upgrade Canceled" -color "Yellow"
+                Update-LogBox "Powershell Upgrade Canceled" -color "Yellow"
             }
         }
         $Script:ReturnValue = $false
@@ -1430,11 +1290,11 @@ function Test-Compatibility {
     $installed = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' -Name Install -ErrorAction SilentlyContinue -ErrorVariable evInstalled).install
 
     if ($evRelease -or $evInstalled) {
-        Update-Textbox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
+        Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
         $Script:ReturnValue = $false
     }
     elseif (($installed -ne 1) -or ($release -lt 378389)) {
-        Update-Textbox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
+        Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
         $Script:ReturnValue = $false
     }
 }
@@ -1450,15 +1310,15 @@ Function Request-Reboot {
     switch ($rebootrequest) {
         'Yes' {
             shutdown.exe -r -t 10
-            update-Textbox "Computer rebooting"
+            Update-LogBox "Computer rebooting"
         }
         'No' {
-            update-Textbox "Please reboot at your earliest convenience." -Color "Yellow"
+            Update-LogBox "Please reboot at your earliest convenience." -Color "Yellow"
         }
     }
 }
 
-function Update-Win10 {
+function Invoke-Win10_Upgrade {
     if (((Get-Host).version).major -gt 2) {
         $version = "1909"
         if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
@@ -1476,42 +1336,42 @@ function Update-Win10 {
         if (([Math]::Round((Get-PSDrive C | Select-Object Free -expandproperty free) / 1GB)) -gt 32) {
             $software = "Win10 $($Version) Upgrade"
             if (!(Test-Path ((Split-Path -path $Destination) + "\setup.exe"))) {
-                Get-Files -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $software
-                Start-Extract -File $Zip -ExtractTo (Split-Path -path $Destination)
+                Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $software
+                Invoke-Extract -File $Zip -ExtractTo (Split-Path -path $Destination)
     
                 Start-Sleep -seconds 5
-                Start-CleanUp -File $Destination
+                Invoke-CleanUp -File $Destination
             }
                 
             if (Test-Path ((Split-Path -path $Destination) + "\setup.exe")) {
                 Set-RestorePoint -Description "Win 10 $($Version) Upgrade"
-                update-Textbox "Upgrading to Win10 $($Version)"
+                Update-LogBox "Upgrading to Win10 $($Version)"
                 $ArgumentList = "/auto upgrade /Compat IgnoreWarning /DynamicUpdate disable /copylogs $env:SystemDrive\wti\Windows10UpgradeLogs /migratedrivers all"
-                update-Textbox "$((Split-Path -path $Destination) + "\setup.exe") $ArgumentList"
+                Update-LogBox "$((Split-Path -path $Destination) + "\setup.exe") $ArgumentList"
                 Start-Process -FilePath ((Split-Path -path $Destination) + "\setup.exe") -ArgumentList $ArgumentList
                 Start-Sleep -Seconds 5
             }
             else {
-                update-Textbox "Extraction Failed" -color "Red"
+                Update-LogBox "Extraction Failed" -color "Red"
             }
         }
         else {
-            update-Textbox "Not enough freespace" -Color "Red"
+            Update-LogBox "Not enough freespace" -Color "Red"
         }
     }
     else {
-        update-Textbox "Please upgrade powershell before updating windows" -Color "Yellow"
+        Update-LogBox "Please upgrade powershell before updating windows" -Color "Yellow"
     }
 }
 
-function Save-UserState {
+function Invoke-Save_USMT {
     param(
         [switch] $Debug
     )
 
-    Get-USMT
+    Get-USMTBinaries
 
-    Update-Textbox "`nBeginning migration..."
+    Update-LogBox "`nBeginning migration..."
 
     $OldComputer = $env:COMPUTERNAME
 
@@ -1519,11 +1379,11 @@ function Save-UserState {
 
     # Get the selected profiles
     if ($SelectedProfile) {
-        Update-Textbox "Profile(s) selected for save state:"
-        $SelectedProfile | ForEach-Object { update-Textbox $_.UserName }
+        Update-LogBox "Profile(s) selected for save state:"
+        $SelectedProfile | ForEach-Object { Update-LogBox $_.UserName }
     }
     else {
-        Update-Textbox "You must select a user profile." -Color 'Red'
+        Update-LogBox "You must select a user profile." -Color 'Red'
         return
     }
 
@@ -1535,7 +1395,7 @@ function Save-UserState {
             New-Item $Destination -ItemType Directory -Force | Out-Null
         }
         catch {
-            Update-Textbox "Error while creating migration store [$Destination]: $($_.Exception.Message)" -Color 'Yellow'
+            Update-LogBox "Error while creating migration store [$Destination]: $($_.Exception.Message)" -Color 'Yellow'
             return
         }
     }
@@ -1548,7 +1408,7 @@ function Save-UserState {
         $FullUserName = "$($Script:SelectedProfile.Domain)\$($SelectedProfile.UserName)"
         if ($SelectedProfile.Domain -ne $DefaultDomain) {
             New-Item "$Destination\DomainMigration.txt" -ItemType File -Value $FullUserName -Force | Out-Null
-            Update-Textbox "Text file created with cross-domain information."
+            Update-LogBox "Text file created with cross-domain information."
         }
         
 
@@ -1558,8 +1418,8 @@ function Save-UserState {
         # Create config syntax for scanstate for generated XML.
         IF (!($SelectedXMLS)) {
             # Create the scan configuration
-            Update-Textbox 'Generating configuration file...'
-            Set-Config
+            Update-LogBox 'Generating configuration file...'
+            Set-Config_USMT
             $GeneratedConfig = """$Config"""
             $ScanStateConfig = "/i:$GeneratedConfig"
         }
@@ -1592,14 +1452,14 @@ function Save-UserState {
         # Create a value to show in the log in order to obscure the encryption key if one was used.
         $LogArguments = $Arguments -Replace '/key:".*"', '/key:(Hidden)'
 
-        Update-Textbox "Command used:"
-        Update-Textbox "$ScanState $LogArguments" -Color 'Cyan'
+        Update-LogBox "Command used:"
+        Update-LogBox "$ScanState $LogArguments" -Color 'Cyan'
 
 
         # If we're running in debug mode don't actually start the process
         if ($Debug) { return }
 
-        Update-Textbox "Saving state of $OldComputer to $Destination..." -NoNewLine
+        Update-LogBox "Saving state of $OldComputer to $Destination..." -NoNewLine
 
         $Process = (Start-Process -FilePath $ScanState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
         #-Verb RunAs
@@ -1607,47 +1467,33 @@ function Save-UserState {
         # Give the process time to start before checking for its existence
         Start-Sleep -Seconds 3
 
-        Get-ProgressBar -Runlog "$Destination\Scan_progress.log" -ProcessID $Process.id -Tracker
+        Update-ProgressBar -Runlog "$Destination\Scan_progress.log" -ProcessID $Process.id -Tracker
 
-        # Wait until the save state is complete
-        <#
-        try {
-            $ScanProcess = Get-Process -Name scanstate -ErrorAction Stop
-            while (-not $ScanProcess.HasExited) {
-                Get-USMTProgress -Destination $Destination -ActionType 'scan'
-                Start-Sleep -Milliseconds 250
-            }
-            
-        }
-        catch {
-            Update-Textbox $_.Exception.Message -Color 'Red'
-        }
-        #>
-        Update-Textbox "Complete!" -Color 'Green'
+        Update-LogBox "Complete!" -Color 'Green'
 
-        Update-Textbox 'Results:'
+        Update-LogBox 'Results:'
         Get-USMTResults -ActionType 'scan'
     }
     ELSE {
-        Update-Textbox "Error when trying to access [$Destination] Please verify that the user account running the utility has appropriate permissions to the folder.: $($_.Exception.Message)" -Color 'Yellow'
+        Update-LogBox "Error when trying to access [$Destination] Please verify that the user account running the utility has appropriate permissions to the folder.: $($_.Exception.Message)" -Color 'Yellow'
     }
 }
 
-function Restore-UserState {
+function Invoke-Restore_USMT {
     param(
         [switch] $Debug
     )
 
-    Get-USMT
+    Get-USMTBinaries
 
-    Update-Textbox "`nBeginning migration..."
+    Update-LogBox "`nBeginning migration..."
     
     # Get the location of the save state data
     $Destination = "$($ImportLocation.Text)"
 
     # Check that the save state data exists
     if (!(Test-Path (Get-Childitem -Path $Destination -include *.MIG -recurse).FullName)) {
-        Update-Textbox "No saved state found at [$Destination]. Migration cancelled." -Color 'Red'
+        Update-LogBox "No saved state found at [$Destination]. Migration cancelled." -Color 'Red'
         return
     }
 
@@ -1674,11 +1520,11 @@ function Restore-UserState {
 
         # Make sure the user entered a new user's user name before continuing
         if ($NewUserNameTextBox.Text -eq '') {
-            Update-Textbox "New user's user name must not be empty." -Color 'Red'
+            Update-LogBox "New user's user name must not be empty." -Color 'Red'
             return
         }
 
-        Update-Textbox "$OldUser will be migrated as $NewUser."
+        Update-LogBox "$OldUser will be migrated as $NewUser."
         $Arguments = "`"$Destination`" $LoadStateConfig $LocalAccountOptions `"/mu:$($OldUser):$NewUser`" $Logs $ContinueCommand /v:0"
     }
     else {
@@ -1688,14 +1534,14 @@ function Restore-UserState {
     # Begin loading user state to this computer
     # Create a value in order to obscure the encryption key if one was specified.
     $LogArguments = $Arguments -Replace '/key:".*"', '/key:(Hidden)'
-    Update-Textbox "Command used:"
-    Update-Textbox "$LoadState $LogArguments" -Color 'Cyan'
+    Update-LogBox "Command used:"
+    Update-LogBox "$LoadState $LogArguments" -Color 'Cyan'
 
 
     # If we're running in debug mode don't actually start the process
     if ($Debug) { return }
 
-    Update-Textbox "Loading state of $OldComputer..." -NoNewLine
+    Update-LogBox "Loading state of $OldComputer..." -NoNewLine
 
     $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
     #-Verb RunAs
@@ -1703,49 +1549,26 @@ function Restore-UserState {
     # Give the process time to start before checking for its existence
     Start-Sleep -Seconds 3
 
-    Get-ProgressBar -Runlog "$Destination\load_progress.log" -ProcessID $Process.id -Tracker
-    <#
-    # Wait until the load state is complete
-    try {
-        $LoadProcess = Get-Process -Name loadstate -ErrorAction Stop
-        while (-not $LoadProcess.HasExited) {
-            Get-USMTProgress
-            Start-Sleep -Seconds 1
-        }
-    }
-    catch {
-        Update-Log $_.Exception.Message -Color 'Red'
-    }
-    #>
-    Update-Textbox 'Results:'
+    Update-ProgressBar -Runlog "$Destination\load_progress.log" -ProcessID $Process.id -Tracker
+
+    Update-LogBox 'Results:'
     Get-USMTResults -ActionType 'load'
 
     # Sometimes loadstate will kill the explorer task and it needs to be start again manually
     if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) {
-        Update-Textbox 'Restarting Explorer process.'
+        Update-LogBox 'Restarting Explorer process.'
         Start-Process explorer
     }
 
     if ($USMTLoadState.ExitCode -eq 0) {
-        Update-Textbox "Complete!" -Color 'Green'
-
-        <#
-        # Delete the save state data
-        try {
-            #Get-ChildItem $MigrationStorePath | Remove-Item -Recurse
-            Update-Textbox 'Successfully removed old save state data.'
-        }
-        catch {
-            Update-Textbox 'There was an issue when trying to remove old save state data.'
-        }
-        #>
+        Update-LogBox "Complete!" -Color 'Green'
     }
     else {
-        Update-Textbox 'There was an issue during the loadstate process, please review the results. The state data was not deleted.'
+        Update-LogBox 'There was an issue during the loadstate process, please review the results. The state data was not deleted.'
     }
 }
 
-function Invoke-USMT {
+function Invoke-USMT_Network {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -1756,14 +1579,14 @@ function Invoke-USMT {
     begin {
         #Test source and destination computers are online
         if (!(Test-Connection -ComputerName $SourceComputer -Count 2)) {
-            Update-TextBox "Count not ping $SourceComputer" -color 'Red'
+            Update-LogBox "Count not ping $SourceComputer" -color 'Red'
             Return
         }
     }
     
     process {
         #Copy USMT files to remote computers
-        Get-USMT
+        Get-USMTBinaries
         Try {
             if (!(Test-Path "A:\usmtfiles")) {
                 New-Item -ItemType Directory -Path "A:\usmtfiles"# | Out-Null
@@ -1771,7 +1594,7 @@ function Invoke-USMT {
             Copy-Item -Path $USMTPath -Destination "A:\usmtfiles\" -ErrorAction Stop -Recurse -force
         }
         Catch {
-            Update-Textbox "Failed to copy $USMTPath to $SourceComputer" -color 'Red'
+            Update-LogBox "Failed to copy $USMTPath to $SourceComputer" -color 'Red'
             Return
         }
 
@@ -1811,7 +1634,7 @@ function Invoke-USMT {
         if (!(Test-Path $Destination)) {
             New-Item -ItemType Directory -Path $Destination | Out-Null
         }
-        Get-Files -Source (Get-Childitem -Path "A:\usmtfiles\$SourceComputer" -include *.MIG -recurse).FullName -Destination "$Destination\USMT\USMT.MIG" -NumberOfFiles 1 -Software "USMT.MIG"
+        Get-FilesDownload -Source (Get-Childitem -Path "A:\usmtfiles\$SourceComputer" -include *.MIG -recurse).FullName -Destination "$Destination\USMT\USMT.MIG" -NumberOfFiles 1 -Software "USMT.MIG"
 
         #Start loadscan on destination
         # Get the location of the save state data
@@ -1822,18 +1645,13 @@ function Invoke-USMT {
         $Process = (Start-Process -FilePath $LoadState -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
         
         Get-USMTProgress -Runlog "$Destination\load_progress.txt" -processID $Process.ID -ActionType "LoadState"
- 
-        #Remove USMT files on remote computers
-        #Remove-Item \\$SourceComputer\C$\USMTFiles -Force -Recurse
-        #Remove-Item \\$DestinationComputer\C$\USMTFiles -Force -Recurse
 
-        #Disable CredSSP on remote computers
         Invoke-Command -ComputerName $SourceComputer -Credential $Credential -ScriptBlock { Disable-WSManCredSSP -Role server }
         Disable-WSManCredSSP -Role client        
     }
 }
 
-function Test-ComputerConnection {
+function Test-ComputerConnection_USMT {
     $ConnectionCheckBox.Checked = $false
     $UNCVerified.Checked = $false
 
@@ -1843,13 +1661,13 @@ function Test-ComputerConnection {
         # Try to update the computer's name with its IP address
         if ($SourceComputerText.Text -eq '') {
             try {
-                Update-Textbox 'Computer name is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
+                Update-LogBox 'Computer name is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
                 $HostName = ([System.Net.Dns]::GetHostEntry($Computer)).HostName
                 $SourceComputerText.Text = $HostName
-                Update-Textbox "Computer name set to $HostName."
+                Update-LogBox "Computer name set to $HostName."
             }
             catch {
-                Update-Textbox "Unable to resolve host name from IP address, you'll need to manually set this." -Color 'Red'
+                Update-LogBox "Unable to resolve host name from IP address, you'll need to manually set this." -Color 'Red'
                 return
             }
         }
@@ -1858,16 +1676,16 @@ function Test-ComputerConnection {
         $Computer = $SourceComputerText.Text
         # Try to update the computer's IP address using its DNS name
         try {
-            Update-Textbox 'Computer IP address is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
+            Update-LogBox 'Computer IP address is blank, attempting to resolve...' -Color 'Yellow' -NoNewLine
             # Get the first IP address found, which is usually the primary adapter
             $IPAddress = ([System.Net.Dns]::GetHostEntry($Computer)).AddressList.IPAddressToString.Split('.', 1)[0]
 
             # Set IP address in text box
             $SourceIPAddressText.Text = $IPAddress
-            Update-Textbox "Computer IP address set to $IPAddress."
+            Update-LogBox "Computer IP address set to $IPAddress."
         }
         catch {
-            Update-Textbox "Unable to resolve IP address from host name, you'll need to manually set this." -Color 'Red'
+            Update-LogBox "Unable to resolve IP address from host name, you'll need to manually set this." -Color 'Red'
             return
         }
     }
@@ -1877,45 +1695,38 @@ function Test-ComputerConnection {
 
     # Don't even try if both fields are empty
     if ($Computer) {
-        <#
-        # If the computer doesn't appear to have a valid office IP, such as if it's on VPN, don't allow the user to continue
-        if ($ComputerIPTextBox.Text -notlike $ValidIPAddress) {
-            Update-Textbox "$IPAddress does not appear to be a valid IP address. The Migration Tool requires an IP address matching $ValidIPAddress." -Color 'Red'
-            return
-        }
-        #>
-        Update-Textbox "Testing connection to $Computer..." -NoNewLine
+        Update-LogBox "Testing connection to $Computer..." -NoNewLine
 
         if (Test-Connection $Computer -Quiet) {
             $ConnectionCheckBox.Checked = $true
-            Update-Textbox "Connection established." -Color 'Green'
+            Update-LogBox "Connection established." -Color 'Green'
         }
         else {
-            Update-Textbox "Unable to reach $Computer." -Color 'Red'
+            Update-LogBox "Unable to reach $Computer." -Color 'Red'
             if ($SourceIPAddressText.Text -eq '') {
-                Update-Textbox "Try entering $Computer's IP address." -Color 'Yellow'
+                Update-LogBox "Try entering $Computer's IP address." -Color 'Yellow'
             }
         }
     }
     else {
-        Update-Textbox "Enter the computer's name or IP address."  -Color 'Red'
+        Update-LogBox "Enter the computer's name or IP address."  -Color 'Red'
     }
 
     if ($ConnectionCheckBox.Checked) {
-        Update-Textbox "Testing UNC path to $Computer..." -NoNewLine
+        Update-LogBox "Testing UNC path to $Computer..." -NoNewLine
         $Script:Creds = Get-Credential
         new-psdrive -name "A" -PSProvider "FileSystem" -Root "\\$Computer\C$" -Credential $Creds -scope global
         if (Test-Path -Path "A:") {
             $UNCVerified.Checked = $true
-            Update-Textbox "Connection established." -Color 'Green'
+            Update-LogBox "Connection established." -Color 'Green'
         }
         else {
-            Update-Textbox "Unable to reach $Computer." -Color 'Red'
+            Update-LogBox "Unable to reach $Computer." -Color 'Red'
         }
     }
 }
 
-function Get-USMT {
+function Get-USMTBinaries {
     if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
         $Script:bit = "amd64"
     }
@@ -1927,12 +1738,12 @@ function Get-USMT {
     if ((Test-Path $USMTPath\scanstate.exe) -and (Test-Path $USMTPath\loadstate.exe)) {
         $Script:ScanState = "$USMTPath\scanstate.exe"
         $Script:LoadState = "$USMTPath\loadstate.exe"
-        update-Textbox "Using [$USMTPath] as path to USMT binaries."
+        Update-LogBox "Using [$USMTPath] as path to USMT binaries."
     }
     else {
-        Update-Textbox "USMT not on local machine. Downloading binaries."
-        Get-Files -Source "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip" -Destination "$ScriptPath\User_State_migration_Tool.zip" -NumberOfFiles 1 -Software "User State Migration Tool"
-        Start-Extract -File "$ScriptPath\User_State_migration_Tool.zip" -ExtractTo $ScriptPath
+        Update-LogBox "USMT not on local machine. Downloading binaries."
+        Get-FilesDownload -Source "$DownloadHost/AutoMate/Tools/User_State_Migration_Tool.zip" -Destination "$ScriptPath\User_State_migration_Tool.zip" -NumberOfFiles 1 -Software "User State Migration Tool"
+        Invoke-Extract -File "$ScriptPath\User_State_migration_Tool.zip" -ExtractTo $ScriptPath
         Remove-Item -Path "$ScriptPath\User_State_migration_Tool.zip" -Recurse
         $Script:ScanState = "$USMTPath\scanstate.exe"
         $Script:LoadState = "$USMTPath\loadstate.exe"
@@ -1964,7 +1775,7 @@ function Get-USMTProgress {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
                         }
-                        Update-USMTTextBox -Text $Line
+                        Update-LogBox_USMT -Text $Line
                     }
                 }
                 $Promptcheck = $Lines
@@ -1979,7 +1790,7 @@ function Get-USMTProgress {
                         if ($line -match '\d{2}\s[a-zA-Z]+\s\d{4}\,\s\d{2}\:\d{2}\:\d{2}') {
                             $line = ($Line.Split(',', 4)[3]).TrimStart()
                         }
-                        Update-USMTTextBox -Text $Line
+                        Update-LogBox_USMT -Text $Line
                     }
                 }
                 $Promptcheck = $Lines
@@ -1996,7 +1807,7 @@ function Get-USMTProgress {
         $TotalProgress.Visible = $false
     }
 }
-function Update-USMTTextBox {
+function Update-LogBox_USMT {
     Param (
         [string] $Text
     )
@@ -2008,20 +1819,20 @@ function Update-USMTTextBox {
             $CurrentFile.Value = $matches[1]
         }
         elseif ($Text.TrimEnd() -match 'UnableToOpen') {
-            Update-Textbox $Text.TrimEnd() -color 'Orange'
-            Update-Textbox ''
+            Update-LogBox $Text.TrimEnd() -color 'Orange'
+            Update-LogBox ''
         }
         elseif ($Text.TrimEnd() -match 'successful' -or $Text.TrimEnd() -match 'completed') {
-            Update-Textbox $Text.TrimEnd() -color 'Green'
+            Update-LogBox $Text.TrimEnd() -color 'Green'
         }
         elseif ($Text.TrimEnd() -match 'ERROR' -or $Text.TrimEnd() -match 'not successful') {
-            Update-Textbox $Text.TrimEnd() -Color 'Red'
+            Update-LogBox $Text.TrimEnd() -Color 'Red'
         }
         elseif ($Text.TrimEnd() -match 'WARNING') {
-            Update-Textbox $Text.TrimEnd() -Color 'Yellow'
+            Update-LogBox $Text.TrimEnd() -Color 'Yellow'
         }
         else {
-            Update-Textbox $Text.TrimEnd()
+            Update-LogBox $Text.TrimEnd()
         }
     }
 }
@@ -2040,14 +1851,14 @@ function Get-USMTResults {
         } | Out-String
     }
 
-    Update-Textbox $Results -Color 'Cyan'
+    Update-LogBox $Results -Color 'Cyan'
 
     if ($ActionType -eq 'load') {
-        Update-Textbox 'A reboot is recommended.' -Color 'Yellow'
+        Update-LogBox 'A reboot is recommended.' -Color 'Yellow'
     }
 }
 
-function Get-UserProfiles {
+function Set-UserProfiles_USMT {
     # Get all user profiles on this PC and let the user select which ones to migrate
     $RegKey = 'Registry::HKey_Local_Machine\Software\Microsoft\Windows NT\CurrentVersion\ProfileList\*'
 
@@ -2081,12 +1892,10 @@ function Get-UserProfiles {
                 }
             }
             catch {
-                #$Script:UpdateText = "Error while translating $SID to a user name."
                 #update-Textbox "Error while translating $SID to a user name." -color 'Yellow'
             }
         }
         catch {
-            #$Script:UpdateText = "Error while translating $($_.PSChildName) to SID."
             #update-Textbox "Error while translating $($_.PSChildName) to SID." -color 'Yellow'
         }
     }
@@ -2104,7 +1913,7 @@ function Get-UserProfilePath {
     $User.ProfileImagePath
 }
 
-function Add-ExtraDirectory {
+function Set-ExtraDirectory_USMT {
     # Bring up file explorer so user can select a directory to add
     $OpenDirectoryDialog = New-Object Windows.Forms.FolderBrowserDialog
     $OpenDirectoryDialog.RootFolder = 'Desktop'
@@ -2114,31 +1923,27 @@ function Add-ExtraDirectory {
     try {
         # If user hits cancel don't add the path
         if ($Result -eq 'OK') {
-            #$Script:UpdateText = "Adding to extra directories: $SelectedDirectory."
-            update-Textbox "Adding to extra directories: $SelectedDirectory."
+            Update-LogBox "Adding to extra directories: $SelectedDirectory."
             $ExtraDataGridView.Rows.Add($SelectedDirectory)
         }
         else {
-            #$Script:UpdateText = "Add directory action cancelled by user."
-            update-Textbox "Add directory action cancelled by user."
+            Update-LogBox "Add directory action cancelled by user."
         }
     }
     catch {
-        #$Script:UpdateText = "There was a problem with the directory you chose: $($_.Exception.Message)"
-        update-Textbox "There was a problem with the directory you chose: $($_.Exception.Message)"
+        Update-LogBox "There was a problem with the directory you chose: $($_.Exception.Message)"
     }
 }
 
-function Remove-ExtraDirectory {
+function Remove-ExtraDirectory_USMT {
     # Remove selected cell from Extra Directories data grid view
     $CurrentCell = $ExtraDataGridView.CurrentCell
-    #$Script:UpdateText = "Removed [$($CurrentCell.Value)] from extra directories."
-    update-Textbox "Removed [$($CurrentCell.Value)] from extra directories."
+    Update-LogBox "Removed [$($CurrentCell.Value)] from extra directories."
     $CurrentRow = $ExtraDataGridView.Rows[$CurrentCell.RowIndex]
     $ExtraDataGridView.Rows.Remove($CurrentRow)
 }
 
-function Set-SaveDirectory {
+function Set-SaveDirectory_USMT {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateSet('Destination', 'Source')]
@@ -2160,7 +1965,7 @@ function Set-SaveDirectory {
     try {
         # If user hits cancel it could cause attempt to add null path, so check that there's something there
         if ($SelectedDirectory) {
-            update-Textbox "Changed save directory to [$SelectedDirectory]."
+            Update-LogBox "Changed save directory to [$SelectedDirectory]."
             if ($Type -eq 'Destination') {
                 $ExportLocation.Text = $SelectedDirectory
             }
@@ -2170,15 +1975,15 @@ function Set-SaveDirectory {
         }
     }
     catch {
-        update-Textbox "There was a problem with the directory you chose: $($_.Exception.Message)" -Color Red
+        Update-LogBox "There was a problem with the directory you chose: $($_.Exception.Message)" -Color Red
     }
 }
 
-function Set-Config {
+function Set-Config_USMT {
     $ExtraDirectoryCount = $ExtraDataGridView.RowCount
 
     if ($ExtraDirectoryCount) {
-        update-Textbox "Including $ExtraDirectoryCount extra directories."
+        Update-LogBox "Including $ExtraDirectoryCount extra directories."
 
         $ExtraDirectoryXML = @"
 <!-- This component includes the additional directories selected by the user -->
@@ -2210,23 +2015,23 @@ function Set-Config {
 "@
     }
     else {
-        update-Textbox 'No extra directories will be included.'
+        Update-LogBox 'No extra directories will be included.'
     }
 
-    update-Textbox 'Data to be included:'
+    Update-LogBox 'Data to be included:'
     $Include = @()
     $Exclude = @()
     foreach ($Control in $USMTCheckList.Items) {
         if ($USMTCheckList.checkeditems.Contains(($Control))) {
             $Include += $control
-            update-Textbox $Control
+            Update-LogBox $Control
         }
         else {
             $Exclude += $Control
         }
     }
-    Update-Textbox "Include array $Include"
-    Update-Textbox "Exclude array $Exclude"
+    Update-LogBox "Include array $Include"
+    Update-LogBox "Exclude array $Exclude"
 
     $ExcludedDataXML = @"
         $(
@@ -2420,283 +2225,17 @@ $WallpapersXML
         New-Item $Config -ItemType File -Force -ErrorAction Stop | Out-Null
     }
     catch {
-        update-Textbox "Error creating config file [$Config]: $($_.Exception.Message)" -Color 'Red'
+        Update-LogBox "Error creating config file [$Config]: $($_.Exception.Message)" -Color 'Red'
         return
     }
     try {
         Set-Content $Config $ConfigContent -ErrorAction Stop
     }
     catch {
-        update-Textbox "Error while setting config file content: $($_.Exception.Message)" -Color 'Red'
+        Update-LogBox "Error while setting config file content: $($_.Exception.Message)" -Color 'Red'
         return
     }
-
-    # Return the path to the config
-    #$Config
 }
-function Set-NetworkConfig {
-    $ExtraDirectoryCount = $ExtraDataGridView.RowCount
-
-    if ($ExtraDirectoryCount) {
-        update-Textbox "Including $ExtraDirectoryCount extra directories."
-
-        $ExtraDirectoryXML = @"
-<!-- This component includes the additional directories selected by the user -->
-<component type="Documents" context="System">
-    <displayName>Additional Folders</displayName>
-    <role role="Data">
-        <rules>
-            <include>
-                <objectSet>
-
-"@
-        # Include each directory user has added to the Extra Directories data grid view
-        $ExtraDataGridView.Rows | ForEach-Object {
-            $CurrentRowIndex = $_.Index
-            $Path = $ExtraDataGridView.Item(0, $CurrentRowIndex).Value
-
-            $ExtraDirectoryXML += @"
-                    <pattern type=`"File`">$Path\* [*]</pattern>"
-
-"@
-        }
-
-        $ExtraDirectoryXML += @"
-                </objectSet>
-            </include>
-        </rules>
-    </role>
-</component>
-"@
-    }
-    else {
-        update-Textbox 'No extra directories will be included.'
-    }
-
-    update-Textbox 'Data to be included:'
-    $Include = @()
-    $Exclude = @()
-    foreach ($Control in $USMTCheckList.Items) {
-        if ($USMTCheckList.checkeditems.Contains(($Control))) {
-            $Include += $control
-            update-Textbox $Control
-        }
-        else {
-            $Exclude += $Control
-        }
-    }
-    Update-Textbox "Include array $Include"
-    Update-Textbox "Exclude array $Exclude"
-
-    $ExcludedDataXML = @"
-        $(
-            if ($Exclude -Contains 'Printers') { "<pattern type=`"File`">%CSIDL_PRINTERS%\* [*]</pattern>`n" }
-            if ($Exclude -Contains 'Recycle Bin') { "<pattern type=`"File`">%CSIDL_BITBUCKET%\* [*]</pattern>`n" }
-            if ($Exclude -Contains 'My Documents') {
-                "<pattern type=`"File`">%CSIDL_MYDOCUMENTS%\* [*]</pattern>`n"
-                "<pattern type=`"File`">%CSIDL_PERSONAL%\* [*]</pattern>`n"
-            }
-            if ($Exclude -Contains 'Desktop') {
-                "<pattern type=`"File`">%CSIDL_DESKTOP%\* [*]</pattern>`n"
-                "<pattern type=`"File`">%CSIDL_DESKTOPDIRECTORY%\* [*]</pattern>`n"
-            }
-            if ($Exclude -Contains 'Downloads') { "<pattern type=`"File`">%CSIDL_DOWNLOADS%\* [*]</pattern>`n" }
-            if ($Exclude -Contains 'Favorites') { "<pattern type=`"File`">%CSIDL_FAVORITES%\* [*]</pattern>`n" }
-            if ($Exclude -Contains 'My Music') { "<pattern type=`"File`">%CSIDL_MYMUSIC%\* [*]</pattern>`n" }
-            if ($Exclude -Contains 'My Pictures') { "<pattern type=`"File`">%CSIDL_MYPICTURES%\* [*]</pattern>`n" }
-            if ($Exclude -Contains 'My Video') { "<pattern type=`"File`">%CSIDL_MYVIDEO%\* [*]</pattern>`n" }
-        )
-"@
-
-    $AppDataXML = if ($Include -Contains 'AppData') {
-        @"
-        <!-- This component migrates all user app data -->
-        <component type=`"Documents`" context=`"User`">
-            <displayName>App Data</displayName>
-            <paths>
-                <path type="File">%CSIDL_APPDATA%</path>
-            </paths>
-            <role role="Data">
-                <detects>
-                    <detect>
-                        <condition>MigXmlHelper.DoesObjectExist("File","%CSIDL_APPDATA%")</condition>
-                    </detect>
-                </detects>
-                <rules>
-                    <include filter='MigXmlHelper.IgnoreIrrelevantLinks()'>
-                        <objectSet>
-                            <pattern type="File">%CSIDL_APPDATA%\* [*]</pattern>
-                        </objectSet>
-                    </include>
-                    <merge script='MigXmlHelper.DestinationPriority()'>
-                        <objectSet>
-                            <pattern type="File">%CSIDL_APPDATA%\* [*]</pattern>
-                        </objectSet>
-                    </merge>
-                </rules>
-            </role>
-        </component>
-"@
-    }
-
-    $LocalAppDataXML = if ($Include -Contains 'Local AppData') {
-        @"
-        <!-- This component migrates all user local app data -->
-        <component type=`"Documents`" context=`"User`">
-            <displayName>Local App Data</displayName>
-            <paths>
-                <path type="File">%CSIDL_LOCAL_APPDATA%</path>
-            </paths>
-            <role role="Data">
-                <detects>
-                    <detect>
-                        <condition>MigXmlHelper.DoesObjectExist("File","%CSIDL_LOCAL_APPDATA%")</condition>
-                    </detect>
-                </detects>
-                <rules>
-                    <include filter='MigXmlHelper.IgnoreIrrelevantLinks()'>
-                        <objectSet>
-                            <pattern type="File">%CSIDL_LOCAL_APPDATA%\* [*]</pattern>
-                        </objectSet>
-                    </include>
-                    <merge script='MigXmlHelper.DestinationPriority()'>
-                        <objectSet>
-                            <pattern type="File">%CSIDL_LOCAL_APPDATA%\* [*]</pattern>
-                        </objectSet>
-                    </merge>
-                </rules>
-            </role>
-        </component>
-"@
-    }
-
-    $WallpapersXML = if ($Include -Contains 'Wallpapers') {
-        @"
-        <!-- This component migrates wallpaper settings -->
-        <component type="System" context="User">
-            <displayName>Wallpapers</displayName>
-            <role role="Settings">
-                <rules>
-                    <include>
-                        <objectSet>
-                            <pattern type="Registry">HKCU\Control Panel\Desktop [Pattern]</pattern>
-                            <pattern type="Registry">HKCU\Control Panel\Desktop [PatternUpgrade]</pattern>
-                            <pattern type="Registry">HKCU\Control Panel\Desktop [TileWallpaper]</pattern>
-                            <pattern type="Registry">HKCU\Control Panel\Desktop [WallPaper]</pattern>
-                            <pattern type="Registry">HKCU\Control Panel\Desktop [WallpaperStyle]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Windows\CurrentVersion\Themes [SetupVersion]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [BackupWallpaper]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [TileWallpaper]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [Wallpaper]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [WallpaperFileTime]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [WallpaperLocalFileTime]</pattern>
-                            <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [WallpaperStyle]</pattern>
-                            <content filter="MigXmlHelper.ExtractSingleFile(NULL, NULL)">
-                                <objectSet>
-                                    <pattern type="Registry">HKCU\Control Panel\Desktop [WallPaper]</pattern>
-                                    <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [BackupWallpaper]</pattern>
-                                    <pattern type="Registry">HKCU\Software\Microsoft\Internet Explorer\Desktop\General [Wallpaper]</pattern>
-                                </objectSet>
-                            </content>
-                        </objectSet>
-                    </include>
-                </rules>
-            </role>
-        </component>
-
-        <!-- This component migrates wallpaper files -->
-        <component type="Documents" context="System">
-            <displayName>Move JPG and BMP</displayName>
-            <role role="Data">
-                <rules>
-                    <include>
-                        <objectSet>
-                            <pattern type="File"> %windir% [*.bmp]</pattern>
-                            <pattern type="File"> %windir%\web\wallpaper [*.jpg]</pattern>
-                            <pattern type="File"> %windir%\web\wallpaper [*.bmp]</pattern>
-                        </objectSet>
-                    </include>
-                </rules>
-            </role>
-        </component>
-"@
-    }
-
-    $ConfigContent = @"
-<?xml version="1.0" encoding="UTF-8"?>
-<migration urlid="http://www.microsoft.com/migration/1.0/migxmlext/config">
-<_locDefinition>
-    <_locDefault _loc="locNone"/>
-    <_locTag _loc="locData">displayName</_locTag>
-</_locDefinition>
-
-$ExtraDirectoryXML
-
-<!-- This component migrates all user data except specified exclusions -->
-<component type="Documents" context="User">
-    <displayName>Documents</displayName>
-    <role role="Data">
-        <rules>
-            <include filter="MigXmlHelper.IgnoreIrrelevantLinks()">
-                <objectSet>
-                    <script>MigXmlHelper.GenerateDocPatterns ("FALSE","TRUE","FALSE")</script>
-                </objectSet>
-            </include>
-            <exclude filter='MigXmlHelper.IgnoreIrrelevantLinks()'>
-                <objectSet>
-                    <script>MigXmlHelper.GenerateDocPatterns ("FALSE","FALSE","FALSE")</script>
-                </objectSet>
-            </exclude>
-            <exclude>
-                <objectSet>
-$ExcludedDataXML
-                </objectSet>
-            </exclude>
-            <contentModify script="MigXmlHelper.MergeShellLibraries('TRUE','TRUE')">
-                <objectSet>
-                    <pattern type="File">*[*.library-ms]</pattern>
-                </objectSet>
-            </contentModify>
-            <merge script="MigXmlHelper.SourcePriority()">
-                <objectSet>
-                    <pattern type="File">*[*.library-ms]</pattern>
-                </objectSet>
-            </merge>
-        </rules>
-    </role>
-</component>
-
-$AppDataXML
-
-$LocalAppDataXML
-
-$WallpapersXML
-
-</migration>
-"@
-
-    $Script:Config = "$Destination\Config.xml"
-    try {
-        New-Item $Config -ItemType File -Force -ErrorAction Stop | Out-Null
-    }
-    catch {
-        update-Textbox "Error creating config file [$Config]: $($_.Exception.Message)" -Color 'Red'
-        return
-    }
-    try {
-        Set-Content $Config $ConfigContent -ErrorAction Stop
-    }
-    catch {
-        update-Textbox "Error while setting config file content: $($_.Exception.Message)" -Color 'Red'
-        return
-    }
-
-    # Return the path to the config
-    #$Config
-}
-
-
-
 
 function Start-QiInstaller {
     param(
@@ -2718,6 +2257,9 @@ function Start-QiInstaller {
     }
     #Set Default Path
     if (($ScriptPath -match $env:SystemDrive)) {
+        $ScriptPath = "$env:systemDrive\QiInstaller"
+    }
+    elseif ($ScriptPath -match 'folderredirection') {
         $ScriptPath = "$env:systemDrive\QiInstaller"
     }
     elseif ($ScriptPath -match 'QiInstaller') {
@@ -2752,7 +2294,7 @@ function Start-QiInstaller {
         $test = @{value = $DebugCommand.Text }
         invoke-expression $test.value | out-file "$Scriptpath\logs\debugger.txt"
         foreach ($line in (Get-content -Path "$Scriptpath\logs\debugger.txt")) {
-            Update-Textbox $line
+            Update-LogBox $line
         }
         
         Remove-Item -path "$Scriptpath\logs\debugger.txt" -force
@@ -2818,13 +2360,13 @@ function Start-QiInstaller {
     
     #Run Automate Buttons
     $ReInstall_Automate_Click = {
-        Invoke-ReInstall_Automate  
+        Invoke-Automate_ReInstall  
     }
     $UnInstall_Automate_Click = {
-        Invoke-UnInstall_Automate
+        Invoke-Automate_UnInstall
     }
     $Install_Automate_Click = {
-        Invoke-Install_Automate
+        Invoke-Automate_Install
     }
     
     $dotnet35_Click = {
@@ -2847,24 +2389,24 @@ function Start-QiInstaller {
             $msgBoxInput = [System.Windows.MessageBox]::Show("Powershell $((Get-Host).Version.Major) detected. Would you like to upgrade Powershell?", 'Powershell Upgrade', 'YesNo', 'Warning')
             switch ($msgBoxInput) {
                 'Yes' {
-                    Test-Compatibility
+                    Test-Powershell_Compatibility
                     if ($ReturnValue) {
                         if (((Get-WmiObject win32_OperatingSystem).Caption) -match 'Windows 7') {
                             Install-Software -Application 'Powershell'
                             switch ($msgBoxInput) {
                                 'Yes' {
                                     shutdown.exe -r -t 30
-                                    update-Textbox "System Rebooting" -color "Yellow"
+                                    Update-LogBox "System Rebooting" -color "Yellow"
                                 }
                                 'No' {
-                                    update-Textbox "Please reboot at your earliest convenience" -color "Yellow"
+                                    Update-LogBox "Please reboot at your earliest convenience" -color "Yellow"
                                 }
                             }
                         }
                     }
                 }
                 'No' {
-                    update-Textbox "Wrong version of Powershell for install." -color 'Red'
+                    Update-LogBox "Wrong version of Powershell for install." -color 'Red'
                     foreach ($i in $SoftwareList.CheckedIndices) {
                         $SoftwareList.SetItemChecked($i, $false);
                     }
@@ -2885,37 +2427,37 @@ function Start-QiInstaller {
     $DellUpdate_Click = {
         if ((get-wmiobject win32_computersystem).Manufacturer -match 'Dell') {
             $RunLog = "$ScriptPath\logs\DellCommand\ActivityLog.xml"
-            Get-DellCommandexe
+            Set-DellCommandexe
             if ($Executable.length -le 0) {
-                Update-Textbox "Command Update 2.4 is not Installed" -Color "Red"
+                Update-LogBox "Command Update 2.4 is not Installed" -Color "Red"
                 Install-DellCommand
-                Invoke-DriverUpdate
+                Invoke-DellDriverUpdate
             }
             else {
-                Invoke-DriverUpdate
+                Invoke-DellDriverUpdate
             }
             if (!((([xml](get-content $RunLog)).logentries.logentry.message | Where-Object { $_.message -like "*Install*" }).data | Where-Object { $_.type -eq "install" })) {
-                Update-Textbox "No Updates Availaible" -Color "Green"
+                Update-LogBox "No Updates Availaible" -Color "Green"
             }
         }
         else {
-            update-Textbox "Dell Hardware Not Detected"
+            Update-LogBox "Dell Hardware Not Detected"
         }
     }
     
     #Powershell 5
     $Powershell5_Click = {
-        Test-Compatibility
+        Test-Powershell_Compatibility
         if ($ReturnValue) {
             if (((Get-WmiObject win32_OperatingSystem).Caption) -match 'Windows 7') {
                 Install-Software -Application 'Powershell'
                 switch ($msgBoxInput) {
                     'Yes' {
                         shutdown.exe -r -t 30
-                        update-Textbox "System Rebooting" -color "Yellow"
+                        Update-LogBox "System Rebooting" -color "Yellow"
                     }
                     'No' {
-                        update-Textbox "Please reboot at your earliest convenience" -color "Yellow"
+                        Update-LogBox "Please reboot at your earliest convenience" -color "Yellow"
                     }
                 }
             }
@@ -2928,11 +2470,11 @@ function Start-QiInstaller {
         $msgBoxInput = [System.Windows.MessageBox]::Show('Options selected will reboot your computer. Would you like to continue?', 'Reboot Required', 'YesNo', 'Warning')
         switch ($msgBoxInput) {
             'Yes' {
-                Update-Win10
+                Invoke-Win10_Upgrade
             }
             
             'No' {
-                update-Textbox "Win10 Upgrade Canceled." -color 'Red'
+                Update-LogBox "Win10 Upgrade Canceled." -color 'Red'
             }
         }
     }
@@ -2961,7 +2503,7 @@ function Start-QiInstaller {
         }
         #Name
         elseif ([bool]($NewComputerName) -and ![bool]($NewDomain)) {
-            update-Textbox "Renaming computer to $($NewComputerName)"
+            Update-LogBox "Renaming computer to $($NewComputerName)"
             if ((Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain) {
                 if ([string](nltest.exe /query) -match '(Connection Status = 0 0x0 NERR_Success)') {
                     $credential = Get-Credential -Message 'Please enter the domain admin credentials.'
@@ -2984,16 +2526,16 @@ function Start-QiInstaller {
                         $ArgumentList = "Add-Computer -Domain $NewDomain -Credential $Credential"
                         $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -WindowStyle Hidden -passthru)
                         if ($Process -match "failed") {
-                            update-Textbox $error -color "Red"
+                            Update-LogBox $error -color "Red"
                         }
                         Request-Reboot
                     }
                     catch {
-                        update-Textbox $error -color "Red"
+                        Update-LogBox $error -color "Red"
                     }
                 }
                 else {
-                    update-Textbox "Unable to reach Domain controller" -Color "Red"
+                    Update-LogBox "Unable to reach Domain controller" -Color "Red"
                 }
             }
             else {
@@ -3002,7 +2544,7 @@ function Start-QiInstaller {
             }
         }
         else {
-            update-Textbox "Rename Canceled"
+            Update-LogBox "Rename Canceled"
         }
     }
     
@@ -3028,39 +2570,39 @@ function Start-QiInstaller {
 
     #USMT_Profile Select
     $Profiles_Click = {
-        $Script:SelectedProfile = Get-UserProfiles | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
-        update-Textbox "Profile(s) selected for migration:"
+        $Script:SelectedProfile = Set-UserProfiles_USMT | Out-GridView -Title 'Profile Selection' -OutputMode Multiple
+        Update-LogBox "Profile(s) selected for migration:"
         $SelectedProfile | ForEach-Object { 
-            update-Textbox "$($_.UserName)"
+            Update-LogBox "$($_.UserName)"
         }
     }
     $AddDirectory_Click = {
-        Add-ExtraDirectory
+        Set-ExtraDirectory_USMT
     }
     $RemoveDirectory_Click = {
-        Remove-ExtraDirectory
+        Remove-ExtraDirectory_USMT
     }
     $ExportLocationButton_Click = {
-        Set-SaveDirectory -Type Destination
+        Set-SaveDirectory_USMT -Type Destination
     }
     $Export_Click = {
-        Save-UserState
+        Invoke-Save_USMT
     }
     $ImportSelect_Click = {
-        Set-SaveDirectory -Type Source
+        Set-SaveDirectory_USMT -Type Source
     }
     $ImportButton_Click = {
-        Restore-UserState
+        Invoke-Restore_USMT
     }
     $TestConnection_Click = {
-        Test-ComputerConnection
+        Test-ComputerConnection_USMT
     }
     $RunNetMig_Click = {
         if ($ConnectionCheckBox.Checked -and $UNCVerified.Checked) {
             Invoke-USMT -SourceComputer $SourceComputerText.Text -Credential $Creds
         }
         else {
-            Update-Textbox "Connection not Verified. Please Test Connection first" -color 'Orange'
+            Update-LogBox "Connection not Verified. Please Test Connection first" -color 'Orange'
         }
     }
 
