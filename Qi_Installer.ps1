@@ -1457,81 +1457,19 @@ Function Request-Reboot {
         }
     }
 }
-<#
-function Test-Cred {
-           
-    [CmdletBinding()]
-    [OutputType([String])] 
-       
-    Param ( 
-        [Parameter( 
-            Mandatory = $false, 
-            ValueFromPipeLine = $true, 
-            ValueFromPipelineByPropertyName = $true
-        )] 
-        [Alias( 
-            'PSCredential'
-        )] 
-        [ValidateNotNull()] 
-        [System.Management.Automation.PSCredential]
-        [System.Management.Automation.Credential()] 
-        $Credentials
-    )
-    $Domain = $null
-    $Username = $null
-    $Password = $null
-      
-    If ($null -eq $Credentials) {
-        Try {
-            $Credentials = Get-Credential "domain\$env:username" -ErrorAction Stop
-        }
-        Catch {
-            $ErrorMsg = $_.Exception.Message
-            Write-Warning "Failed to validate credentials: $ErrorMsg "
-            Pause
-            Break
-        }
-    }
-      
-    # Checking module
-    Try {
-        # Split username and password
-        $Username = $credentials.username
-        $Password = $credentials.GetNetworkCredential().password
-  
-        # Get Domain
-        $Domain = $NewDomain
-    }
-    Catch {
-        $_.Exception.Message
-        Continue
-    }
-  
-    If (!$domain) {
-        Write-Warning "Something went wrong"
-    }
-    Else {
-        If ($null -ne $domain.name) {
-            return "Authenticated"
-        }
-        Else {
-            return "Not authenticated"
-        }
-    }
-}
-#>
+
 function Update-Win10 {
     if (((Get-Host).version).major -gt 2) {
         $version = "1909"
         if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
-            $Destination = "$($ScriptPath)\Win10_Upgrade\$($Version)_x64.zip"
+            $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
             $zip = "$($Destination).001"
             $NumberOfFiles = 51
         }
         else {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
-            $Destination = "$ScriptPath\Win10_Upgrade\$($Version)_x86.zip"
+            $Destination = "$ScriptPath\Win10_Upgrade_$($Version)\$($Version)_x86.zip"
             $zip = "$($Destination).001"
             $NumberOfFiles = 35
         }
