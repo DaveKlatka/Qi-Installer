@@ -2322,10 +2322,10 @@ function Start-QiInstaller {
         }
         elseif ($AuthUser.Text -eq 'Console') {
             if ($QiDebug) {
-                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.ps1') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com' -QiDebug"
+                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.ps1') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer $AutomateServer -AutomatePass $AutomatePass -DownloadHost $DownloadHost -QiSupportAuth $QiSupportAuth -QiDebug"
             }
             else {
-                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/34uSuCU') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer 'Automate.QualityIP.com' -AutomatePass 'BndOZpmJrChvdODpKIbdiA==' -DownloadHost 'https://qi-host.nyc3.digitaloceanspaces.com'"
+                start-process powershell.exe -argumentlist "-executionpolicy bypass -noprofile -command (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/DaveKlatka/Qi-Installer/Development/Qi_Installer.ps1') | Invoke-Expression; Start-QiInstaller -ScriptPath $ScriptPath -AutomateServer $AutomateServer -AutomatePass $AutomatePass -DownloadHost $DownloadHost -QiSupportAuth $QiSupportAuth"
             }
             $TechInstaller.Close()
         }
@@ -2339,7 +2339,7 @@ function Start-QiInstaller {
 
                 $QiPass = ConvertTo-SecureString $QiSupportAuth -AsPlainText -Force
                 $QiCreds = New-Object System.Management.Automation.PSCredential ('QiSupportAuth', $QiPass)
-                
+
                 Connect-AutomateAPI -credential $QiCreds -Server $AutomateServer -ErrorAction stop
                 if ($AuthUser.text -eq 'dklatkaadm') {
                     $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
