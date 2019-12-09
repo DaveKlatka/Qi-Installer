@@ -2255,6 +2255,8 @@ function Start-QiInstaller {
         [string] $DownloadHost,
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
         [string] $ScriptPath,
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $True)]
+        [string] $QiSupportAuth,
         [switch] $QiDebug
     )
 
@@ -2332,7 +2334,13 @@ function Start-QiInstaller {
             Try {
                 $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
                 $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
+                
                 Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
+
+                $QiPass = ConvertTo-SecureString $QiSupportAuth -AsPlainText -Force
+                $QiCreds = New-Object System.Management.Automation.PSCredential ('QiSupportAuth', $QiPass)
+                
+                Connect-AutomateAPI -credential $QiCreds -Server $AutomateServer -ErrorAction stop
                 if ($AuthUser.text -eq 'dklatkaadm') {
                     $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
                 }
