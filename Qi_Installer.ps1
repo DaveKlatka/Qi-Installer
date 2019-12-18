@@ -1333,13 +1333,13 @@ function Invoke-Win10_Upgrade {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
             $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
             $zip = "$($Destination).001"
-            $NumberOfFiles = 51
+            $NumberOfFiles = 40
         }
         else {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
             $Destination = "$ScriptPath\Win10_Upgrade_$($Version)\$($Version)_x86.zip"
             $zip = "$($Destination).001"
-            $NumberOfFiles = 35
+            $NumberOfFiles = 28
         }
         if (([Math]::Round((Get-PSDrive C | Select-Object Free -expandproperty free) / 1GB)) -gt 32) {
             $software = "Win10 $($Version) Upgrade"
