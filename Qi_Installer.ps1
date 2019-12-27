@@ -1341,7 +1341,7 @@ function Invoke-Win10_Upgrade {
             $zip = "$($Destination).001"
             $NumberOfFiles = 28
         }
-        if (([Math]::Round((Get-PSDrive C | Select-Object Free -expandproperty free) / 1GB)) -gt 10) {
+        if (([Math]::Round((Get-PSDrive C | Select-Object Free -expandproperty free) / 1GB)) -gt 15) {
             $software = "Win10 $($Version) Upgrade"
             if (!(Test-Path ((Split-Path -path $Destination) + "\setup.exe"))) {
                 Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $software
