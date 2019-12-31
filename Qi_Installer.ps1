@@ -2655,8 +2655,8 @@ function Start-QiInstaller {
     }
 
     #Check Minimum Requirements
+    $PoSHVersion.Text = "Current Powershell Version: " + (Get-host).Version.Major
     if ((get-host).Version.Major -gt 2) {
-        $PoSHVersion.Text = "Current Powershell Version: " + (Get-host).Version.Major
         $MinimumRequirements.Visible = $false
     }
 
