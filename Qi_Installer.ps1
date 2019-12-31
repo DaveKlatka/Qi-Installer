@@ -1,5 +1,3 @@
-$InstallPoSH3_Click = {
-}
 function Update-LogBox {
     param(
         [string] $Message,
@@ -2315,7 +2313,9 @@ function Start-QiInstaller {
 
     #Minimum Requirements
     $InstallPoSH4_Click = {
+        $AuthPanel.Visible = $false
         Install-Software 'powershell4'
+        $AuthPanel.Visible = $true
     }
 
     #Authenticator
@@ -2656,6 +2656,7 @@ function Start-QiInstaller {
 
     #Check Minimum Requirements
     if ((get-host).Version.Major -gt 2) {
+        $PoSHVersion.Text = "Current Powershell Version: " + (Get-host).Version.Major
         $MinimumRequirements.Visible = $false
     }
 
