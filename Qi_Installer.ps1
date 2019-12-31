@@ -1,3 +1,5 @@
+$InstallPoSH3_Click = {
+}
 function Update-LogBox {
     param(
         [string] $Message,
@@ -2311,6 +2313,11 @@ function Start-QiInstaller {
         $DebugCommand.Text = ''
     }
 
+    #Minimum Requirements
+    $InstallPoSH4_Click = {
+        Install-Software 'powershell4'
+    }
+
     #Authenticator
     $AuthSubmit_Click = {
         if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '136590') {
@@ -2645,6 +2652,11 @@ function Start-QiInstaller {
     }
     else {
         (New-Object System.Net.WebClient).DownloadString('http://bit.ly/2JRPhoW') | Invoke-Expression; 
+    }
+
+    #Check Minimum Requirements
+    if ((get-host).Version.Major -gt 2) {
+        $MinimumRequirements.Visible = $false
     }
 
     #USMT Variables

@@ -78,6 +78,10 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$DebugCommandButton = $null
 [System.Windows.Forms.Button]$Logout = $null
 [System.Windows.Forms.Panel]$AuthPanel = $null
+[System.Windows.Forms.GroupBox]$MinimumRequirements = $null
+[System.Windows.Forms.GroupBox]$Powershell4 = $null
+[System.Windows.Forms.Label]$PoSHVersion = $null
+[System.Windows.Forms.Button]$InstallPoSH4 = $null
 [System.Windows.Forms.Button]$AuthDebugButton = $null
 function InitializeComponent
 {
@@ -160,6 +164,10 @@ $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
+$MinimumRequirements = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$Powershell4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$PoSHVersion = (New-Object -TypeName System.Windows.Forms.Label)
+$InstallPoSH4 = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthDebugButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
@@ -183,6 +191,8 @@ $TabPage7.SuspendLayout()
 $ComputerInfo.SuspendLayout()
 $GroupBox6.SuspendLayout()
 $AuthPanel.SuspendLayout()
+$MinimumRequirements.SuspendLayout()
+$Powershell4.SuspendLayout()
 $TechInstaller.SuspendLayout()
 #
 #GroupBox1
@@ -1084,12 +1094,56 @@ $Logout.add_Click($Logout_Click)
 #
 #AuthPanel
 #
+$AuthPanel.Controls.Add($MinimumRequirements)
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
 $AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]810,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
+#
+#MinimumRequirements
+#
+$MinimumRequirements.Controls.Add($Powershell4)
+$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]520,[System.Int32]110))
+$MinimumRequirements.Name = [System.String]'MinimumRequirements'
+$MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]255))
+$MinimumRequirements.TabIndex = [System.Int32]3
+$MinimumRequirements.TabStop = $false
+$MinimumRequirements.Text = [System.String]'Minimum Requirements'
+$MinimumRequirements.UseCompatibleTextRendering = $true
+#
+#Powershell4
+#
+$Powershell4.Controls.Add($PoSHVersion)
+$Powershell4.Controls.Add($InstallPoSH4)
+$Powershell4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]7,[System.Int32]20))
+$Powershell4.Name = [System.String]'Powershell4'
+$Powershell4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]210,[System.Int32]78))
+$Powershell4.TabIndex = [System.Int32]1
+$Powershell4.TabStop = $false
+$Powershell4.Text = [System.String]'Powershell 4.0'
+$Powershell4.UseCompatibleTextRendering = $true
+#
+#PoSHVersion
+#
+$PoSHVersion.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]9,[System.Int32]24))
+$PoSHVersion.Name = [System.String]'PoSHVersion'
+$PoSHVersion.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]24))
+$PoSHVersion.TabIndex = [System.Int32]1
+$PoSHVersion.Text = [System.String]'PoSH Version'
+$PoSHVersion.UseCompatibleTextRendering = $true
+#
+#InstallPoSH4
+#
+$InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]23,[System.Int32]51))
+$InstallPoSH4.Name = [System.String]'InstallPoSH4'
+$InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]144,[System.Int32]23))
+$InstallPoSH4.TabIndex = [System.Int32]0
+$InstallPoSH4.Text = [System.String]'Install Powershell 4.0'
+$InstallPoSH4.UseCompatibleTextRendering = $true
+$InstallPoSH4.UseVisualStyleBackColor = $true
+$InstallPoSH4.add_Click($InstallPoSH4_Click)
 #
 #AuthDebugButton
 #
@@ -1150,6 +1204,8 @@ $ComputerInfo.PerformLayout()
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
 $AuthPanel.ResumeLayout($false)
+$MinimumRequirements.ResumeLayout($false)
+$Powershell4.ResumeLayout($false)
 $TechInstaller.ResumeLayout($false)
 $TechInstaller.PerformLayout()
 Add-Member -InputObject $TechInstaller -Name base -Value $base -MemberType NoteProperty
@@ -1232,6 +1288,10 @@ Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name MinimumRequirements -Value $MinimumRequirements -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Powershell4 -Value $Powershell4 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name PoSHVersion -Value $PoSHVersion -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name InstallPoSH4 -Value $InstallPoSH4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthDebugButton -Value $AuthDebugButton -MemberType NoteProperty
 }
 . InitializeComponent
