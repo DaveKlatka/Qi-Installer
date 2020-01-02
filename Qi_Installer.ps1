@@ -2311,6 +2311,11 @@ function Start-QiInstaller {
         $DebugCommand.Text = ''
     }
 
+    #Minimum Requirements
+    $InstallPoSH4_Click = {
+        Install-Software 'powershell4'
+    }
+
     #Authenticator
     $AuthSubmit_Click = {
         if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '136590') {
@@ -2356,6 +2361,9 @@ function Start-QiInstaller {
             }
             catch {
                 Update-LogBox 'Failed to login' -color 'Red'
+                if (((get-host).version.major) -le 2) {
+                    Update-LogBox 'Authentication incompatible with current Powershell version. Please upgrade Powershell.' -color 'Red'
+                }
             }
         }
     }
@@ -2651,10 +2659,6 @@ function Start-QiInstaller {
     $PoSHVersion.Text = "Current Powershell Version: " + (Get-host).Version.Major
     if ((get-host).Version.Major -gt 2) {
         $MinimumRequirements.Visible = $false
-    }
-    #Minimum Requirements
-    $InstallPoSH4_Click = {
-        Install-Software 'powershell4'
     }
 
     #USMT Variables
