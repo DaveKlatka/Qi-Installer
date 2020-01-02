@@ -172,7 +172,8 @@ function Invoke-CleanUp {
 
 function Install-Software {
     Param (
-        [string] $Application
+        [string] $Application,
+        [switch] $NoLogBox
     )
     if ($Application -ne "") {
         if (!(Test-Path $env:ProgramData\chocolatey\bin\choco.exe -ErrorAction SilentlyContinue)) {
@@ -182,9 +183,14 @@ function Install-Software {
             Install-Chocolatey
         }
         $RunLog = "$ScriptPath\logs\$Application Install.txt"
-        $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
-        start-sleep 1
-        Update-ProgressBar -RunLog $RunLog -ProcessID $Process.ID -Tracker
+        if ($NoLogBox) {
+            Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y"
+        }
+        else {
+            $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+            start-sleep 1
+            Update-ProgressBar -RunLog $RunLog -ProcessID $Process.ID -Tracker
+        }
     }
 }
 
