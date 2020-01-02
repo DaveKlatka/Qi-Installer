@@ -2313,7 +2313,21 @@ function Start-QiInstaller {
 
     #Minimum Requirements
     $InstallPoSH4_Click = {
-        $Powershell5.performclick()
+        Test-Powershell_Compatibility
+        if ($ReturnValue) {
+            if (((Get-WmiObject win32_OperatingSystem).Caption) -match 'Windows 7') {
+                Install-Software -Application 'Powershell'
+                switch ($msgBoxInput) {
+                    'Yes' {
+                        shutdown.exe -r -t 30
+                        Update-LogBox "System Rebooting" -color "Yellow"
+                    }
+                    'No' {
+                        Update-LogBox "Please reboot at your earliest convenience" -color "Yellow"
+                    }
+                }
+            }
+        }
     }
 
     #Authenticator
