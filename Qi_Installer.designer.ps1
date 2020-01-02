@@ -20,6 +20,22 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.PictureBox]$PictureBox1 = $null
 [System.Windows.Forms.TabControl]$TabControl1 = $null
 [System.Windows.Forms.TabPage]$TabPage1 = $null
+[System.Windows.Forms.Panel]$AuthPanel = $null
+[System.Windows.Forms.GroupBox]$MinimumRequirements = $null
+[System.Windows.Forms.GroupBox]$Powershell4 = $null
+[System.Windows.Forms.Label]$PoSHVersion = $null
+[System.Windows.Forms.Button]$InstallPoSH4 = $null
+[System.Windows.Forms.Button]$AuthDebugButton = $null
+[System.Windows.Forms.GroupBox]$GroupBox6 = $null
+[System.Windows.Forms.Label]$Label4 = $null
+[System.Windows.Forms.Label]$Label3 = $null
+[System.Windows.Forms.Label]$Label2 = $null
+[System.Windows.Forms.TextBox]$2FAAuth = $null
+[System.Windows.Forms.TextBox]$AuthPass = $null
+[System.Windows.Forms.Button]$AuthCancel = $null
+[System.Windows.Forms.Button]$AuthSubmit = $null
+[System.Windows.Forms.TextBox]$AuthUser = $null
+[System.Windows.Forms.Label]$Label1 = $null
 [System.Windows.Forms.TabPage]$TabPage2 = $null
 [System.Windows.Forms.Button]$InstallSoftware = $null
 [System.Windows.Forms.TabPage]$TabPage3 = $null
@@ -62,26 +78,10 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.RichTextBox]$LogBox = $null
 [System.Windows.Forms.ProgressBar]$CurrentFile = $null
 [System.Windows.Forms.ProgressBar]$TotalProgress = $null
-[System.Windows.Forms.GroupBox]$GroupBox6 = $null
-[System.Windows.Forms.Label]$Label4 = $null
-[System.Windows.Forms.Label]$Label3 = $null
-[System.Windows.Forms.Label]$Label2 = $null
-[System.Windows.Forms.TextBox]$2FAAuth = $null
-[System.Windows.Forms.TextBox]$AuthPass = $null
-[System.Windows.Forms.Button]$AuthCancel = $null
-[System.Windows.Forms.Button]$AuthSubmit = $null
-[System.Windows.Forms.TextBox]$AuthUser = $null
-[System.Windows.Forms.Label]$Label1 = $null
 [System.Windows.Forms.Button]$DebugConsole = $null
 [System.Windows.Forms.TextBox]$DebugCommand = $null
 [System.Windows.Forms.Button]$DebugCommandButton = $null
 [System.Windows.Forms.Button]$Logout = $null
-[System.Windows.Forms.Panel]$AuthPanel = $null
-[System.Windows.Forms.GroupBox]$MinimumRequirements = $null
-[System.Windows.Forms.GroupBox]$Powershell4 = $null
-[System.Windows.Forms.Label]$PoSHVersion = $null
-[System.Windows.Forms.Button]$InstallPoSH4 = $null
-[System.Windows.Forms.Button]$AuthDebugButton = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -441,6 +441,7 @@ $TabControl1.TabIndex = [System.Int32]20
 #
 #TabPage1
 #
+$TabPage1.Controls.Add($AuthPanel)
 $TabPage1.Controls.Add($GroupBox2)
 $TabPage1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage1.Name = [System.String]'TabPage1'
@@ -1082,9 +1083,9 @@ $Logout.add_Click($Logout_Click)
 $AuthPanel.Controls.Add($MinimumRequirements)
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
 $AuthPanel.Name = [System.String]'AuthPanel'
-$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]305,[System.Int32]477))
+$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]429))
 $AuthPanel.TabIndex = [System.Int32]2
 #
 #MinimumRequirements
@@ -1132,7 +1133,7 @@ $InstallPoSH4.add_Click($InstallPoSH4_Click)
 #
 #AuthDebugButton
 #
-$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]119,[System.Int32]442))
+$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]107,[System.Int32]387))
 $AuthDebugButton.Name = [System.String]'AuthDebugButton'
 $AuthDebugButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
 $AuthDebugButton.TabIndex = [System.Int32]2
@@ -1147,7 +1148,6 @@ $AuthDebugButton.add_Click($AuthDebugButton_Click)
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
-$TechInstaller.Controls.Add($AuthPanel)
 $TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
 $TechInstaller.Controls.Add($DebugCommand)
@@ -1215,6 +1215,22 @@ Add-Member -InputObject $TechInstaller -Name Cancel -Value $Cancel -MemberType N
 Add-Member -InputObject $TechInstaller -Name PictureBox1 -Value $PictureBox1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabControl1 -Value $TabControl1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage1 -Value $TabPage1 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name MinimumRequirements -Value $MinimumRequirements -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Powershell4 -Value $Powershell4 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name PoSHVersion -Value $PoSHVersion -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name InstallPoSH4 -Value $InstallPoSH4 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthDebugButton -Value $AuthDebugButton -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name GroupBox6 -Value $GroupBox6 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label4 -Value $Label4 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label3 -Value $Label3 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label2 -Value $Label2 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name 2FAAuth -Value $2FAAuth -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthPass -Value $AuthPass -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthCancel -Value $AuthCancel -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthSubmit -Value $AuthSubmit -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name AuthUser -Value $AuthUser -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name Label1 -Value $Label1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage2 -Value $TabPage2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name InstallSoftware -Value $InstallSoftware -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberType NoteProperty
@@ -1257,25 +1273,9 @@ Add-Member -InputObject $TechInstaller -Name OldComputerLabel -Value $OldCompute
 Add-Member -InputObject $TechInstaller -Name LogBox -Value $LogBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name CurrentFile -Value $CurrentFile -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TotalProgress -Value $TotalProgress -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name GroupBox6 -Value $GroupBox6 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Label4 -Value $Label4 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Label3 -Value $Label3 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Label2 -Value $Label2 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name 2FAAuth -Value $2FAAuth -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthPass -Value $AuthPass -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthCancel -Value $AuthCancel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthSubmit -Value $AuthSubmit -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthUser -Value $AuthUser -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Label1 -Value $Label1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name MinimumRequirements -Value $MinimumRequirements -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Powershell4 -Value $Powershell4 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name PoSHVersion -Value $PoSHVersion -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name InstallPoSH4 -Value $InstallPoSH4 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthDebugButton -Value $AuthDebugButton -MemberType NoteProperty
 }
 . InitializeComponent
