@@ -1125,7 +1125,7 @@ $InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentLis
 $InstallPoSH4.Name = [System.String]'InstallPoSH4'
 $InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]144,[System.Int32]23))
 $InstallPoSH4.TabIndex = [System.Int32]0
-$InstallPoSH4.Text = [System.String]'Install Powershell 4.0'
+$InstallPoSH4.Text = [System.String]'Update Powershell'
 $InstallPoSH4.UseCompatibleTextRendering = $true
 $InstallPoSH4.UseVisualStyleBackColor = $true
 $InstallPoSH4.add_Click($InstallPoSH4_Click)
