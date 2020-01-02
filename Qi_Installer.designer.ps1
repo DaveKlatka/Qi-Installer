@@ -4,14 +4,14 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.ComboBox]$365ComboBox = $null
 [System.Windows.Forms.CheckedListBox]$SoftwareList = $null
 [System.Windows.Forms.GroupBox]$GroupBox2 = $null
-[System.Windows.Forms.Button]$dotnet35 = $null
 [System.Windows.Forms.Button]$UnInstall_Automate = $null
 [System.Windows.Forms.Button]$ReInstall_Automate = $null
 [System.Windows.Forms.Button]$Install_Automate = $null
+[System.Windows.Forms.Button]$dotnet35 = $null
 [System.Windows.Forms.GroupBox]$GroupBox3 = $null
+[System.Windows.Forms.Button]$RenameDomain = $null
 [System.Windows.Forms.Button]$SystemRestorePoint = $null
 [System.Windows.Forms.DataGridView]$SystemInfo = $null
-[System.Windows.Forms.Button]$RenameDomain = $null
 [System.Windows.Forms.Button]$Win10Upgrade = $null
 [System.Windows.Forms.Button]$Powershell5 = $null
 [System.Windows.Forms.Button]$DellUpdate = $null
@@ -105,6 +105,22 @@ $Cancel = (New-Object -TypeName System.Windows.Forms.Button)
 $PictureBox1 = (New-Object -TypeName System.Windows.Forms.PictureBox)
 $TabControl1 = (New-Object -TypeName System.Windows.Forms.TabControl)
 $TabPage1 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
+$MinimumRequirements = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$Powershell4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$PoSHVersion = (New-Object -TypeName System.Windows.Forms.Label)
+$InstallPoSH4 = (New-Object -TypeName System.Windows.Forms.Button)
+$AuthDebugButton = (New-Object -TypeName System.Windows.Forms.Button)
+$GroupBox6 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$Label4 = (New-Object -TypeName System.Windows.Forms.Label)
+$Label3 = (New-Object -TypeName System.Windows.Forms.Label)
+$Label2 = (New-Object -TypeName System.Windows.Forms.Label)
+$2FAAuth = (New-Object -TypeName System.Windows.Forms.TextBox)
+$AuthPass = (New-Object -TypeName System.Windows.Forms.TextBox)
+$AuthCancel = (New-Object -TypeName System.Windows.Forms.Button)
+$AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
+$AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
+$Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $TabPage2 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $InstallSoftware = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage3 = (New-Object -TypeName System.Windows.Forms.TabPage)
@@ -147,26 +163,10 @@ $OldComputerLabel = (New-Object -TypeName System.Windows.Forms.Label)
 $LogBox = (New-Object -TypeName System.Windows.Forms.RichTextBox)
 $CurrentFile = (New-Object -TypeName System.Windows.Forms.ProgressBar)
 $TotalProgress = (New-Object -TypeName System.Windows.Forms.ProgressBar)
-$GroupBox6 = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$Label4 = (New-Object -TypeName System.Windows.Forms.Label)
-$Label3 = (New-Object -TypeName System.Windows.Forms.Label)
-$Label2 = (New-Object -TypeName System.Windows.Forms.Label)
-$2FAAuth = (New-Object -TypeName System.Windows.Forms.TextBox)
-$AuthPass = (New-Object -TypeName System.Windows.Forms.TextBox)
-$AuthCancel = (New-Object -TypeName System.Windows.Forms.Button)
-$AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
-$AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
-$Label1 = (New-Object -TypeName System.Windows.Forms.Label)
 $DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
 $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
-$AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
-$MinimumRequirements = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$Powershell4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$PoSHVersion = (New-Object -TypeName System.Windows.Forms.Label)
-$InstallPoSH4 = (New-Object -TypeName System.Windows.Forms.Button)
-$AuthDebugButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -174,6 +174,10 @@ $GroupBox3.SuspendLayout()
 ([System.ComponentModel.ISupportInitialize]$PictureBox1).BeginInit()
 $TabControl1.SuspendLayout()
 $TabPage1.SuspendLayout()
+$AuthPanel.SuspendLayout()
+$MinimumRequirements.SuspendLayout()
+$Powershell4.SuspendLayout()
+$GroupBox6.SuspendLayout()
 $TabPage2.SuspendLayout()
 $TabPage3.SuspendLayout()
 $TabPage4.SuspendLayout()
@@ -187,10 +191,6 @@ $TabPage6.SuspendLayout()
 $GroupBox7.SuspendLayout()
 $TabPage7.SuspendLayout()
 $ComputerInfo.SuspendLayout()
-$GroupBox6.SuspendLayout()
-$AuthPanel.SuspendLayout()
-$MinimumRequirements.SuspendLayout()
-$Powershell4.SuspendLayout()
 $TechInstaller.SuspendLayout()
 #
 #GroupBox1
@@ -198,7 +198,7 @@ $TechInstaller.SuspendLayout()
 $GroupBox1.Controls.Add($365Checkbox)
 $GroupBox1.Controls.Add($365ComboBox)
 $GroupBox1.Controls.Add($SoftwareList)
-$GroupBox1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]6))
+$GroupBox1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]39,[System.Int32]11))
 $GroupBox1.Name = [System.String]'GroupBox1'
 $GroupBox1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]206,[System.Int32]253))
 $GroupBox1.TabIndex = [System.Int32]0
@@ -240,7 +240,6 @@ $SoftwareList.UseCompatibleTextRendering = $true
 #
 #GroupBox2
 #
-$GroupBox2.Controls.Add($dotnet35)
 $GroupBox2.Controls.Add($UnInstall_Automate)
 $GroupBox2.Controls.Add($ReInstall_Automate)
 $GroupBox2.Controls.Add($Install_Automate)
@@ -253,9 +252,9 @@ $GroupBox2.UseCompatibleTextRendering = $true
 #
 #dotnet35
 #
-$dotnet35.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]11,[System.Int32]125))
+$dotnet35.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]20))
 $dotnet35.Name = [System.String]'dotnet35'
-$dotnet35.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]29))
+$dotnet35.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $dotnet35.TabIndex = [System.Int32]11
 $dotnet35.Text = [System.String]'Install .NET 3.5'
 $dotnet35.UseCompatibleTextRendering = $true
@@ -265,7 +264,7 @@ $dotnet35.add_Click($dotnet35_Click)
 #UnInstall_Automate
 #
 $UnInstall_Automate.Enabled = $false
-$UnInstall_Automate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]11,[System.Int32]90))
+$UnInstall_Automate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]62,[System.Int32]90))
 $UnInstall_Automate.Name = [System.String]'UnInstall_Automate'
 $UnInstall_Automate.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]29))
 $UnInstall_Automate.TabIndex = [System.Int32]10
@@ -277,7 +276,7 @@ $UnInstall_Automate.add_Click($UnInstall_Automate_Click)
 #ReInstall_Automate
 #
 $ReInstall_Automate.Enabled = $false
-$ReInstall_Automate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]11,[System.Int32]55))
+$ReInstall_Automate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]62,[System.Int32]55))
 $ReInstall_Automate.Name = [System.String]'ReInstall_Automate'
 $ReInstall_Automate.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]29))
 $ReInstall_Automate.TabIndex = [System.Int32]9
@@ -288,7 +287,7 @@ $ReInstall_Automate.add_Click($ReInstall_Automate_Click)
 #
 #Install_Automate
 #
-$Install_Automate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]11,[System.Int32]20))
+$Install_Automate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]62,[System.Int32]20))
 $Install_Automate.Name = [System.String]'Install_Automate'
 $Install_Automate.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]29))
 $Install_Automate.TabIndex = [System.Int32]8
@@ -299,10 +298,11 @@ $Install_Automate.add_Click($Install_Automate_Click)
 #
 #GroupBox3
 #
+$GroupBox3.Controls.Add($RenameDomain)
 $GroupBox3.Controls.Add($SystemRestorePoint)
 $GroupBox3.Controls.Add($SystemInfo)
-$GroupBox3.Controls.Add($RenameDomain)
 $GroupBox3.Controls.Add($Win10Upgrade)
+$GroupBox3.Controls.Add($dotnet35)
 $GroupBox3.Controls.Add($Powershell5)
 $GroupBox3.Controls.Add($DellUpdate)
 $GroupBox3.Controls.Add($PowerPolicy)
@@ -316,9 +316,9 @@ $GroupBox3.UseCompatibleTextRendering = $true
 #
 #SystemRestorePoint
 #
-$SystemRestorePoint.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]180))
+$SystemRestorePoint.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]61))
 $SystemRestorePoint.Name = [System.String]'SystemRestorePoint'
-$SystemRestorePoint.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$SystemRestorePoint.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $SystemRestorePoint.TabIndex = [System.Int32]19
 $SystemRestorePoint.Text = [System.String]'Create Restore Point'
 $SystemRestorePoint.UseCompatibleTextRendering = $true
@@ -337,7 +337,7 @@ $SystemInfo.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $SystemInfo.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode]::AutoSize
 $SystemInfo.ColumnHeadersVisible = $false
 $SystemInfo.EditMode = [System.Windows.Forms.DataGridViewEditMode]::EditProgrammatically
-$SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]1,[System.Int32]218))
+$SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]215))
 $SystemInfo.MaximumSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.MinimumSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.MultiSelect = $false
@@ -351,9 +351,9 @@ $SystemInfo.TabIndex = [System.Int32]5
 #RenameDomain
 #
 $RenameDomain.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]8.25,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$RenameDomain.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]147))
+$RenameDomain.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]102))
 $RenameDomain.Name = [System.String]'RenameDomain'
-$RenameDomain.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$RenameDomain.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $RenameDomain.TabIndex = [System.Int32]18
 $RenameDomain.Text = [System.String]'Rename Computer/Domain'
 $RenameDomain.UseCompatibleTextRendering = $true
@@ -362,9 +362,9 @@ $RenameDomain.add_Click($RenameDomain_Click)
 #
 #Win10Upgrade
 #
-$Win10Upgrade.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]116))
+$Win10Upgrade.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]102))
 $Win10Upgrade.Name = [System.String]'Win10Upgrade'
-$Win10Upgrade.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$Win10Upgrade.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $Win10Upgrade.TabIndex = [System.Int32]6
 $Win10Upgrade.Text = [System.String]'Win10 1909 Upgrade'
 $Win10Upgrade.UseCompatibleTextRendering = $true
@@ -373,9 +373,9 @@ $Win10Upgrade.add_Click($Win10Upgrade_Click)
 #
 #Powershell5
 #
-$Powershell5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]83))
+$Powershell5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]61))
 $Powershell5.Name = [System.String]'Powershell5'
-$Powershell5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$Powershell5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $Powershell5.TabIndex = [System.Int32]7
 $Powershell5.Text = [System.String]'Install Powershell 5'
 $Powershell5.UseCompatibleTextRendering = $true
@@ -384,9 +384,9 @@ $Powershell5.add_Click($Powershell5_Click)
 #
 #DellUpdate
 #
-$DellUpdate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]50))
+$DellUpdate.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]147))
 $DellUpdate.Name = [System.String]'DellUpdate'
-$DellUpdate.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$DellUpdate.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $DellUpdate.TabIndex = [System.Int32]17
 $DellUpdate.Text = [System.String]'DellCMD | Update'
 $DellUpdate.UseCompatibleTextRendering = $true
@@ -395,9 +395,9 @@ $DellUpdate.add_Click($DellUpdate_Click)
 #
 #PowerPolicy
 #
-$PowerPolicy.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]43,[System.Int32]17))
+$PowerPolicy.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]20))
 $PowerPolicy.Name = [System.String]'PowerPolicy'
-$PowerPolicy.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]202,[System.Int32]27))
+$PowerPolicy.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
 $PowerPolicy.TabIndex = [System.Int32]16
 $PowerPolicy.Text = [System.String]'Apply Qi Power Policy'
 $PowerPolicy.UseCompatibleTextRendering = $true
@@ -452,6 +452,175 @@ $TabPage1.TabIndex = [System.Int32]0
 $TabPage1.Text = [System.String]'Automate'
 $TabPage1.UseVisualStyleBackColor = $true
 #
+#AuthPanel
+#
+$AuthPanel.Controls.Add($MinimumRequirements)
+$AuthPanel.Controls.Add($AuthDebugButton)
+$AuthPanel.Controls.Add($GroupBox6)
+$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
+$AuthPanel.Name = [System.String]'AuthPanel'
+$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
+$AuthPanel.TabIndex = [System.Int32]2
+#
+#MinimumRequirements
+#
+$MinimumRequirements.Controls.Add($Powershell4)
+$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]262))
+$MinimumRequirements.Name = [System.String]'MinimumRequirements'
+$MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]109))
+$MinimumRequirements.TabIndex = [System.Int32]3
+$MinimumRequirements.TabStop = $false
+$MinimumRequirements.Text = [System.String]'Minimum Requirements'
+$MinimumRequirements.UseCompatibleTextRendering = $true
+#
+#Powershell4
+#
+$Powershell4.Controls.Add($PoSHVersion)
+$Powershell4.Controls.Add($InstallPoSH4)
+$Powershell4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]7,[System.Int32]20))
+$Powershell4.Name = [System.String]'Powershell4'
+$Powershell4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]210,[System.Int32]78))
+$Powershell4.TabIndex = [System.Int32]1
+$Powershell4.TabStop = $false
+$Powershell4.Text = [System.String]'Powershell 3.0'
+$Powershell4.UseCompatibleTextRendering = $true
+#
+#PoSHVersion
+#
+$PoSHVersion.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]9,[System.Int32]24))
+$PoSHVersion.Name = [System.String]'PoSHVersion'
+$PoSHVersion.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]24))
+$PoSHVersion.TabIndex = [System.Int32]1
+$PoSHVersion.Text = [System.String]'PoSH Version'
+$PoSHVersion.UseCompatibleTextRendering = $true
+#
+#InstallPoSH4
+#
+$InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]29,[System.Int32]49))
+$InstallPoSH4.Name = [System.String]'InstallPoSH4'
+$InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]156,[System.Int32]23))
+$InstallPoSH4.TabIndex = [System.Int32]0
+$InstallPoSH4.Text = [System.String]'Update Powershell'
+$InstallPoSH4.UseCompatibleTextRendering = $true
+$InstallPoSH4.UseVisualStyleBackColor = $true
+$InstallPoSH4.add_Click($InstallPoSH4_Click)
+#
+#AuthDebugButton
+#
+$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]101,[System.Int32]377))
+$AuthDebugButton.Name = [System.String]'AuthDebugButton'
+$AuthDebugButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$AuthDebugButton.TabIndex = [System.Int32]2
+$AuthDebugButton.Text = [System.String]'Debug'
+$AuthDebugButton.UseCompatibleTextRendering = $true
+$AuthDebugButton.UseVisualStyleBackColor = $true
+$AuthDebugButton.Visible = $false
+$AuthDebugButton.add_Click($AuthDebugButton_Click)
+#
+#GroupBox6
+#
+$GroupBox6.Controls.Add($Label4)
+$GroupBox6.Controls.Add($Label3)
+$GroupBox6.Controls.Add($Label2)
+$GroupBox6.Controls.Add($2FAAuth)
+$GroupBox6.Controls.Add($AuthPass)
+$GroupBox6.Controls.Add($AuthCancel)
+$GroupBox6.Controls.Add($AuthSubmit)
+$GroupBox6.Controls.Add($AuthUser)
+$GroupBox6.Controls.Add($Label1)
+$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]23))
+$GroupBox6.Name = [System.String]'GroupBox6'
+$GroupBox6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]233))
+$GroupBox6.TabIndex = [System.Int32]1
+$GroupBox6.TabStop = $false
+$GroupBox6.Text = [System.String]'Authentication'
+$GroupBox6.UseCompatibleTextRendering = $true
+#
+#Label4
+#
+$Label4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]57))
+$Label4.Name = [System.String]'Label4'
+$Label4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
+$Label4.TabIndex = [System.Int32]8
+$Label4.Text = [System.String]'Username:'
+$Label4.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label4.UseCompatibleTextRendering = $true
+#
+#Label3
+#
+$Label3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]101))
+$Label3.Name = [System.String]'Label3'
+$Label3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]20))
+$Label3.TabIndex = [System.Int32]7
+$Label3.Text = [System.String]'Password:'
+$Label3.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label3.UseCompatibleTextRendering = $true
+#
+#Label2
+#
+$Label2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]148))
+$Label2.Name = [System.String]'Label2'
+$Label2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
+$Label2.TabIndex = [System.Int32]6
+$Label2.Text = [System.String]'Token:'
+$Label2.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
+$Label2.UseCompatibleTextRendering = $true
+#
+#2FAAuth
+#
+$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]168))
+$2FAAuth.Name = [System.String]'2FAAuth'
+$2FAAuth.PasswordChar = [System.Char]'*'
+$2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
+$2FAAuth.TabIndex = [System.Int32]3
+#
+#AuthPass
+#
+$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]124))
+$AuthPass.Name = [System.String]'AuthPass'
+$AuthPass.PasswordChar = [System.Char]'*'
+$AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
+$AuthPass.TabIndex = [System.Int32]2
+#
+#AuthCancel
+#
+$AuthCancel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]117,[System.Int32]195))
+$AuthCancel.Name = [System.String]'AuthCancel'
+$AuthCancel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$AuthCancel.TabIndex = [System.Int32]5
+$AuthCancel.Text = [System.String]'Cancel'
+$AuthCancel.UseCompatibleTextRendering = $true
+$AuthCancel.UseVisualStyleBackColor = $true
+$AuthCancel.add_Click($AuthCancel_Click)
+#
+#AuthSubmit
+#
+$AuthSubmit.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]36,[System.Int32]195))
+$AuthSubmit.Name = [System.String]'AuthSubmit'
+$AuthSubmit.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
+$AuthSubmit.TabIndex = [System.Int32]4
+$AuthSubmit.Text = [System.String]'Submit'
+$AuthSubmit.UseCompatibleTextRendering = $true
+$AuthSubmit.UseVisualStyleBackColor = $true
+$AuthSubmit.add_Click($AuthSubmit_Click)
+#
+#AuthUser
+#
+$AuthUser.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]77))
+$AuthUser.Name = [System.String]'AuthUser'
+$AuthUser.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
+$AuthUser.TabIndex = [System.Int32]1
+#
+#Label1
+#
+$Label1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]22))
+$Label1.Name = [System.String]'Label1'
+$Label1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]211,[System.Int32]23))
+$Label1.TabIndex = [System.Int32]0
+$Label1.Text = [System.String]'Enter Your Automate Credentials'
+$Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
+$Label1.UseCompatibleTextRendering = $true
+#
 #TabPage2
 #
 $TabPage2.Controls.Add($InstallSoftware)
@@ -466,7 +635,7 @@ $TabPage2.UseVisualStyleBackColor = $true
 #
 #InstallSoftware
 #
-$InstallSoftware.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]265))
+$InstallSoftware.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]64,[System.Int32]270))
 $InstallSoftware.Name = [System.String]'InstallSoftware'
 $InstallSoftware.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]149,[System.Int32]29))
 $InstallSoftware.TabIndex = [System.Int32]1
@@ -931,110 +1100,6 @@ $TotalProgress.Style = [System.Windows.Forms.ProgressBarStyle]::Continuous
 $TotalProgress.TabIndex = [System.Int32]22
 $TotalProgress.Visible = $false
 #
-#GroupBox6
-#
-$GroupBox6.Controls.Add($Label4)
-$GroupBox6.Controls.Add($Label3)
-$GroupBox6.Controls.Add($Label2)
-$GroupBox6.Controls.Add($2FAAuth)
-$GroupBox6.Controls.Add($AuthPass)
-$GroupBox6.Controls.Add($AuthCancel)
-$GroupBox6.Controls.Add($AuthSubmit)
-$GroupBox6.Controls.Add($AuthUser)
-$GroupBox6.Controls.Add($Label1)
-$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]23))
-$GroupBox6.Name = [System.String]'GroupBox6'
-$GroupBox6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]233))
-$GroupBox6.TabIndex = [System.Int32]1
-$GroupBox6.TabStop = $false
-$GroupBox6.Text = [System.String]'Authentication'
-$GroupBox6.UseCompatibleTextRendering = $true
-#
-#Label4
-#
-$Label4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]57))
-$Label4.Name = [System.String]'Label4'
-$Label4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
-$Label4.TabIndex = [System.Int32]8
-$Label4.Text = [System.String]'Username:'
-$Label4.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label4.UseCompatibleTextRendering = $true
-#
-#Label3
-#
-$Label3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]101))
-$Label3.Name = [System.String]'Label3'
-$Label3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]20))
-$Label3.TabIndex = [System.Int32]7
-$Label3.Text = [System.String]'Password:'
-$Label3.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label3.UseCompatibleTextRendering = $true
-#
-#Label2
-#
-$Label2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]148))
-$Label2.Name = [System.String]'Label2'
-$Label2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
-$Label2.TabIndex = [System.Int32]6
-$Label2.Text = [System.String]'Token:'
-$Label2.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label2.UseCompatibleTextRendering = $true
-#
-#2FAAuth
-#
-$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]168))
-$2FAAuth.Name = [System.String]'2FAAuth'
-$2FAAuth.PasswordChar = [System.Char]'*'
-$2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
-$2FAAuth.TabIndex = [System.Int32]3
-#
-#AuthPass
-#
-$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]124))
-$AuthPass.Name = [System.String]'AuthPass'
-$AuthPass.PasswordChar = [System.Char]'*'
-$AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
-$AuthPass.TabIndex = [System.Int32]2
-#
-#AuthCancel
-#
-$AuthCancel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]117,[System.Int32]195))
-$AuthCancel.Name = [System.String]'AuthCancel'
-$AuthCancel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$AuthCancel.TabIndex = [System.Int32]5
-$AuthCancel.Text = [System.String]'Cancel'
-$AuthCancel.UseCompatibleTextRendering = $true
-$AuthCancel.UseVisualStyleBackColor = $true
-$AuthCancel.add_Click($AuthCancel_Click)
-#
-#AuthSubmit
-#
-$AuthSubmit.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]36,[System.Int32]195))
-$AuthSubmit.Name = [System.String]'AuthSubmit'
-$AuthSubmit.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$AuthSubmit.TabIndex = [System.Int32]4
-$AuthSubmit.Text = [System.String]'Submit'
-$AuthSubmit.UseCompatibleTextRendering = $true
-$AuthSubmit.UseVisualStyleBackColor = $true
-$AuthSubmit.add_Click($AuthSubmit_Click)
-#
-#AuthUser
-#
-$AuthUser.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]77))
-$AuthUser.Name = [System.String]'AuthUser'
-$AuthUser.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
-$AuthUser.TabIndex = [System.Int32]1
-#
-#Label1
-#
-$Label1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]22))
-$Label1.Name = [System.String]'Label1'
-$Label1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]211,[System.Int32]23))
-$Label1.TabIndex = [System.Int32]0
-$Label1.Text = [System.String]'Enter Your Automate Credentials'
-$Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
-$Label1.UseCompatibleTextRendering = $true
-#
 #DebugConsole
 #
 $DebugConsole.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]315,[System.Int32]450))
@@ -1078,71 +1143,6 @@ $Logout.UseCompatibleTextRendering = $true
 $Logout.UseVisualStyleBackColor = $true
 $Logout.add_Click($Logout_Click)
 #
-#AuthPanel
-#
-$AuthPanel.Controls.Add($MinimumRequirements)
-$AuthPanel.Controls.Add($AuthDebugButton)
-$AuthPanel.Controls.Add($GroupBox6)
-$AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
-$AuthPanel.Name = [System.String]'AuthPanel'
-$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]429))
-$AuthPanel.TabIndex = [System.Int32]2
-#
-#MinimumRequirements
-#
-$MinimumRequirements.Controls.Add($Powershell4)
-$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]262))
-$MinimumRequirements.Name = [System.String]'MinimumRequirements'
-$MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]109))
-$MinimumRequirements.TabIndex = [System.Int32]3
-$MinimumRequirements.TabStop = $false
-$MinimumRequirements.Text = [System.String]'Minimum Requirements'
-$MinimumRequirements.UseCompatibleTextRendering = $true
-#
-#Powershell4
-#
-$Powershell4.Controls.Add($PoSHVersion)
-$Powershell4.Controls.Add($InstallPoSH4)
-$Powershell4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]7,[System.Int32]20))
-$Powershell4.Name = [System.String]'Powershell4'
-$Powershell4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]210,[System.Int32]78))
-$Powershell4.TabIndex = [System.Int32]1
-$Powershell4.TabStop = $false
-$Powershell4.Text = [System.String]'Powershell 3.0'
-$Powershell4.UseCompatibleTextRendering = $true
-#
-#PoSHVersion
-#
-$PoSHVersion.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]9,[System.Int32]24))
-$PoSHVersion.Name = [System.String]'PoSHVersion'
-$PoSHVersion.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]24))
-$PoSHVersion.TabIndex = [System.Int32]1
-$PoSHVersion.Text = [System.String]'PoSH Version'
-$PoSHVersion.UseCompatibleTextRendering = $true
-#
-#InstallPoSH4
-#
-$InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]29,[System.Int32]49))
-$InstallPoSH4.Name = [System.String]'InstallPoSH4'
-$InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]156,[System.Int32]23))
-$InstallPoSH4.TabIndex = [System.Int32]0
-$InstallPoSH4.Text = [System.String]'Update Powershell'
-$InstallPoSH4.UseCompatibleTextRendering = $true
-$InstallPoSH4.UseVisualStyleBackColor = $true
-$InstallPoSH4.add_Click($InstallPoSH4_Click)
-#
-#AuthDebugButton
-#
-$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]101,[System.Int32]377))
-$AuthDebugButton.Name = [System.String]'AuthDebugButton'
-$AuthDebugButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
-$AuthDebugButton.TabIndex = [System.Int32]2
-$AuthDebugButton.Text = [System.String]'Debug'
-$AuthDebugButton.UseCompatibleTextRendering = $true
-$AuthDebugButton.UseVisualStyleBackColor = $true
-$AuthDebugButton.Visible = $false
-$AuthDebugButton.add_Click($AuthDebugButton_Click)
-#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
@@ -1170,6 +1170,11 @@ $GroupBox3.ResumeLayout($false)
 ([System.ComponentModel.ISupportInitialize]$PictureBox1).EndInit()
 $TabControl1.ResumeLayout($false)
 $TabPage1.ResumeLayout($false)
+$AuthPanel.ResumeLayout($false)
+$MinimumRequirements.ResumeLayout($false)
+$Powershell4.ResumeLayout($false)
+$GroupBox6.ResumeLayout($false)
+$GroupBox6.PerformLayout()
 $TabPage2.ResumeLayout($false)
 $TabPage3.ResumeLayout($false)
 $TabPage4.ResumeLayout($false)
@@ -1186,11 +1191,6 @@ $GroupBox7.PerformLayout()
 $TabPage7.ResumeLayout($false)
 $ComputerInfo.ResumeLayout($false)
 $ComputerInfo.PerformLayout()
-$GroupBox6.ResumeLayout($false)
-$GroupBox6.PerformLayout()
-$AuthPanel.ResumeLayout($false)
-$MinimumRequirements.ResumeLayout($false)
-$Powershell4.ResumeLayout($false)
 $TechInstaller.ResumeLayout($false)
 $TechInstaller.PerformLayout()
 Add-Member -InputObject $TechInstaller -Name base -Value $base -MemberType NoteProperty
@@ -1199,14 +1199,14 @@ Add-Member -InputObject $TechInstaller -Name 365Checkbox -Value $365Checkbox -Me
 Add-Member -InputObject $TechInstaller -Name 365ComboBox -Value $365ComboBox -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SoftwareList -Value $SoftwareList -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox2 -Value $GroupBox2 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name dotnet35 -Value $dotnet35 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name UnInstall_Automate -Value $UnInstall_Automate -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ReInstall_Automate -Value $ReInstall_Automate -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Install_Automate -Value $Install_Automate -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name dotnet35 -Value $dotnet35 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox3 -Value $GroupBox3 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name RenameDomain -Value $RenameDomain -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SystemRestorePoint -Value $SystemRestorePoint -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SystemInfo -Value $SystemInfo -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name RenameDomain -Value $RenameDomain -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Win10Upgrade -Value $Win10Upgrade -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Powershell5 -Value $Powershell5 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DellUpdate -Value $DellUpdate -MemberType NoteProperty
