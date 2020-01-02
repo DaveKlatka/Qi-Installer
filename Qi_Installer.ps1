@@ -810,6 +810,7 @@ Function Invoke-Automate_UnInstall {
     Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
 
     if (!(Test-Path $env:windir\LTSVC)) {
+        Update-LogBox "Automate Removed" -Color 'Green'
         $ReInstall_Automate.Enabled = $false
         $UnInstall_Automate.Enabled = $false
         $install_Automate.Enabled = $true
