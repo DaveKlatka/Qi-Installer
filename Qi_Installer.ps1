@@ -314,6 +314,9 @@ function Update-ProgressLogBox {
                     $Wait = $true
                     Update-LogBox $Text.TrimEnd()
                 }
+                else {
+                    Update-LogBox '.' -NoNewLine
+                }
             }
             else {
                 $Wait = $false
@@ -348,6 +351,9 @@ function Update-ProgressLogBox {
                 if (!($wait)) {
                     $Wait = $true
                     Update-LogBox $Text.TrimEnd()
+                }
+                else {
+                    Update-LogBox '.' -NoNewLine
                 }
             }
             else {
@@ -741,7 +747,7 @@ Function Invoke-Automate_Install {
                     $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
                 } 
                 else {
-                    $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -PassThru)
+                    start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -wait
                 }
             }
             else {
@@ -749,7 +755,7 @@ Function Invoke-Automate_Install {
                     $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
                 } 
                 else {
-                    $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
+                    start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -wait
                 }
             }
         }
@@ -758,7 +764,7 @@ Function Invoke-Automate_Install {
                 $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
             } 
             else {
-                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
+                start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -wait
             }
         }
     }
@@ -770,7 +776,7 @@ Function Invoke-Automate_Install {
     
     start-sleep -Seconds 1
     Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
-
+    Update-LogBox "Agent ID: $((New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression;) $((get-ltserviceinfo).id))" -color 'Green'
     if (Test-Path $env:windir\LTSVC) {
         $ReInstall_Automate.Enabled = $true
         $UnInstall_Automate.Enabled = $true
