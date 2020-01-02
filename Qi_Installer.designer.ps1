@@ -942,7 +942,7 @@ $GroupBox6.Controls.Add($AuthCancel)
 $GroupBox6.Controls.Add($AuthSubmit)
 $GroupBox6.Controls.Add($AuthUser)
 $GroupBox6.Controls.Add($Label1)
-$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]40,[System.Int32]33))
+$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]23))
 $GroupBox6.Name = [System.String]'GroupBox6'
 $GroupBox6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]233))
 $GroupBox6.TabIndex = [System.Int32]1
@@ -1085,13 +1085,13 @@ $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
 $AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
 $AuthPanel.Name = [System.String]'AuthPanel'
-$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]429))
+$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]429))
 $AuthPanel.TabIndex = [System.Int32]2
 #
 #MinimumRequirements
 #
 $MinimumRequirements.Controls.Add($Powershell4)
-$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]40,[System.Int32]272))
+$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]262))
 $MinimumRequirements.Name = [System.String]'MinimumRequirements'
 $MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]109))
 $MinimumRequirements.TabIndex = [System.Int32]3
@@ -1108,7 +1108,7 @@ $Powershell4.Name = [System.String]'Powershell4'
 $Powershell4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]210,[System.Int32]78))
 $Powershell4.TabIndex = [System.Int32]1
 $Powershell4.TabStop = $false
-$Powershell4.Text = [System.String]'Powershell 4.0'
+$Powershell4.Text = [System.String]'Powershell 3.0'
 $Powershell4.UseCompatibleTextRendering = $true
 #
 #PoSHVersion
@@ -1122,9 +1122,9 @@ $PoSHVersion.UseCompatibleTextRendering = $true
 #
 #InstallPoSH4
 #
-$InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]23,[System.Int32]51))
+$InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]29,[System.Int32]49))
 $InstallPoSH4.Name = [System.String]'InstallPoSH4'
-$InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]144,[System.Int32]23))
+$InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]156,[System.Int32]23))
 $InstallPoSH4.TabIndex = [System.Int32]0
 $InstallPoSH4.Text = [System.String]'Update Powershell'
 $InstallPoSH4.UseCompatibleTextRendering = $true
@@ -1133,7 +1133,7 @@ $InstallPoSH4.add_Click($InstallPoSH4_Click)
 #
 #AuthDebugButton
 #
-$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]107,[System.Int32]387))
+$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]101,[System.Int32]377))
 $AuthDebugButton.Name = [System.String]'AuthDebugButton'
 $AuthDebugButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
 $AuthDebugButton.TabIndex = [System.Int32]2

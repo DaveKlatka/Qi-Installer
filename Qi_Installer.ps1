@@ -776,7 +776,7 @@ Function Invoke-Automate_Install {
     
     start-sleep -Seconds 1
     Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
-    Update-LogBox "Agent ID: $((New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression;) $((get-ltserviceinfo).id))" -color 'Green'
+    Update-LogBox "Agent ID: $((New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression;) $((get-ltserviceinfo).id)" -color 'Green'
     if (Test-Path $env:windir\LTSVC) {
         $ReInstall_Automate.Enabled = $true
         $UnInstall_Automate.Enabled = $true
