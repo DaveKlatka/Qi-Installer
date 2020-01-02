@@ -2313,7 +2313,7 @@ function Start-QiInstaller {
 
     #Minimum Requirements
     $InstallPoSH4_Click = {
-        Install-Software 'powershell4'
+        $Powershell5_Click.performclick()
     }
 
     #Authenticator
