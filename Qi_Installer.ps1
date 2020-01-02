@@ -188,7 +188,7 @@ function Install-Software {
             Update-ProgressBar -RunLog $RunLog -ProcessID $Process.ID -Tracker
         }
         else {
-            Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y"
+            Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -wait
         }
     }
 }
