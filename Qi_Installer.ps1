@@ -1280,6 +1280,7 @@ function Test-Powershell_Compatibility {
     ## OS 7 is missing Service Pack 1
     if ($BuildVersion.Major -eq '6' -and $BuildVersion.Build -eq '7600') {
         Update-LogBox "WMF 5.1 is not supported on BuildVersion: $($BuildVersion.ToString())" -color "Yellow"
+        Update-LogBox "Please install Service Pack 1 to become compatible." -Color 'Yellow'
         $Script:ReturnValue = $false
     }
 
