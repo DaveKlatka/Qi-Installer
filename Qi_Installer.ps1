@@ -1278,7 +1278,7 @@ function Test-Powershell_Compatibility {
     if ($wmf3) {
         Update-LogBox "WMF 5.1 is not supported when WMF 3.0 is installed." -color "Yellow"
         Add-Type -AssemblyName PresentationFramework
-        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('Powershell 3 detected. PS 4 Must be installed prior to 5 Would you like to install Powershell 4 now?', 'WMF 4.0', 'YesNo', 'Warning')
+        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('Powershell 3 detected. PS 4 Must be installed prior to 5. Would you like to install Powershell 4 now?', 'WMF 4.0', 'YesNo', 'Warning')
 
         switch ($wmf3msgBoxInput) {
             'Yes' {
@@ -1299,11 +1299,35 @@ function Test-Powershell_Compatibility {
 
     if ($evRelease -or $evInstalled) {
         Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
-        $Script:ReturnValue = $false
+
+        Add-Type -AssemblyName PresentationFramework
+        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('.Net 4.5 required. Would you like to install .Net Framework 4.5?', '.Net 4.5', 'YesNo', 'Warning')
+        switch ($wmf3msgBoxInput) {
+            'Yes' {
+                Install-Software -Application "dotnet4.5"
+                Request-Reboot
+            }
+            'No' {
+                Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
+                $Script:ReturnValue = $false
+            }
+        }
     }
     elseif (($installed -ne 1) -or ($release -lt 378389)) {
         Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
-        $Script:ReturnValue = $false
+
+        Add-Type -AssemblyName PresentationFramework
+        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('.Net 4.5 required. Would you like to install .Net Framework 4.5?', '.Net 4.5', 'YesNo', 'Warning')
+        switch ($wmf3msgBoxInput) {
+            'Yes' {
+                Install-Software -Application "dotnet4.5"
+                Request-Reboot
+            }
+            'No' {
+                Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
+                $Script:ReturnValue = $false
+            }
+        }
     }
 }
 
