@@ -944,7 +944,7 @@ $GroupBox6.Controls.Add($AuthSubmit)
 $GroupBox6.Controls.Add($AuthError)
 $GroupBox6.Controls.Add($AuthUser)
 $GroupBox6.Controls.Add($Label1)
-$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]297,[System.Int32]110))
+$GroupBox6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]40,[System.Int32]33))
 $GroupBox6.Name = [System.String]'GroupBox6'
 $GroupBox6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]255))
 $GroupBox6.TabIndex = [System.Int32]1
@@ -1099,15 +1099,15 @@ $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
 $AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]4))
 $AuthPanel.Name = [System.String]'AuthPanel'
-$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]810,[System.Int32]477))
+$AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]305,[System.Int32]477))
 $AuthPanel.TabIndex = [System.Int32]2
 #
 #MinimumRequirements
 #
 $MinimumRequirements.Controls.Add($Powershell4)
-$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]520,[System.Int32]110))
+$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]40,[System.Int32]294))
 $MinimumRequirements.Name = [System.String]'MinimumRequirements'
-$MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]255))
+$MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]109))
 $MinimumRequirements.TabIndex = [System.Int32]3
 $MinimumRequirements.TabStop = $false
 $MinimumRequirements.Text = [System.String]'Minimum Requirements'
@@ -1147,7 +1147,7 @@ $InstallPoSH4.add_Click($InstallPoSH4_Click)
 #
 #AuthDebugButton
 #
-$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]370,[System.Int32]371))
+$AuthDebugButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]119,[System.Int32]442))
 $AuthDebugButton.Name = [System.String]'AuthDebugButton'
 $AuthDebugButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
 $AuthDebugButton.TabIndex = [System.Int32]2

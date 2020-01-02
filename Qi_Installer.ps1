@@ -2319,9 +2319,7 @@ function Start-QiInstaller {
 
     #Minimum Requirements
     $InstallPoSH4_Click = {
-        $AuthPanel.Visible = $false
         Install-Software 'powershell4'
-        $AuthPanel.Visible = $true
     }
 
     #Authenticator
