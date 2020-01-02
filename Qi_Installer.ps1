@@ -172,8 +172,7 @@ function Invoke-CleanUp {
 
 function Install-Software {
     Param (
-        [string] $Application,
-        [switch] $NoLogBox
+        [string] $Application
     )
     if ($Application -ne "") {
         if (!(Test-Path $env:ProgramData\chocolatey\bin\choco.exe -ErrorAction SilentlyContinue)) {
@@ -2312,11 +2311,6 @@ function Start-QiInstaller {
         $DebugCommand.Text = ''
     }
 
-    #Minimum Requirements
-    $InstallPoSH4_Click = {
-        Install-Software 'powershell4'
-    }
-
     #Authenticator
     $AuthSubmit_Click = {
         if ($AuthUser.Text -eq 'Debug' -and $2FAAuth.Text -eq '136590') {
@@ -2356,12 +2350,12 @@ function Start-QiInstaller {
                 $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
         
                 if (!($null -eq $Location.ID)) {
+                    Update-LogBox 'Credentials Verified' -Color 'Green'
                     $AuthPanel.Visible = $false
                 }
             }
             catch {
-                $AuthError.Text = 'Failed to login with supplied credentials.'
-                $AuthError.Visible = $true
+                Update-LogBox 'Failed to login' -color 'Red'
             }
         }
     }
@@ -2657,6 +2651,10 @@ function Start-QiInstaller {
     $PoSHVersion.Text = "Current Powershell Version: " + (Get-host).Version.Major
     if ((get-host).Version.Major -gt 2) {
         $MinimumRequirements.Visible = $false
+    }
+    #Minimum Requirements
+    $InstallPoSH4_Click = {
+        Install-Software 'powershell4'
     }
 
     #USMT Variables
