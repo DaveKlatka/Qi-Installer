@@ -1299,37 +1299,38 @@ function Test-Powershell_Compatibility {
     }
 
     # Check if .Net 4.5 or above is installed
-
-    $release = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' -Name Release -ErrorAction SilentlyContinue -ErrorVariable evRelease).release
-    $installed = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' -Name Install -ErrorAction SilentlyContinue -ErrorVariable evInstalled).install
-
-    if ($evRelease -or $evInstalled) {
-        Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
-
-        Add-Type -AssemblyName PresentationFramework
-        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('.Net 4.5 required. Would you like to install .Net Framework 4.5?', '.Net 4.5', 'YesNo', 'Warning')
-        switch ($wmf3msgBoxInput) {
-            'Yes' {
-                Install-Software -Application "dotnet4.5"
-            }
-            'No' {
-                Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
-                $Script:ReturnValue = $false
+    if ($Script:ReturnValue) {
+        $release = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' -Name Release -ErrorAction SilentlyContinue -ErrorVariable evRelease).release
+        $installed = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' -Name Install -ErrorAction SilentlyContinue -ErrorVariable evInstalled).install
+    
+        if ($evRelease -or $evInstalled) {
+            Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
+    
+            Add-Type -AssemblyName PresentationFramework
+            $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('.Net 4.5 required. Would you like to install .Net Framework 4.5?', '.Net 4.5', 'YesNo', 'Warning')
+            switch ($wmf3msgBoxInput) {
+                'Yes' {
+                    Install-Software -Application "dotnet4.5"
+                }
+                'No' {
+                    Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
+                    $Script:ReturnValue = $false
+                }
             }
         }
-    }
-    elseif (($installed -ne 1) -or ($release -lt 378389)) {
-        Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
-
-        Add-Type -AssemblyName PresentationFramework
-        $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('.Net 4.5 required. Would you like to install .Net Framework 4.5?', '.Net 4.5', 'YesNo', 'Warning')
-        switch ($wmf3msgBoxInput) {
-            'Yes' {
-                Install-Software -Application "dotnet4.5"
-            }
-            'No' {
-                Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
-                $Script:ReturnValue = $false
+        elseif (($installed -ne 1) -or ($release -lt 378389)) {
+            Update-LogBox "WMF 5.1 requires .Net 4.5" -color 'Yellow'
+    
+            Add-Type -AssemblyName PresentationFramework
+            $wmf3msgBoxInput = [System.Windows.MessageBox]::Show('.Net 4.5 required. Would you like to install .Net Framework 4.5?', '.Net 4.5', 'YesNo', 'Warning')
+            switch ($wmf3msgBoxInput) {
+                'Yes' {
+                    Install-Software -Application "dotnet4.5"
+                }
+                'No' {
+                    Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
+                    $Script:ReturnValue = $false
+                }
             }
         }
     }
