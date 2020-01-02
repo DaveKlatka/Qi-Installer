@@ -1311,7 +1311,6 @@ function Test-Powershell_Compatibility {
         switch ($wmf3msgBoxInput) {
             'Yes' {
                 Install-Software -Application "dotnet4.5"
-                Request-Reboot
             }
             'No' {
                 Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
@@ -1327,7 +1326,6 @@ function Test-Powershell_Compatibility {
         switch ($wmf3msgBoxInput) {
             'Yes' {
                 Install-Software -Application "dotnet4.5"
-                Request-Reboot
             }
             'No' {
                 Update-LogBox ".Net 4.5 Install Canceled" -color "Yellow"
@@ -2280,6 +2278,7 @@ function Invoke-PowershellUpgrade {
     if ($ReturnValue) {
         if (((Get-WmiObject win32_OperatingSystem).Caption) -match 'Windows 7') {
             Install-Software -Application 'Powershell'
+            $msgBoxInput = [System.Windows.MessageBox]::Show("A reboot is required to finish the install. Would you like to reboot now?", 'Powershell Upgrade', 'YesNo', 'Warning')
             switch ($msgBoxInput) {
                 'Yes' {
                     shutdown.exe -r -t 30
