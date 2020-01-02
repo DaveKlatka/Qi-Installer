@@ -182,7 +182,13 @@ function Install-Software {
             Install-Chocolatey
         }
         $RunLog = "$ScriptPath\logs\$Application Install.txt"
-        $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+        if ((Get-Host).Version.Major -gt 3) {
+            $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+        }
+        else {
+            $Process = (Start-Process -filepath C:\ProgramData\chocolatey\choco.exe -argumentlist "Upgrade $Application -ignore-checksums -y" -RedirectStandardOutput $RunLog -PassThru)
+        }
+        
         start-sleep 1
         Update-ProgressBar -RunLog $RunLog -ProcessID $Process.ID -Tracker
     }
