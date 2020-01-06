@@ -1121,6 +1121,9 @@ Function Remove-DellCommand {
 
 function Invoke-DellDriverUpdate {
     $Log = "$ScriptPath\logs\DellCommandUpdate.log"
+    if (Test-Path -path $Log) {
+        Remove-Item -Path $Log
+    }
     $Arguments = "/applyUpdates -outputlog=" + [char]34 + $Log + [char]34
     $Process = (start-process -FilePath $Executable -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
     start-sleep -Seconds 1
