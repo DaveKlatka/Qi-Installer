@@ -1119,12 +1119,12 @@ Function Remove-DellCommand {
     }
 }
 
-function Invoke-DellDriverUpdate {  
-    $Log = "$ScriptPath\logs\DellCommand"
-    $Arguments = "/log" + [char]32 + [char]34 + $Log + [char]34
+function Invoke-DellDriverUpdate {
+    $Log = "$ScriptPath\logs\DellCommandUpdate.log"
+    $Arguments = "/scan -outputlog=" + [char]34 + $Log + [char]34
     $Process = (start-process -FilePath $Executable -ArgumentList $Arguments -WindowStyle Hidden -PassThru)
     start-sleep -Seconds 1
-    Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
+    Update-ProgressBar -Runlog $Log -ProcessID $Process.ID
 } 
 
 function Install-DotNet {
@@ -2505,14 +2505,18 @@ function Start-QiInstaller {
     #Dell Command Update
     $DellUpdate_Click = {
         if ((get-wmiobject win32_computersystem).Manufacturer -match 'Dell') {
-            $RunLog = "$ScriptPath\logs\DellCommand\ActivityLog.xml"
+            #$RunLog = "$ScriptPath\logs\DellCommand\ActivityLog.xml"
             Set-DellCommandexe
             if ($Executable.length -le 0) {
-                Update-LogBox "Command Update 2.4 is not Installed" -Color "Red"
+                Update-LogBox "Command Update is not Installed" -Color "Red"
                 Install-DellCommand
                 Invoke-DellDriverUpdate
             }
             else {
+                ((Get-ItemProperty $Executable).VersionInfo.productVersion) -match '(3\.1)\.'
+                if ($matches[1] -lt 3.1) {
+                    Install-DellCommand
+                }
                 Invoke-DellDriverUpdate
             }
             if (!((([xml](get-content $RunLog)).logentries.logentry.message | Where-Object { $_.message -like "*Install*" }).data | Where-Object { $_.type -eq "install" })) {
