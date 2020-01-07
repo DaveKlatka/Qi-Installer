@@ -1367,7 +1367,6 @@ Function Request-Reboot {
 
 function Invoke-Win10_Upgrade {
     if (((Get-Host).version).major -gt 2) {
-        $version = "1909"
         if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
             $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
@@ -2319,6 +2318,7 @@ function Start-QiInstaller {
     )
 
     $TechInstaller_Load = {
+        $Script:version = "1909"
     }
     $Close_Click = {
         $TechInstaller.Close()
@@ -2432,6 +2432,7 @@ function Start-QiInstaller {
 
     $PackageDownload_Click = {
         #Win10_x64
+        https://qi-host.nyc3.digitaloceanspaces.com/AutoMate/Microsoft/Windows/1909_Upgrade/Win10_1909_x64.zip.001
         $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
         $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
         $zip = "$($Destination).001"
