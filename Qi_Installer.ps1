@@ -2429,17 +2429,82 @@ function Start-QiInstaller {
     $AuthCancel_Click = {
         $TechInstaller.Close()
     }
-    
-    $AlphaButton_Click = {
-        $AlphaButton.Visible = $false
+
+    $PackageDownload_Click = {
+        #Win10_x64
+        $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
+        $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
+        $zip = "$($Destination).001"
+        $NumberOfFiles = 51
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $software
+        Invoke-Extract -File $Zip -ExtractTo (Split-Path -path $Destination)
+        Start-Sleep -seconds 5
+        Invoke-CleanUp -File $Destination
+
+
+        #Win10_x86
+        $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
+        $Destination = "$ScriptPath\Win10_Upgrade_$($Version)\$($Version)_x86.zip"
+        $zip = "$($Destination).001"
+        $NumberOfFiles = 35
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $software
+        Invoke-Extract -File $Zip -ExtractTo (Split-Path -path $Destination)
+        Start-Sleep -seconds 5
+        Invoke-CleanUp -File $Destination
+
+
+        #Office 365 Business x64
+        $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x64/Office_365_Business_x64.zip"
+        $Destination = "$ScriptPath\O365\Business x64\Office_365_Business_x64.zip"
+        $NumberOfFiles = 24
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software "Office 365 Business x64"
+        Invoke-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+        Invoke-CleanUp -File $Destination
+
+
+        #Office 365 Business x86
+        $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x86/Office_365_Business_x86.zip"
+        $Destination = "$ScriptPath\O365\Business x86\Office_365_Business_x86.zip"
+        $NumberOfFiles = 18
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software "Office 365 Business x86"
+        Invoke-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+        Invoke-CleanUp -File $Destination
+
+
+        #Office 365 ProPlus x64
+        $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x64/Office_365_ProPlus_x64.zip"
+        $Destination = "$ScriptPath\O365\ProPlus x64\Office_365_ProPlus_x64.zip"
+        $NumberOfFiles = 23
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software "Office 365 ProPlus x64"
+        Invoke-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+        Invoke-CleanUp -File $Destination
+
+        
+        #Office 365 ProPlus x86
+        $Source = "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x86/Office_365_ProPlus_x86.zip"
+        $Destination = "$ScriptPath\O365\ProPlus x86\Office_365_ProPlus_x86.zip"
+        $NumberOfFiles = 18
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software "Office 365 ProPlus x86"
+        Invoke-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+        Invoke-CleanUp -File $Destination
+
+
+        #Office 2019 Standard x64
+        $Source = "$DownloadHost/AutoMate/Microsoft/Office/2019_Standard/Office_2019_Standard.zip"
+        $Destination = "$ScriptPath\Office_2019\Standard\Office_2019_Standard.zip"
+        $NumberOfFiles = 20
+
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software "Office 2019 Standard x64"
+        Invoke-Extract -File "$($Destination).001" -ExtractTo "$env:systemDrive\office365"
+        Invoke-CleanUp -File $Destination
     }
-    $Beta3_Click = {
-        $Beta3.Visible = $false
-    }
-    $BetaButton2_Click = {
-        $BetaButton2.Visible = $false
-    }
-    
+
     #Run Automate Buttons
     $ReInstall_Automate_Click = {
         Invoke-Automate_ReInstall  

@@ -42,7 +42,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TabPage]$TabPage4 = $null
 [System.Windows.Forms.TabControl]$TabControl2 = $null
 [System.Windows.Forms.TabPage]$TabPage5 = $null
-[System.Windows.Forms.Button]$AlphaButton = $null
 [System.Windows.Forms.Button]$Export = $null
 [System.Windows.Forms.GroupBox]$SaveDestination = $null
 [System.Windows.Forms.Button]$ExportLocationButton = $null
@@ -55,13 +54,11 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.CheckedListBox]$USMTCheckList = $null
 [System.Windows.Forms.Button]$Profiles = $null
 [System.Windows.Forms.TabPage]$TabPage6 = $null
-[System.Windows.Forms.Button]$BetaButton2 = $null
 [System.Windows.Forms.Button]$ImportButton = $null
 [System.Windows.Forms.GroupBox]$GroupBox7 = $null
 [System.Windows.Forms.Button]$ImportSelect = $null
 [System.Windows.Forms.TextBox]$ImportLocation = $null
 [System.Windows.Forms.TabPage]$TabPage7 = $null
-[System.Windows.Forms.Button]$Beta3 = $null
 [System.Windows.Forms.Button]$RunNetMig = $null
 [System.Windows.Forms.GroupBox]$ComputerInfo = $null
 [System.Windows.Forms.CheckBox]$UNCVerified = $null
@@ -82,6 +79,7 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$DebugCommand = $null
 [System.Windows.Forms.Button]$DebugCommandButton = $null
 [System.Windows.Forms.Button]$Logout = $null
+[System.Windows.Forms.Button]$PackageDownload = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -89,14 +87,14 @@ $365Checkbox = (New-Object -TypeName System.Windows.Forms.CheckBox)
 $365ComboBox = (New-Object -TypeName System.Windows.Forms.ComboBox)
 $SoftwareList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $GroupBox2 = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$dotnet35 = (New-Object -TypeName System.Windows.Forms.Button)
 $UnInstall_Automate = (New-Object -TypeName System.Windows.Forms.Button)
 $ReInstall_Automate = (New-Object -TypeName System.Windows.Forms.Button)
 $Install_Automate = (New-Object -TypeName System.Windows.Forms.Button)
+$dotnet35 = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox3 = (New-Object -TypeName System.Windows.Forms.GroupBox)
+$RenameDomain = (New-Object -TypeName System.Windows.Forms.Button)
 $SystemRestorePoint = (New-Object -TypeName System.Windows.Forms.Button)
 $SystemInfo = (New-Object -TypeName System.Windows.Forms.DataGridView)
-$RenameDomain = (New-Object -TypeName System.Windows.Forms.Button)
 $Win10Upgrade = (New-Object -TypeName System.Windows.Forms.Button)
 $Powershell5 = (New-Object -TypeName System.Windows.Forms.Button)
 $DellUpdate = (New-Object -TypeName System.Windows.Forms.Button)
@@ -127,7 +125,6 @@ $TabPage3 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabPage4 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $TabControl2 = (New-Object -TypeName System.Windows.Forms.TabControl)
 $TabPage5 = (New-Object -TypeName System.Windows.Forms.TabPage)
-$AlphaButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Export = (New-Object -TypeName System.Windows.Forms.Button)
 $SaveDestination = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $ExportLocationButton = (New-Object -TypeName System.Windows.Forms.Button)
@@ -140,13 +137,11 @@ $GroupBox4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $USMTCheckList = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $Profiles = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage6 = (New-Object -TypeName System.Windows.Forms.TabPage)
-$BetaButton2 = (New-Object -TypeName System.Windows.Forms.Button)
 $ImportButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox7 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $ImportSelect = (New-Object -TypeName System.Windows.Forms.Button)
 $ImportLocation = (New-Object -TypeName System.Windows.Forms.TextBox)
 $TabPage7 = (New-Object -TypeName System.Windows.Forms.TabPage)
-$Beta3 = (New-Object -TypeName System.Windows.Forms.Button)
 $RunNetMig = (New-Object -TypeName System.Windows.Forms.Button)
 $ComputerInfo = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $UNCVerified = (New-Object -TypeName System.Windows.Forms.CheckBox)
@@ -167,6 +162,7 @@ $DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
 $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
+$PackageDownload = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -250,17 +246,6 @@ $GroupBox2.TabIndex = [System.Int32]3
 $GroupBox2.TabStop = $false
 $GroupBox2.UseCompatibleTextRendering = $true
 #
-#dotnet35
-#
-$dotnet35.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]20))
-$dotnet35.Name = [System.String]'dotnet35'
-$dotnet35.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
-$dotnet35.TabIndex = [System.Int32]11
-$dotnet35.Text = [System.String]'Install .NET 3.5'
-$dotnet35.UseCompatibleTextRendering = $true
-$dotnet35.UseVisualStyleBackColor = $true
-$dotnet35.add_Click($dotnet35_Click)
-#
 #UnInstall_Automate
 #
 $UnInstall_Automate.Enabled = $false
@@ -296,6 +281,17 @@ $Install_Automate.UseCompatibleTextRendering = $true
 $Install_Automate.UseVisualStyleBackColor = $true
 $Install_Automate.add_Click($Install_Automate_Click)
 #
+#dotnet35
+#
+$dotnet35.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]20))
+$dotnet35.Name = [System.String]'dotnet35'
+$dotnet35.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
+$dotnet35.TabIndex = [System.Int32]11
+$dotnet35.Text = [System.String]'Install .NET 3.5'
+$dotnet35.UseCompatibleTextRendering = $true
+$dotnet35.UseVisualStyleBackColor = $true
+$dotnet35.add_Click($dotnet35_Click)
+#
 #GroupBox3
 #
 $GroupBox3.Controls.Add($RenameDomain)
@@ -308,11 +304,23 @@ $GroupBox3.Controls.Add($DellUpdate)
 $GroupBox3.Controls.Add($PowerPolicy)
 $GroupBox3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]3,[System.Int32]3))
 $GroupBox3.Name = [System.String]'GroupBox3'
-$GroupBox3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]287,[System.Int32]425))
+$GroupBox3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]287,[System.Int32]405))
 $GroupBox3.TabIndex = [System.Int32]4
 $GroupBox3.TabStop = $false
 $GroupBox3.Text = [System.String]'System'
 $GroupBox3.UseCompatibleTextRendering = $true
+#
+#RenameDomain
+#
+$RenameDomain.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]8.25,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
+$RenameDomain.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]102))
+$RenameDomain.Name = [System.String]'RenameDomain'
+$RenameDomain.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
+$RenameDomain.TabIndex = [System.Int32]18
+$RenameDomain.Text = [System.String]'Rename Computer/Domain'
+$RenameDomain.UseCompatibleTextRendering = $true
+$RenameDomain.UseVisualStyleBackColor = $true
+$RenameDomain.add_Click($RenameDomain_Click)
 #
 #SystemRestorePoint
 #
@@ -337,7 +345,7 @@ $SystemInfo.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $SystemInfo.ColumnHeadersHeightSizeMode = [System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode]::AutoSize
 $SystemInfo.ColumnHeadersVisible = $false
 $SystemInfo.EditMode = [System.Windows.Forms.DataGridViewEditMode]::EditProgrammatically
-$SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]215))
+$SystemInfo.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]195))
 $SystemInfo.MaximumSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.MinimumSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.MultiSelect = $false
@@ -347,18 +355,6 @@ $SystemInfo.RowHeadersVisible = $false
 $SystemInfo.RowTemplate.Height = [System.Int32]20
 $SystemInfo.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]284,[System.Int32]210))
 $SystemInfo.TabIndex = [System.Int32]5
-#
-#RenameDomain
-#
-$RenameDomain.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]8.25,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$RenameDomain.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]151,[System.Int32]102))
-$RenameDomain.Name = [System.String]'RenameDomain'
-$RenameDomain.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]130,[System.Int32]35))
-$RenameDomain.TabIndex = [System.Int32]18
-$RenameDomain.Text = [System.String]'Rename Computer/Domain'
-$RenameDomain.UseCompatibleTextRendering = $true
-$RenameDomain.UseVisualStyleBackColor = $true
-$RenameDomain.add_Click($RenameDomain_Click)
 #
 #Win10Upgrade
 #
@@ -436,7 +432,7 @@ $TabControl1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList
 $TabControl1.Multiline = $true
 $TabControl1.Name = [System.String]'TabControl1'
 $TabControl1.SelectedIndex = [System.Int32]0
-$TabControl1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]301,[System.Int32]461))
+$TabControl1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]301,[System.Int32]437))
 $TabControl1.TabIndex = [System.Int32]20
 #
 #TabPage1
@@ -447,7 +443,7 @@ $TabPage1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @(
 $TabPage1.Name = [System.String]'TabPage1'
 $TabPage1.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
 $TabPage1.RightToLeft = [System.Windows.Forms.RightToLeft]::No
-$TabPage1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
+$TabPage1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]411))
 $TabPage1.TabIndex = [System.Int32]0
 $TabPage1.Text = [System.String]'Automate'
 $TabPage1.UseVisualStyleBackColor = $true
@@ -628,7 +624,7 @@ $TabPage2.Controls.Add($GroupBox1)
 $TabPage2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage2.Name = [System.String]'TabPage2'
 $TabPage2.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
-$TabPage2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
+$TabPage2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]411))
 $TabPage2.TabIndex = [System.Int32]1
 $TabPage2.Text = [System.String]'Software'
 $TabPage2.UseVisualStyleBackColor = $true
@@ -649,7 +645,7 @@ $InstallSoftware.add_Click($InstallSoftware_Click)
 $TabPage3.Controls.Add($GroupBox3)
 $TabPage3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage3.Name = [System.String]'TabPage3'
-$TabPage3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
+$TabPage3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]411))
 $TabPage3.TabIndex = [System.Int32]2
 $TabPage3.Text = [System.String]'System'
 $TabPage3.UseVisualStyleBackColor = $true
@@ -660,7 +656,7 @@ $TabPage3.Visible = $false
 $TabPage4.Controls.Add($TabControl2)
 $TabPage4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage4.Name = [System.String]'TabPage4'
-$TabPage4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
+$TabPage4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]411))
 $TabPage4.TabIndex = [System.Int32]3
 $TabPage4.Text = [System.String]'Migration'
 $TabPage4.UseVisualStyleBackColor = $true
@@ -674,12 +670,11 @@ $TabControl2.Controls.Add($TabPage7)
 $TabControl2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]-4,[System.Int32]0))
 $TabControl2.Name = [System.String]'TabControl2'
 $TabControl2.SelectedIndex = [System.Int32]0
-$TabControl2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]299,[System.Int32]439))
+$TabControl2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]299,[System.Int32]415))
 $TabControl2.TabIndex = [System.Int32]3
 #
 #TabPage5
 #
-$TabPage5.Controls.Add($AlphaButton)
 $TabPage5.Controls.Add($Export)
 $TabPage5.Controls.Add($SaveDestination)
 $TabPage5.Controls.Add($GroupBox5)
@@ -688,27 +683,14 @@ $TabPage5.Controls.Add($Profiles)
 $TabPage5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage5.Name = [System.String]'TabPage5'
 $TabPage5.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
-$TabPage5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
+$TabPage5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]389))
 $TabPage5.TabIndex = [System.Int32]0
 $TabPage5.Text = [System.String]'Export'
 $TabPage5.UseVisualStyleBackColor = $true
 #
-#AlphaButton
-#
-$AlphaButton.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$AlphaButton.ForeColor = [System.Drawing.Color]::DarkOrange
-$AlphaButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
-$AlphaButton.Name = [System.String]'AlphaButton'
-$AlphaButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
-$AlphaButton.TabIndex = [System.Int32]22
-$AlphaButton.Text = [System.String]'Beta'
-$AlphaButton.UseCompatibleTextRendering = $true
-$AlphaButton.UseVisualStyleBackColor = $true
-$AlphaButton.add_Click($AlphaButton_Click)
-#
 #Export
 #
-$Export.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]185,[System.Int32]373))
+$Export.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]210,[System.Int32]363))
 $Export.Name = [System.String]'Export'
 $Export.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
 $Export.TabIndex = [System.Int32]6
@@ -721,7 +703,7 @@ $Export.add_Click($Export_Click)
 #
 $SaveDestination.Controls.Add($ExportLocationButton)
 $SaveDestination.Controls.Add($ExportLocation)
-$SaveDestination.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]288))
+$SaveDestination.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]272))
 $SaveDestination.Name = [System.String]'SaveDestination'
 $SaveDestination.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]77))
 $SaveDestination.TabIndex = [System.Int32]5
@@ -755,7 +737,7 @@ $GroupBox5.Controls.Add($RemoveDirectory)
 $GroupBox5.Controls.Add($AdditionalLocations)
 $GroupBox5.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]156))
 $GroupBox5.Name = [System.String]'GroupBox5'
-$GroupBox5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]130))
+$GroupBox5.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]273,[System.Int32]110))
 $GroupBox5.TabIndex = [System.Int32]3
 $GroupBox5.TabStop = $false
 $GroupBox5.Text = [System.String]'Additional Locations'
@@ -763,7 +745,7 @@ $GroupBox5.UseCompatibleTextRendering = $true
 #
 #AddDirectory
 #
-$AddDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]26,[System.Int32]105))
+$AddDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]27,[System.Int32]85))
 $AddDirectory.Name = [System.String]'AddDirectory'
 $AddDirectory.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]25,[System.Int32]19))
 $AddDirectory.TabIndex = [System.Int32]21
@@ -774,7 +756,7 @@ $AddDirectory.add_Click($AddDirectory_Click)
 #
 #RemoveDirectory
 #
-$RemoveDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]105))
+$RemoveDirectory.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]85))
 $RemoveDirectory.Name = [System.String]'RemoveDirectory'
 $RemoveDirectory.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]21,[System.Int32]19))
 $RemoveDirectory.TabIndex = [System.Int32]4
@@ -798,7 +780,7 @@ $AdditionalLocations.MultiSelect = $false
 $AdditionalLocations.Name = [System.String]'AdditionalLocations'
 $AdditionalLocations.ReadOnly = $true
 $AdditionalLocations.RowHeadersVisible = $false
-$AdditionalLocations.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]104))
+$AdditionalLocations.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]259,[System.Int32]84))
 $AdditionalLocations.TabIndex = [System.Int32]3
 #
 #GroupBox4
@@ -827,7 +809,7 @@ $USMTCheckList.UseCompatibleTextRendering = $true
 #
 #Profiles
 #
-$Profiles.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]371))
+$Profiles.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]6,[System.Int32]361))
 $Profiles.Name = [System.String]'Profiles'
 $Profiles.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]154,[System.Int32]25))
 $Profiles.TabIndex = [System.Int32]0
@@ -838,34 +820,19 @@ $Profiles.add_Click($Profiles_Click)
 #
 #TabPage6
 #
-$TabPage6.Controls.Add($BetaButton2)
 $TabPage6.Controls.Add($ImportButton)
 $TabPage6.Controls.Add($GroupBox7)
 $TabPage6.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage6.Name = [System.String]'TabPage6'
 $TabPage6.Padding = (New-Object -TypeName System.Windows.Forms.Padding -ArgumentList @([System.Int32]3))
-$TabPage6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
+$TabPage6.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]389))
 $TabPage6.TabIndex = [System.Int32]1
 $TabPage6.Text = [System.String]'Import'
 $TabPage6.UseVisualStyleBackColor = $true
 #
-#BetaButton2
-#
-$BetaButton2.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$BetaButton2.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
-
-$BetaButton2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
-$BetaButton2.Name = [System.String]'BetaButton2'
-$BetaButton2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
-$BetaButton2.TabIndex = [System.Int32]2
-$BetaButton2.Text = [System.String]'Beta'
-$BetaButton2.UseCompatibleTextRendering = $true
-$BetaButton2.UseVisualStyleBackColor = $true
-$BetaButton2.add_Click($BetaButton2_Click)
-#
 #ImportButton
 #
-$ImportButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]210,[System.Int32]381))
+$ImportButton.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]210,[System.Int32]360))
 $ImportButton.Name = [System.String]'ImportButton'
 $ImportButton.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]75,[System.Int32]23))
 $ImportButton.TabIndex = [System.Int32]1
@@ -907,34 +874,19 @@ $ImportLocation.TabIndex = [System.Int32]0
 #
 #TabPage7
 #
-$TabPage7.Controls.Add($Beta3)
 $TabPage7.Controls.Add($RunNetMig)
 $TabPage7.Controls.Add($ComputerInfo)
 $TabPage7.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
 $TabPage7.Name = [System.String]'TabPage7'
-$TabPage7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]413))
+$TabPage7.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]291,[System.Int32]389))
 $TabPage7.TabIndex = [System.Int32]2
 $TabPage7.Text = [System.String]'Network Migration'
 $TabPage7.UseVisualStyleBackColor = $true
 $TabPage7.Visible = $false
 #
-#Beta3
-#
-$Beta3.Font = (New-Object -TypeName System.Drawing.Font -ArgumentList @([System.String]'Tahoma',[System.Single]27.75,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Point,([System.Byte][System.Byte]0)))
-$Beta3.ForeColor = [System.Drawing.Color]::FromArgb(([System.Int32]([System.Byte][System.Byte]255)),([System.Int32]([System.Byte][System.Byte]128)),([System.Int32]([System.Byte][System.Byte]0)))
-
-$Beta3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]371))
-$Beta3.Name = [System.String]'Beta3'
-$Beta3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]124,[System.Int32]40))
-$Beta3.TabIndex = [System.Int32]2
-$Beta3.Text = [System.String]'Beta'
-$Beta3.UseCompatibleTextRendering = $true
-$Beta3.UseVisualStyleBackColor = $true
-$Beta3.add_Click($Beta3_Click)
-#
 #RunNetMig
 #
-$RunNetMig.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]164,[System.Int32]381))
+$RunNetMig.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]170,[System.Int32]363))
 $RunNetMig.Name = [System.String]'RunNetMig'
 $RunNetMig.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]118,[System.Int32]23))
 $RunNetMig.TabIndex = [System.Int32]1
@@ -1143,11 +1095,23 @@ $Logout.UseCompatibleTextRendering = $true
 $Logout.UseVisualStyleBackColor = $true
 $Logout.add_Click($Logout_Click)
 #
+#PackageDownload
+#
+$PackageDownload.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]455))
+$PackageDownload.Name = [System.String]'PackageDownload'
+$PackageDownload.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]301,[System.Int32]23))
+$PackageDownload.TabIndex = [System.Int32]27
+$PackageDownload.Text = [System.String]'Download Large Software Packages'
+$PackageDownload.UseCompatibleTextRendering = $true
+$PackageDownload.UseVisualStyleBackColor = $true
+$PackageDownload.add_Click($PackageDownload_Click)
+#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
+$TechInstaller.Controls.Add($PackageDownload)
 $TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
 $TechInstaller.Controls.Add($DebugCommand)
@@ -1237,7 +1201,6 @@ Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberTy
 Add-Member -InputObject $TechInstaller -Name TabPage4 -Value $TabPage4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabControl2 -Value $TabControl2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage5 -Value $TabPage5 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AlphaButton -Value $AlphaButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Export -Value $Export -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name SaveDestination -Value $SaveDestination -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ExportLocationButton -Value $ExportLocationButton -MemberType NoteProperty
@@ -1250,13 +1213,11 @@ Add-Member -InputObject $TechInstaller -Name GroupBox4 -Value $GroupBox4 -Member
 Add-Member -InputObject $TechInstaller -Name USMTCheckList -Value $USMTCheckList -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Profiles -Value $Profiles -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage6 -Value $TabPage6 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name BetaButton2 -Value $BetaButton2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportButton -Value $ImportButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox7 -Value $GroupBox7 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportSelect -Value $ImportSelect -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ImportLocation -Value $ImportLocation -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage7 -Value $TabPage7 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Beta3 -Value $Beta3 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name RunNetMig -Value $RunNetMig -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name ComputerInfo -Value $ComputerInfo -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name UNCVerified -Value $UNCVerified -MemberType NoteProperty
@@ -1277,5 +1238,6 @@ Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -
 Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name PackageDownload -Value $PackageDownload -MemberType NoteProperty
 }
 . InitializeComponent
