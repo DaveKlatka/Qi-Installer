@@ -1369,13 +1369,13 @@ function Invoke-Win10_Upgrade {
     if (((Get-Host).version).major -gt 2) {
         if ((Get-WmiObject Win32_OperatingSystem).OSArchitecture -eq '64-bit') {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
-            $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
+            $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip"
             $zip = "$($Destination).001"
             $NumberOfFiles = 51
         }
         else {
             $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
-            $Destination = "$ScriptPath\Win10_Upgrade_$($Version)\$($Version)_x86.zip"
+            $Destination = "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip"
             $zip = "$($Destination).001"
             $NumberOfFiles = 35
         }
@@ -2433,7 +2433,7 @@ function Start-QiInstaller {
     $PackageDownload_Click = {
         #Win10_x64
         $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip"
-        $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)\$($Version)_x64.zip"
+        $Destination = "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip"
         $zip = "$($Destination).001"
         $NumberOfFiles = 51
 
@@ -2445,11 +2445,11 @@ function Start-QiInstaller {
 
         #Win10_x86
         $Source = "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip"
-        $Destination = "$ScriptPath\Win10_Upgrade_$($Version)\$($Version)_x86.zip"
+        $Destination = "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip"
         $zip = "$($Destination).001"
         $NumberOfFiles = 35
 
-        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software $software
+        Get-FilesDownload -Source $Source -Destination $Destination -NumberOfFiles $NumberOfFiles -Software "Win10 $Version x86"
         Invoke-Extract -File $Zip -ExtractTo (Split-Path -path $Destination)
         Start-Sleep -seconds 5
         Invoke-CleanUp -File $Destination
