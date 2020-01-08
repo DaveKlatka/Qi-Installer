@@ -2435,14 +2435,14 @@ function Start-QiInstaller {
         if ($DownloadListBox.CheckedItems.count -gt 0) {
             foreach ($object in $DownloadListBox.CheckedItems) {
                 switch ($object) {
-                    "Windows 10 $Version x64" {
+                    "Windows 10 Upgrade x64" {
                         #Win10_x64
                         Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip" -Destination "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip" -NumberOfFiles "51" -Software "Win10 $Version x64"
                         Invoke-Extract -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip.001" -ExtractTo "$($ScriptPath)\Win10_Upgrade_$($Version)_x64"
                         Start-Sleep -seconds 5
                         Invoke-CleanUp -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip"
                     }
-                    "Windows 10 $Version x64" {
+                    "Windows 10 Upgrade x64" {
                         #Win10_x86
                         Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip" -Destination "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip" -NumberOfFiles "35" -Software "Win10 $Version x86"
                         Invoke-Extract -File "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip.001" -ExtractTo "$ScriptPath\Win10_Upgrade_$($Version)_x86"

@@ -1128,7 +1128,7 @@ $Logout.add_Click($Logout_Click)
 #
 $DownloadListBox.CheckOnClick = $true
 $DownloadListBox.FormattingEnabled = $true
-$DownloadListBox.Items.AddRange([System.Object[]]@([System.String]'Windows 10 $Version x64',[System.String]'Windows 10 $Version x86',[System.String]'Office 365 Business x64',[System.String]'Office 365 Business x86',[System.String]'Office 365 ProPlus x64',[System.String]'Office 365 ProPlus x86',[System.String]'Office 2019 Standard x64'))
+$DownloadListBox.Items.AddRange([System.Object[]]@([System.String]'Windows 10 Upgrade x64',[System.String]'Windows 10 Upgrade x86',[System.String]'Office 365 Business x64',[System.String]'Office 365 Business x86',[System.String]'Office 365 ProPlus x64',[System.String]'Office 365 ProPlus x86',[System.String]'Office 2019 Standard x64'))
 $DownloadListBox.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]14,[System.Int32]12))
 $DownloadListBox.Name = [System.String]'DownloadListBox'
 $DownloadListBox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]263,[System.Int32]116))
