@@ -2431,38 +2431,50 @@ function Start-QiInstaller {
     }
 
     $PackageDownload_Click = {
-        #Win10_x64
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip" -Destination "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip" -NumberOfFiles "51" -Software "Win10 $Version x64"
-        Invoke-Extract -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip.001" -ExtractTo "$($ScriptPath)\Win10_Upgrade_$($Version)_x64"
-        Start-Sleep -seconds 5
-        Invoke-CleanUp -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip"
 
-
-        #Win10_x86
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip" -Destination "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip" -NumberOfFiles "35" -Software "Win10 $Version x86"
-        Invoke-Extract -File "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip.001" -ExtractTo "$ScriptPath\Win10_Upgrade_$($Version)_x86"
-        Start-Sleep -seconds 5
-        Invoke-CleanUp -File "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip"
-
-
-        #Office 365 Business x64
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x64/Office_365_Business_x64.zip" -Destination "$ScriptPath\O365\Business x64\Office_365_Business_x64.zip" -NumberOfFiles "24" -Software "Office 365 Business x64"
-
-
-        #Office 365 Business x86
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x86/Office_365_Business_x86.zip" -Destination "$ScriptPath\O365\Business x86\Office_365_Business_x86.zip" -NumberOfFiles "18" -Software "Office 365 Business x86"
-
-
-        #Office 365 ProPlus x64
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x64/Office_365_ProPlus_x64.zip" -Destination "$ScriptPath\O365\ProPlus x64\Office_365_ProPlus_x64.zip" -NumberOfFiles "23" -Software "Office 365 ProPlus x64"
-
-        
-        #Office 365 ProPlus x86
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x86/Office_365_ProPlus_x86.zip" -Destination "$ScriptPath\O365\ProPlus x86\Office_365_ProPlus_x86.zip" -NumberOfFiles "18" -Software "Office 365 ProPlus x86"
-
-
-        #Office 2019 Standard x64
-        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/2019_Standard/Office_2019_Standard.zip" -Destination "$ScriptPath\Office_2019\Standard\Office_2019_Standard.zip" -NumberOfFiles "20" -Software "Office 2019 Standard x64"
+        if ($DownloadListBox.CheckedItems.count -gt 0) {
+            foreach ($object in $DownloadListBox.CheckedItems) {
+                switch ($object) {
+                    "Windows 10 $Version x64" {
+                        #Win10_x64
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x64.zip" -Destination "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip" -NumberOfFiles "51" -Software "Win10 $Version x64"
+                        Invoke-Extract -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip.001" -ExtractTo "$($ScriptPath)\Win10_Upgrade_$($Version)_x64"
+                        Start-Sleep -seconds 5
+                        Invoke-CleanUp -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip"
+                    }
+                    "Windows 10 $Version x64" {
+                        #Win10_x86
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip" -Destination "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip" -NumberOfFiles "35" -Software "Win10 $Version x86"
+                        Invoke-Extract -File "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip.001" -ExtractTo "$ScriptPath\Win10_Upgrade_$($Version)_x86"
+                        Start-Sleep -seconds 5
+                        Invoke-CleanUp -File "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip"
+                    }
+                    "Office 365 Business x64" {
+                        #Office 365 Business x64
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x64/Office_365_Business_x64.zip" -Destination "$ScriptPath\O365\Business x64\Office_365_Business_x64.zip" -NumberOfFiles "24" -Software "Office 365 Business x64"
+                    }
+                    "Office 365 Business x86" {
+                        #Office 365 Business x86
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_Business_x86/Office_365_Business_x86.zip" -Destination "$ScriptPath\O365\Business x86\Office_365_Business_x86.zip" -NumberOfFiles "18" -Software "Office 365 Business x86"
+                    }
+                    "Office 365 ProPlus x64" {
+                        #Office 365 ProPlus x64
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x64/Office_365_ProPlus_x64.zip" -Destination "$ScriptPath\O365\ProPlus x64\Office_365_ProPlus_x64.zip" -NumberOfFiles "23" -Software "Office 365 ProPlus x64"
+                    }
+                    "Office 365 ProPlus x86" {
+                        #Office 365 ProPlus x86
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/365_ProPlus_x86/Office_365_ProPlus_x86.zip" -Destination "$ScriptPath\O365\ProPlus x86\Office_365_ProPlus_x86.zip" -NumberOfFiles "18" -Software "Office 365 ProPlus x86"
+                    }
+                    "Office 2019 Standard x64" {
+                        #Office 2019 Standard x64
+                        Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Office/2019_Standard/Office_2019_Standard.zip" -Destination "$ScriptPath\Office_2019\Standard\Office_2019_Standard.zip" -NumberOfFiles "20" -Software "Office 2019 Standard x64"
+                    }
+                }
+            } 
+            foreach ($i in $DownloadListBox.CheckedIndices) {
+                $DownloadListBox.SetItemChecked($i, $false);
+            }
+        }
     }
 
     #Run Automate Buttons
@@ -2482,7 +2494,7 @@ function Start-QiInstaller {
     
     $InstallSoftware_Click = {
         if ((Get-Host).Version.Major -gt 3) {
-            if ($SoftwareList.CheckedItems.count -gt 0 -and $SoftwareList.enabled) {
+            if ($SoftwareList.CheckedItems.count -gt 0) {
                 foreach ($object in $SoftwareList.CheckedItems) {
                     Install-Software -Application $object
                 } 

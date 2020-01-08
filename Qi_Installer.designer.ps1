@@ -36,6 +36,9 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.Button]$AuthSubmit = $null
 [System.Windows.Forms.TextBox]$AuthUser = $null
 [System.Windows.Forms.Label]$Label1 = $null
+[System.Windows.Forms.TabPage]$TabPage8 = $null
+[System.Windows.Forms.CheckedListBox]$DownloadListBox = $null
+[System.Windows.Forms.Button]$PackageDownload = $null
 [System.Windows.Forms.TabPage]$TabPage2 = $null
 [System.Windows.Forms.Button]$InstallSoftware = $null
 [System.Windows.Forms.TabPage]$TabPage3 = $null
@@ -79,7 +82,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$DebugCommand = $null
 [System.Windows.Forms.Button]$DebugCommandButton = $null
 [System.Windows.Forms.Button]$Logout = $null
-[System.Windows.Forms.Button]$PackageDownload = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -119,6 +121,8 @@ $AuthCancel = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
+$TabPage8 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$PackageDownload = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage2 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $InstallSoftware = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage3 = (New-Object -TypeName System.Windows.Forms.TabPage)
@@ -162,7 +166,7 @@ $DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
 $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
-$PackageDownload = (New-Object -TypeName System.Windows.Forms.Button)
+$DownloadListBox = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -174,6 +178,7 @@ $AuthPanel.SuspendLayout()
 $MinimumRequirements.SuspendLayout()
 $Powershell4.SuspendLayout()
 $GroupBox6.SuspendLayout()
+$TabPage8.SuspendLayout()
 $TabPage2.SuspendLayout()
 $TabPage3.SuspendLayout()
 $TabPage4.SuspendLayout()
@@ -424,6 +429,7 @@ $PictureBox1.TabStop = $false
 #TabControl1
 #
 $TabControl1.Controls.Add($TabPage1)
+$TabControl1.Controls.Add($TabPage8)
 $TabControl1.Controls.Add($TabPage2)
 $TabControl1.Controls.Add($TabPage3)
 $TabControl1.Controls.Add($TabPage4)
@@ -616,6 +622,29 @@ $Label1.TabIndex = [System.Int32]0
 $Label1.Text = [System.String]'Enter Your Automate Credentials'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
+#
+#TabPage8
+#
+$TabPage8.Controls.Add($DownloadListBox)
+$TabPage8.Controls.Add($PackageDownload)
+$TabPage8.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
+$TabPage8.Name = [System.String]'TabPage8'
+$TabPage8.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]411))
+$TabPage8.TabIndex = [System.Int32]4
+$TabPage8.Text = [System.String]'Download'
+$TabPage8.UseVisualStyleBackColor = $true
+$TabPage8.Visible = $false
+#
+#PackageDownload
+#
+$PackageDownload.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]14,[System.Int32]134))
+$PackageDownload.Name = [System.String]'PackageDownload'
+$PackageDownload.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]218,[System.Int32]23))
+$PackageDownload.TabIndex = [System.Int32]27
+$PackageDownload.Text = [System.String]'Download Large Software Packages'
+$PackageDownload.UseCompatibleTextRendering = $true
+$PackageDownload.UseVisualStyleBackColor = $true
+$PackageDownload.add_Click($PackageDownload_Click)
 #
 #TabPage2
 #
@@ -1095,23 +1124,22 @@ $Logout.UseCompatibleTextRendering = $true
 $Logout.UseVisualStyleBackColor = $true
 $Logout.add_Click($Logout_Click)
 #
-#PackageDownload
+#DownloadListBox
 #
-$PackageDownload.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]455))
-$PackageDownload.Name = [System.String]'PackageDownload'
-$PackageDownload.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]301,[System.Int32]23))
-$PackageDownload.TabIndex = [System.Int32]27
-$PackageDownload.Text = [System.String]'Download Large Software Packages'
-$PackageDownload.UseCompatibleTextRendering = $true
-$PackageDownload.UseVisualStyleBackColor = $true
-$PackageDownload.add_Click($PackageDownload_Click)
+$DownloadListBox.CheckOnClick = $true
+$DownloadListBox.FormattingEnabled = $true
+$DownloadListBox.Items.AddRange([System.Object[]]@([System.String]'Windows 10 $Version x64',[System.String]'Windows 10 $Version x86',[System.String]'Office 365 Business x64',[System.String]'Office 365 Business x86',[System.String]'Office 365 ProPlus x64',[System.String]'Office 365 ProPlus x86',[System.String]'Office 2019 Standard x64'))
+$DownloadListBox.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]14,[System.Int32]12))
+$DownloadListBox.Name = [System.String]'DownloadListBox'
+$DownloadListBox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]263,[System.Int32]116))
+$DownloadListBox.TabIndex = [System.Int32]29
+$DownloadListBox.UseCompatibleTextRendering = $true
 #
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
-$TechInstaller.Controls.Add($PackageDownload)
 $TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
 $TechInstaller.Controls.Add($DebugCommand)
@@ -1139,6 +1167,7 @@ $MinimumRequirements.ResumeLayout($false)
 $Powershell4.ResumeLayout($false)
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
+$TabPage8.ResumeLayout($false)
 $TabPage2.ResumeLayout($false)
 $TabPage3.ResumeLayout($false)
 $TabPage4.ResumeLayout($false)
@@ -1195,6 +1224,9 @@ Add-Member -InputObject $TechInstaller -Name AuthCancel -Value $AuthCancel -Memb
 Add-Member -InputObject $TechInstaller -Name AuthSubmit -Value $AuthSubmit -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthUser -Value $AuthUser -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Label1 -Value $Label1 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name TabPage8 -Value $TabPage8 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DownloadListBox -Value $DownloadListBox -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name PackageDownload -Value $PackageDownload -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage2 -Value $TabPage2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name InstallSoftware -Value $InstallSoftware -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberType NoteProperty
@@ -1238,6 +1270,5 @@ Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -
 Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name PackageDownload -Value $PackageDownload -MemberType NoteProperty
 }
 . InitializeComponent
