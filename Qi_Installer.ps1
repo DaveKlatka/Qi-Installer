@@ -2450,7 +2450,7 @@ function Start-QiInstaller {
                         Start-Sleep -seconds 5
                         Invoke-CleanUp -File "$($ScriptPath)\Win10_Upgrade_$($Version)_x64\$($Version)_x64.zip"
                     }
-                    "Windows 10 Upgrade x64" {
+                    "Windows 10 Upgrade x86" {
                         #Win10_x86
                         Get-FilesDownload -Source "$DownloadHost/AutoMate/Microsoft/Windows/$($version)_Upgrade/Win10_$($version)_x86.zip" -Destination "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip" -NumberOfFiles "35" -Software "Win10 $Version x86"
                         Invoke-Extract -File "$ScriptPath\Win10_Upgrade_$($Version)_x86\$($Version)_x86.zip.001" -ExtractTo "$ScriptPath\Win10_Upgrade_$($Version)_x86"
