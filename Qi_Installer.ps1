@@ -130,7 +130,7 @@ function Invoke-Extract {
         [string] $ExtractTo
     )
     $Source = "$DownloadHost/AutoMate/Tools/7za.exe"
-    $7zip = "$env:SystemRoot\Temp\7za.exe"
+    $7zip = "$Scriptpath\7za.exe"
     if (!(Test-Path $7zip)) {
         Update-LogBox "Downloading 7zip extractor"
         $CurrentFile.Value = 0
@@ -152,6 +152,10 @@ function Invoke-Extract {
     Update-LogBox "Extracting $file to $ExtractTo"
     $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
+    if ($ScriptPath -match '\\\\') {
+        Copy-Item -Path $7zip -Destination "$env:SystemDrive\Temp\7za.exe"
+        $7zip = "$env:SystemDrive\Temp\7za.exe"
+    }
     if ((Get-Host).Version.Major -gt 3) {
         $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
     } 
