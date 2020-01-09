@@ -153,7 +153,9 @@ function Invoke-Extract {
     $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
     if ($ScriptPath -match '\\\\') {
-        Copy-Item -Path $7zip -Destination "$env:SystemDrive\Temp\7za.exe"
+        if (!(Test-Path "$env:SystemDrive\Temp\7za.exe")) {
+            Copy-Item -Path $7zip -Destination "$env:SystemDrive\Temp\7za.exe"
+        }
         $7zip = "$env:SystemDrive\Temp\7za.exe"
     }
     if ((Get-Host).Version.Major -gt 3) {
