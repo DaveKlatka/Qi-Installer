@@ -155,7 +155,7 @@ function Invoke-Extract {
             Copy-Item -Path $7zip -Destination "C:\Windows\Temp\7za.exe"
             start-sleep seconds 1
         }
-        $7zip = "$env:SystemDrive\Temp\7za.exe"
+        $7zip = "C:\Windows\Temp\7za.exe"
     }
     $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
