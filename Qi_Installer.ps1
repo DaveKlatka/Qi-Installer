@@ -130,7 +130,7 @@ function Invoke-Extract {
         [string] $ExtractTo
     )
     $Source = "$DownloadHost/AutoMate/Tools/7za.exe"
-    $7zip = "$Scriptpath\7za.exe"
+    $7zip = "$env:TEMP\7za.exe"
     if (!(Test-Path $7zip)) {
         Update-LogBox "Downloading 7zip extractor"
         $CurrentFile.Value = 0
