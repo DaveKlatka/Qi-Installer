@@ -152,7 +152,8 @@ function Invoke-Extract {
     Update-LogBox "Extracting $file to $ExtractTo"
     if ($ScriptPath -match '\\\\') {
         if (!(Test-Path "$env:SystemDrive\Temp\7za.exe")) {
-            Copy-Item -Path $7zip -Destination "$env:SystemDrive\Temp\7za.exe"
+            Copy-Item -Path $7zip -Destination "C:\Windows\Temp\7za.exe"
+            start-sleep seconds 1
         }
         $7zip = "$env:SystemDrive\Temp\7za.exe"
     }
