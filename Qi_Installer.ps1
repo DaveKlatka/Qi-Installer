@@ -150,8 +150,16 @@ function Invoke-Extract {
         }
     }
     Update-LogBox "Extracting $file to $ExtractTo"
+    if ($ScriptPath -match '\\\\') {
+        if (!(Test-Path "$env:SystemDrive\Temp\7za.exe")) {
+            Copy-Item -Path $7zip -Destination "C:\Windows\Temp\7za.exe"
+            start-sleep seconds 1
+        }
+        $7zip = "C:\Windows\Temp\7za.exe"
+    }
     $ArgumentList = "&$($7zip) x '$($file)' -aoa -o'$ExtractTo'"
     $RunLog = "$ScriptPath\logs\Extract log.txt"
+   
     if ((Get-Host).Version.Major -gt 3) {
         $process = (start-process powershell -ArgumentList "-executionpolicy bypass -command $ArgumentList" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
     } 
