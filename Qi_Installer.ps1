@@ -2408,11 +2408,47 @@ function Start-QiInstaller {
                 }
                 "mbaker" {
                     $Script:LocationID = "624"
-                    $TechInstaller.Text = "Baker, Mike"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Baker, Mike)"
                 }
                 "JBender" {
                     $Script:LocationID = "448"
-                    $TechInstaller.Text = "Bender, Jonathan"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Bender, Jonathan)"
+                }
+                "jcanzurlo"{
+                    $Script:LocationID = "617"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Canzurlo, Jesse)"
+                }
+                "ncecil" {
+                    $Script:LocationID = "459"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Cecil, Nick)"
+                }
+                "sconti"{
+                    $Script:LocationID = "464"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Conti, Scott)"
+                }
+                "jdarby"{
+                    $Script:LocationID = "449"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Darby, Jeffrey)"
+                }
+                "kdillon" {
+                    $Script:LocationID = "452"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Dillon, Ken)"
+                }
+                "bdixon" {
+                    $Script:LocationID = "595"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Dixon, Bryan)"
+                }
+                "sengland"{
+                    $Script:LocationID = "465"
+                    $TechInstaller.Text = [System.String] "Tech Installer (England, Shane)"
+                }
+                "kylef" {
+                    $Script:LocationID = "456"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Fabricius, Kyle)"
+                }
+                "kfranklin"{
+                    $Script:LocationID = "633"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Franklin, Karis)"
                 }
                 "cmehl" {
                     $Script:LocationID = "440"
