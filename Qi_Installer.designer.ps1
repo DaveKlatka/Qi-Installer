@@ -21,21 +21,16 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TabControl]$TabControl1 = $null
 [System.Windows.Forms.TabPage]$TabPage1 = $null
 [System.Windows.Forms.Panel]$AuthPanel = $null
-[System.Windows.Forms.GroupBox]$MinimumRequirements = $null
-[System.Windows.Forms.GroupBox]$Powershell4 = $null
-[System.Windows.Forms.Label]$PoSHVersion = $null
-[System.Windows.Forms.Button]$InstallPoSH4 = $null
 [System.Windows.Forms.Button]$AuthDebugButton = $null
 [System.Windows.Forms.GroupBox]$GroupBox6 = $null
 [System.Windows.Forms.Label]$Label4 = $null
-[System.Windows.Forms.Label]$Label3 = $null
-[System.Windows.Forms.Label]$Label2 = $null
-[System.Windows.Forms.TextBox]$2FAAuth = $null
-[System.Windows.Forms.TextBox]$AuthPass = $null
 [System.Windows.Forms.Button]$AuthCancel = $null
 [System.Windows.Forms.Button]$AuthSubmit = $null
 [System.Windows.Forms.TextBox]$AuthUser = $null
 [System.Windows.Forms.Label]$Label1 = $null
+[System.Windows.Forms.TabPage]$TabPage8 = $null
+[System.Windows.Forms.CheckedListBox]$DownloadListBox = $null
+[System.Windows.Forms.Button]$PackageDownload = $null
 [System.Windows.Forms.TabPage]$TabPage2 = $null
 [System.Windows.Forms.Button]$InstallSoftware = $null
 [System.Windows.Forms.TabPage]$TabPage3 = $null
@@ -79,7 +74,6 @@ $TechInstaller = New-Object -TypeName System.Windows.Forms.Form
 [System.Windows.Forms.TextBox]$DebugCommand = $null
 [System.Windows.Forms.Button]$DebugCommandButton = $null
 [System.Windows.Forms.Button]$Logout = $null
-[System.Windows.Forms.Button]$PackageDownload = $null
 function InitializeComponent
 {
 $GroupBox1 = (New-Object -TypeName System.Windows.Forms.GroupBox)
@@ -104,21 +98,16 @@ $PictureBox1 = (New-Object -TypeName System.Windows.Forms.PictureBox)
 $TabControl1 = (New-Object -TypeName System.Windows.Forms.TabControl)
 $TabPage1 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $AuthPanel = (New-Object -TypeName System.Windows.Forms.Panel)
-$MinimumRequirements = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$Powershell4 = (New-Object -TypeName System.Windows.Forms.GroupBox)
-$PoSHVersion = (New-Object -TypeName System.Windows.Forms.Label)
-$InstallPoSH4 = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthDebugButton = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox6 = (New-Object -TypeName System.Windows.Forms.GroupBox)
 $Label4 = (New-Object -TypeName System.Windows.Forms.Label)
-$Label3 = (New-Object -TypeName System.Windows.Forms.Label)
-$Label2 = (New-Object -TypeName System.Windows.Forms.Label)
-$2FAAuth = (New-Object -TypeName System.Windows.Forms.TextBox)
-$AuthPass = (New-Object -TypeName System.Windows.Forms.TextBox)
 $AuthCancel = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthSubmit = (New-Object -TypeName System.Windows.Forms.Button)
 $AuthUser = (New-Object -TypeName System.Windows.Forms.TextBox)
 $Label1 = (New-Object -TypeName System.Windows.Forms.Label)
+$TabPage8 = (New-Object -TypeName System.Windows.Forms.TabPage)
+$DownloadListBox = (New-Object -TypeName System.Windows.Forms.CheckedListBox)
+$PackageDownload = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage2 = (New-Object -TypeName System.Windows.Forms.TabPage)
 $InstallSoftware = (New-Object -TypeName System.Windows.Forms.Button)
 $TabPage3 = (New-Object -TypeName System.Windows.Forms.TabPage)
@@ -162,7 +151,6 @@ $DebugConsole = (New-Object -TypeName System.Windows.Forms.Button)
 $DebugCommand = (New-Object -TypeName System.Windows.Forms.TextBox)
 $DebugCommandButton = (New-Object -TypeName System.Windows.Forms.Button)
 $Logout = (New-Object -TypeName System.Windows.Forms.Button)
-$PackageDownload = (New-Object -TypeName System.Windows.Forms.Button)
 $GroupBox1.SuspendLayout()
 $GroupBox2.SuspendLayout()
 $GroupBox3.SuspendLayout()
@@ -171,9 +159,8 @@ $GroupBox3.SuspendLayout()
 $TabControl1.SuspendLayout()
 $TabPage1.SuspendLayout()
 $AuthPanel.SuspendLayout()
-$MinimumRequirements.SuspendLayout()
-$Powershell4.SuspendLayout()
 $GroupBox6.SuspendLayout()
+$TabPage8.SuspendLayout()
 $TabPage2.SuspendLayout()
 $TabPage3.SuspendLayout()
 $TabPage4.SuspendLayout()
@@ -424,6 +411,7 @@ $PictureBox1.TabStop = $false
 #TabControl1
 #
 $TabControl1.Controls.Add($TabPage1)
+$TabControl1.Controls.Add($TabPage8)
 $TabControl1.Controls.Add($TabPage2)
 $TabControl1.Controls.Add($TabPage3)
 $TabControl1.Controls.Add($TabPage4)
@@ -450,56 +438,12 @@ $TabPage1.UseVisualStyleBackColor = $true
 #
 #AuthPanel
 #
-$AuthPanel.Controls.Add($MinimumRequirements)
 $AuthPanel.Controls.Add($AuthDebugButton)
 $AuthPanel.Controls.Add($GroupBox6)
 $AuthPanel.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]0,[System.Int32]0))
 $AuthPanel.Name = [System.String]'AuthPanel'
 $AuthPanel.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]435))
 $AuthPanel.TabIndex = [System.Int32]2
-#
-#MinimumRequirements
-#
-$MinimumRequirements.Controls.Add($Powershell4)
-$MinimumRequirements.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]34,[System.Int32]262))
-$MinimumRequirements.Name = [System.String]'MinimumRequirements'
-$MinimumRequirements.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]223,[System.Int32]109))
-$MinimumRequirements.TabIndex = [System.Int32]3
-$MinimumRequirements.TabStop = $false
-$MinimumRequirements.Text = [System.String]'Minimum Requirements'
-$MinimumRequirements.UseCompatibleTextRendering = $true
-#
-#Powershell4
-#
-$Powershell4.Controls.Add($PoSHVersion)
-$Powershell4.Controls.Add($InstallPoSH4)
-$Powershell4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]7,[System.Int32]20))
-$Powershell4.Name = [System.String]'Powershell4'
-$Powershell4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]210,[System.Int32]78))
-$Powershell4.TabIndex = [System.Int32]1
-$Powershell4.TabStop = $false
-$Powershell4.Text = [System.String]'Powershell 3.0'
-$Powershell4.UseCompatibleTextRendering = $true
-#
-#PoSHVersion
-#
-$PoSHVersion.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]9,[System.Int32]24))
-$PoSHVersion.Name = [System.String]'PoSHVersion'
-$PoSHVersion.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]24))
-$PoSHVersion.TabIndex = [System.Int32]1
-$PoSHVersion.Text = [System.String]'PoSH Version'
-$PoSHVersion.UseCompatibleTextRendering = $true
-#
-#InstallPoSH4
-#
-$InstallPoSH4.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]29,[System.Int32]49))
-$InstallPoSH4.Name = [System.String]'InstallPoSH4'
-$InstallPoSH4.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]156,[System.Int32]23))
-$InstallPoSH4.TabIndex = [System.Int32]0
-$InstallPoSH4.Text = [System.String]'Update Powershell'
-$InstallPoSH4.UseCompatibleTextRendering = $true
-$InstallPoSH4.UseVisualStyleBackColor = $true
-$InstallPoSH4.add_Click($InstallPoSH4_Click)
 #
 #AuthDebugButton
 #
@@ -516,10 +460,6 @@ $AuthDebugButton.add_Click($AuthDebugButton_Click)
 #GroupBox6
 #
 $GroupBox6.Controls.Add($Label4)
-$GroupBox6.Controls.Add($Label3)
-$GroupBox6.Controls.Add($Label2)
-$GroupBox6.Controls.Add($2FAAuth)
-$GroupBox6.Controls.Add($AuthPass)
 $GroupBox6.Controls.Add($AuthCancel)
 $GroupBox6.Controls.Add($AuthSubmit)
 $GroupBox6.Controls.Add($AuthUser)
@@ -541,42 +481,6 @@ $Label4.TabIndex = [System.Int32]8
 $Label4.Text = [System.String]'Username:'
 $Label4.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
 $Label4.UseCompatibleTextRendering = $true
-#
-#Label3
-#
-$Label3.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]101))
-$Label3.Name = [System.String]'Label3'
-$Label3.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]20))
-$Label3.TabIndex = [System.Int32]7
-$Label3.Text = [System.String]'Password:'
-$Label3.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label3.UseCompatibleTextRendering = $true
-#
-#Label2
-#
-$Label2.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]148))
-$Label2.Name = [System.String]'Label2'
-$Label2.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]100,[System.Int32]17))
-$Label2.TabIndex = [System.Int32]6
-$Label2.Text = [System.String]'Token:'
-$Label2.TextAlign = [System.Drawing.ContentAlignment]::BottomLeft
-$Label2.UseCompatibleTextRendering = $true
-#
-#2FAAuth
-#
-$2FAAuth.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]168))
-$2FAAuth.Name = [System.String]'2FAAuth'
-$2FAAuth.PasswordChar = [System.Char]'*'
-$2FAAuth.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
-$2FAAuth.TabIndex = [System.Int32]3
-#
-#AuthPass
-#
-$AuthPass.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]16,[System.Int32]124))
-$AuthPass.Name = [System.String]'AuthPass'
-$AuthPass.PasswordChar = [System.Char]'*'
-$AuthPass.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]195,[System.Int32]21))
-$AuthPass.TabIndex = [System.Int32]2
 #
 #AuthCancel
 #
@@ -613,9 +517,44 @@ $Label1.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([S
 $Label1.Name = [System.String]'Label1'
 $Label1.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]211,[System.Int32]23))
 $Label1.TabIndex = [System.Int32]0
-$Label1.Text = [System.String]'Enter Your Automate Credentials'
+$Label1.Text = [System.String]'Enter Your Automate User'
 $Label1.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $Label1.UseCompatibleTextRendering = $true
+$Label1.add_Click($Label1_Click)
+#
+#TabPage8
+#
+$TabPage8.Controls.Add($DownloadListBox)
+$TabPage8.Controls.Add($PackageDownload)
+$TabPage8.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]4,[System.Int32]22))
+$TabPage8.Name = [System.String]'TabPage8'
+$TabPage8.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]293,[System.Int32]411))
+$TabPage8.TabIndex = [System.Int32]4
+$TabPage8.Text = [System.String]'Download'
+$TabPage8.UseVisualStyleBackColor = $true
+$TabPage8.Visible = $false
+#
+#DownloadListBox
+#
+$DownloadListBox.CheckOnClick = $true
+$DownloadListBox.FormattingEnabled = $true
+$DownloadListBox.Items.AddRange([System.Object[]]@([System.String]'Windows 10 Upgrade x64',[System.String]'Windows 10 Upgrade x86',[System.String]'Office 365 Business x64',[System.String]'Office 365 Business x86',[System.String]'Office 365 ProPlus x64',[System.String]'Office 365 ProPlus x86',[System.String]'Office 2019 Standard x64'))
+$DownloadListBox.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]14,[System.Int32]12))
+$DownloadListBox.Name = [System.String]'DownloadListBox'
+$DownloadListBox.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]263,[System.Int32]116))
+$DownloadListBox.TabIndex = [System.Int32]29
+$DownloadListBox.UseCompatibleTextRendering = $true
+#
+#PackageDownload
+#
+$PackageDownload.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]14,[System.Int32]134))
+$PackageDownload.Name = [System.String]'PackageDownload'
+$PackageDownload.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]218,[System.Int32]23))
+$PackageDownload.TabIndex = [System.Int32]27
+$PackageDownload.Text = [System.String]'Download Large Software Packages'
+$PackageDownload.UseCompatibleTextRendering = $true
+$PackageDownload.UseVisualStyleBackColor = $true
+$PackageDownload.add_Click($PackageDownload_Click)
 #
 #TabPage2
 #
@@ -1095,23 +1034,11 @@ $Logout.UseCompatibleTextRendering = $true
 $Logout.UseVisualStyleBackColor = $true
 $Logout.add_Click($Logout_Click)
 #
-#PackageDownload
-#
-$PackageDownload.Location = (New-Object -TypeName System.Drawing.Point -ArgumentList @([System.Int32]8,[System.Int32]455))
-$PackageDownload.Name = [System.String]'PackageDownload'
-$PackageDownload.Size = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]301,[System.Int32]23))
-$PackageDownload.TabIndex = [System.Int32]27
-$PackageDownload.Text = [System.String]'Download Large Software Packages'
-$PackageDownload.UseCompatibleTextRendering = $true
-$PackageDownload.UseVisualStyleBackColor = $true
-$PackageDownload.add_Click($PackageDownload_Click)
-#
 #TechInstaller
 #
 $TechInstaller.AcceptButton = $AuthSubmit
 $TechInstaller.CancelButton = $Cancel
 $TechInstaller.ClientSize = (New-Object -TypeName System.Drawing.Size -ArgumentList @([System.Int32]816,[System.Int32]485))
-$TechInstaller.Controls.Add($PackageDownload)
 $TechInstaller.Controls.Add($Logout)
 $TechInstaller.Controls.Add($DebugCommandButton)
 $TechInstaller.Controls.Add($DebugCommand)
@@ -1135,10 +1062,9 @@ $GroupBox3.ResumeLayout($false)
 $TabControl1.ResumeLayout($false)
 $TabPage1.ResumeLayout($false)
 $AuthPanel.ResumeLayout($false)
-$MinimumRequirements.ResumeLayout($false)
-$Powershell4.ResumeLayout($false)
 $GroupBox6.ResumeLayout($false)
 $GroupBox6.PerformLayout()
+$TabPage8.ResumeLayout($false)
 $TabPage2.ResumeLayout($false)
 $TabPage3.ResumeLayout($false)
 $TabPage4.ResumeLayout($false)
@@ -1180,21 +1106,16 @@ Add-Member -InputObject $TechInstaller -Name PictureBox1 -Value $PictureBox1 -Me
 Add-Member -InputObject $TechInstaller -Name TabControl1 -Value $TabControl1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage1 -Value $TabPage1 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthPanel -Value $AuthPanel -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name MinimumRequirements -Value $MinimumRequirements -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Powershell4 -Value $Powershell4 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name PoSHVersion -Value $PoSHVersion -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name InstallPoSH4 -Value $InstallPoSH4 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthDebugButton -Value $AuthDebugButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name GroupBox6 -Value $GroupBox6 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Label4 -Value $Label4 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Label3 -Value $Label3 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name Label2 -Value $Label2 -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name 2FAAuth -Value $2FAAuth -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name AuthPass -Value $AuthPass -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthCancel -Value $AuthCancel -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthSubmit -Value $AuthSubmit -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name AuthUser -Value $AuthUser -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Label1 -Value $Label1 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name TabPage8 -Value $TabPage8 -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name DownloadListBox -Value $DownloadListBox -MemberType NoteProperty
+Add-Member -InputObject $TechInstaller -Name PackageDownload -Value $PackageDownload -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage2 -Value $TabPage2 -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name InstallSoftware -Value $InstallSoftware -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name TabPage3 -Value $TabPage3 -MemberType NoteProperty
@@ -1238,6 +1159,5 @@ Add-Member -InputObject $TechInstaller -Name DebugConsole -Value $DebugConsole -
 Add-Member -InputObject $TechInstaller -Name DebugCommand -Value $DebugCommand -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name DebugCommandButton -Value $DebugCommandButton -MemberType NoteProperty
 Add-Member -InputObject $TechInstaller -Name Logout -Value $Logout -MemberType NoteProperty
-Add-Member -InputObject $TechInstaller -Name PackageDownload -Value $PackageDownload -MemberType NoteProperty
 }
 . InitializeComponent
