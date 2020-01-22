@@ -2401,33 +2401,8 @@ function Start-QiInstaller {
             $TechInstaller.Close()
         }
         else {
-            #https://github.com/gavsto/AutomateAPI
-            Try {
-                $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
-                $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
-                
-                Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
+            $AuthPanel.Visible = $false
 
-                $QiPass = ConvertTo-SecureString $QiSupportAuth -AsPlainText -Force
-                $QiCreds = New-Object System.Management.Automation.PSCredential ('QiSupportAuth', $QiPass)
-
-                Connect-AutomateAPI -credential $QiCreds -Server $AutomateServer -ErrorAction stop
-                
-                $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
-                
-                $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
-        
-                if (!($null -eq $Location.ID)) {
-                    Update-LogBox 'Credentials Verified' -Color 'Green'
-                    $AuthPanel.Visible = $false
-                }
-            }
-            catch {
-                Update-LogBox 'Failed to login' -color 'Red'
-                if (((get-host).version.major) -le 2) {
-                    Update-LogBox 'Authentication incompatible with current Powershell version. Please upgrade Powershell.' -color 'Red'
-                }
-            }
         }
     }
     #Authenticator Cancel
