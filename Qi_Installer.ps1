@@ -752,27 +752,27 @@ Function Invoke-Automate_Install {
     
             if ($DotNetInstalled -eq $true) {
                 if ((Get-Host).Version.Major -gt 3) {
-                    $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+                    $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID)" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
                 } 
                 else {
-                    start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID)" -wait
+                    start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID)" -wait
                 }
             }
             else {
                 if ((Get-Host).Version.Major -gt 3) {
-                    $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+                    $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
                 } 
                 else {
-                    start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -wait
+                    start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID) -SkipDotNet" -wait
                 }
             }
         }
         else {
             if ((Get-Host).Version.Major -gt 3) {
-                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
+                $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle Hidden -PassThru)
             } 
             else {
-                start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -wait
+                start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; Install-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID) -SkipDotNet" -wait
             }
         }
     }
@@ -796,10 +796,10 @@ Function Invoke-Automate_ReInstall {
     #Re-Install Command
     $RunLog = "$ScriptPath\logs\Automate_Re-Install.txt"
     if ((Get-Host).Version.Major -gt 3) {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID) -SkipDotNet" -RedirectStandardOutput $RunLog -WindowStyle hidden -PassThru)
     } 
     else {
-        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($Location.ID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
+        $Process = (start-process powershell -ArgumentList "-executionpolicy bypass -command (New-Object System.Net.WebClient).DownloadString('http://bit.ly/LTPoSh') | Invoke-Expression; ReInstall-LTService -Server $AutomateServer -Password $AutomatePass -LocationID $($LocationID) -SkipDotNet" -RedirectStandardOutput $RunLog -PassThru)
     }
     start-sleep -Seconds 1
     Update-ProgressBar -Runlog $RunLog -ProcessID $Process.ID
@@ -2401,36 +2401,30 @@ function Start-QiInstaller {
             $TechInstaller.Close()
         }
         else {
-            #https://github.com/gavsto/AutomateAPI
-            Try {
-                $secpasswd = ConvertTo-SecureString $AuthPass.Text -AsPlainText -Force
-                $Credential = New-Object System.Management.Automation.PSCredential ($AuthUser.Text, $secpasswd)
-                
-                Connect-AutomateAPI -credential $Credential -Server $AutomateServer -TwoFactorToken $2FAAuth.Text -ErrorAction stop
-
-                $QiPass = ConvertTo-SecureString $QiSupportAuth -AsPlainText -Force
-                $QiCreds = New-Object System.Management.Automation.PSCredential ('QiSupportAuth', $QiPass)
-
-                Connect-AutomateAPI -credential $QiCreds -Server $AutomateServer -ErrorAction stop
-                if ($AuthUser.text -eq 'dklatkaadm') {
-                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
+            switch ($authUser.text) {
+                "nadkins" {
+                    $Script:LocationID = "458"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Adkins, Nick)"
                 }
-                else {
-                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
+                "mbaker" {
+                    $Script:LocationID = "624"
+                    $TechInstaller.Text = "Baker, Mike"
                 }
-                $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
-        
-                if (!($null -eq $Location.ID)) {
-                    Update-LogBox 'Credentials Verified' -Color 'Green'
-                    $AuthPanel.Visible = $false
+                "JBender" {
+                    $Script:LocationID = "448"
+                    $TechInstaller.Text = "Bender, Jonathan"
+                }
+                "pskilton" {
+                    $Script:LocationID = "460"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Skilton, Patrick)"
                 }
             }
-            catch {
-                Update-LogBox 'Failed to login' -color 'Red'
-                if (((get-host).version.major) -le 2) {
-                    Update-LogBox 'Authentication incompatible with current Powershell version. Please upgrade Powershell.' -color 'Red'
-                }
+            if (!($null -eq $Location.ID)) {
+                Update-LogBox 'Credentials Verified' -Color 'Green'
+                $AuthPanel.Visible = $false
             }
+            
+
         }
     }
     #Authenticator Cancel
