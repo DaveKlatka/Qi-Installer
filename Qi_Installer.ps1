@@ -406,341 +406,6 @@ function Set-RestorePoint {
     }
 }
 
-function Connect-AutomateAPI {
-    [CmdletBinding(DefaultParameterSetName = 'refresh')]
-    param (
-        [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
-        [System.Management.Automation.PSCredential]$Credential,
-    
-        [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
-        [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
-        [Parameter(ParameterSetName = 'verify', Mandatory = $False)]
-        [String]$Server = $Script:CWAServer,
-    
-        [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
-        [Parameter(ParameterSetName = 'verify', Mandatory = $False)]
-        [String]$AuthorizationToken = ($Script:CWAToken.Authorization -replace 'Bearer ', ''),
-    
-        [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
-        [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
-        [Switch]$SkipCheck,
-    
-        [Parameter(ParameterSetName = 'verify', Mandatory = $False)]
-        [Switch]$Verify,
-    
-        [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
-        [String]$TwoFactorToken,
-    
-        [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
-        [Switch]$Force,
-    
-        [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
-        [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
-        [Parameter(ParameterSetName = 'verify', Mandatory = $False)]
-        [Switch]$Quiet
-    )
-    
-    Begin {
-        # Check for locally stored credentials
-        #        [string]$CredentialDirectory = "$($env:USERPROFILE)\AutomateAPI\"
-        #        $LocalCredentialsExist = Test-Path "$($CredentialDirectory)Automate - Credentials.txt"
-        If ($TwoFactorToken -match '.+') { $Force = $True }
-        $TwoFactorNeeded = $False
-    
-        If (!$Quiet) {
-            While (!($Server -match '.+')) {
-                $Server = Read-Host -Prompt "Please enter your Automate Server address, IE: rancor.hostedrmm.com" 
-            }
-        }
-        $Server = $Server -replace '^https?://', '' -replace '/[^\/]*$', ''
-        $AuthorizationToken = $AuthorizationToken -replace 'Bearer ', ''
-    } #End Begin
-        
-    Process {
-        If (!($Server -match '^[a-z0-9][a-z0-9\.\-\/]*$')) { Throw "Server address ($Server) is missing or in invalid format."; Return }
-        If ($SkipCheck) {
-            $Script:CWAServer = ("https://" + $Server)
-            If ($Credential) {
-                Write-Debug "Setting Credentials to $($Credential.UserName)"
-                $Script:CWAToken = $AutomateToken
-            }
-            If ($AuthorizationToken) {
-                #Build the token
-                $AutomateToken = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-                $Null = $AutomateToken.Add("Authorization", "Bearer $AuthorizationToken")
-                Write-Debug "Setting Authorization Token to $($AutomateToken.Authorization)"
-                $Script:CWAToken = $AutomateToken
-            }
-            Return
-        }
-        If (!$AuthorizationToken -and $PSCmdlet.ParameterSetName -eq 'verify') {
-            Throw "Attempt to verify token failed. No token was provided or was cached."
-            Return
-        }
-        Do {
-            $AutomateAPIURI = ('https://' + $Server + '/cwa/api/v1')
-            $testCredentials = $Credential
-            If (!$Quiet) {
-                If ($Credential) {
-                    $testCredentials = $Credential
-                }
-                If (!$Credential -and ($Force -or !$AuthorizationToken)) {
-                    If (!$Force -and $Script:CWACredentials) {
-                        $testCredentials = $Script:CWACredentials
-                    }
-                    Else {
-                        $Username = Read-Host -Prompt "Please enter your Automate Username"
-                        $Password = Read-Host -Prompt "Please enter your Automate Password" -AsSecureString
-                        $Credential = New-Object System.Management.Automation.PSCredential ($Username, $Password)
-                        $testCredentials = $Credential
-                    }
-                }
-                If ($TwoFactorNeeded -eq $True -and $TwoFactorToken -match '') {
-                    $TwoFactorToken = Read-Host -Prompt "Please enter your 2FA Token"
-                }
-            }
-    
-            If ($testCredentials) {
-                #Build the headers for the Authentication
-                $PostBody = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-                $PostBody.Add("username", $testCredentials.UserName)
-                $PostBody.Add("password", $testCredentials.GetNetworkCredential().Password)
-                If (!([string]::IsNullOrEmpty($TwoFactorToken))) {
-                    #Remove any spaces that were added
-                    $TwoFactorToken = $TwoFactorToken -replace '\s', ''
-                    $PostBody.Add("TwoFactorPasscode", $TwoFactorToken)
-                }
-                $RESTRequest = @{
-                    'URI'         = ($AutomateAPIURI + '/apitoken')
-                    'Method'      = 'POST'
-                    'ContentType' = 'application/json'
-                    'Body'        = $($PostBody | ConvertTo-Json -Compress)
-                }
-            }
-            ElseIf ($PSCmdlet.ParameterSetName -eq 'refresh') {
-                $PostBody = $AuthorizationToken -replace 'Bearer ', ''
-                $RESTRequest = @{
-                    'URI'         = ($AutomateAPIURI + '/apitoken/refresh')
-                    'Method'      = 'POST'
-                    'ContentType' = 'application/json'
-                    'Body'        = $PostBody | ConvertTo-Json -Compress
-                }
-            }
-            ElseIf ($PSCmdlet.ParameterSetName -eq 'verify') {
-                $PostBody = $AuthorizationToken -replace 'Bearer ', ''
-                $RESTRequest = @{
-                    'URI'         = ($AutomateAPIURI + '/DatabaseServerTime')
-                    'Method'      = 'GET'
-                    'ContentType' = 'application/json'
-                    'Headers'     = @{'Authorization' = "Bearer $PostBody" }
-                }
-            }
-    
-            #Invoke the REST Method
-            Write-Debug "Submitting Request to $($RESTRequest.URI)`nHeaders:`n$($RESTRequest.Headers|ConvertTo-JSON -Depth 5)`nBody:`n$($RESTRequest.Body|ConvertTo-JSON -Depth 5)"
-            Try {
-                $AutomateAPITokenResult = Invoke-RestMethod @RESTRequest
-            }
-            Catch {
-                Remove-Variable CWAToken, CWATokenKey -Scope Script -ErrorAction 0
-                If ($testCredentials) {
-                    Remove-Variable CWACredentials -Scope Script -ErrorAction 0
-                }
-                If ($Credential) {
-                    Throw "Attempt to authenticate to the Automate API has failed with error $_.Exception.Message"
-                    Return
-                }
-            }
-                
-            $AuthorizationToken = $AutomateAPITokenResult.Accesstoken
-            If ($PSCmdlet.ParameterSetName -eq 'verify' -and !$AuthorizationToken -and $AutomateAPITokenResult) {
-                $AuthorizationToken = $Script:CWAToken.Authorization -replace 'Bearer ', ''
-            }
-            $TwoFactorNeeded = $AutomateAPITokenResult.IsTwoFactorRequired
-        } Until ($Quiet -or ![string]::IsNullOrEmpty($AuthorizationToken) -or 
-            ($TwoFactorNeeded -ne $True -and $Credential) -or 
-            ($TwoFactorNeeded -eq $True -and $TwoFactorToken -ne '')
-        )
-    } #End Process
-    
-    End {
-        If ($SkipCheck) {
-            If ($Quiet) {
-                Return $False
-            }
-            Else {
-                Return
-            }
-        }
-        ElseIf ([string]::IsNullOrEmpty($AuthorizationToken)) {
-            Remove-Variable CWAToken -Scope Script -ErrorAction 0
-            Throw "Unable to get Access Token. Either the credentials you entered are incorrect or you did not pass a valid two factor token" 
-            If ($Quiet) {
-                Return $False
-            }
-            Else {
-                Return
-            }
-        }
-        Else {
-            #Build the returned token
-            $AutomateToken = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-            $AutomateToken.Add("Authorization", "Bearer $AuthorizationToken")
-            #Create Script Variables for this session in order to use the token
-            $Script:CWATokenKey = ConvertTo-SecureString $AuthorizationToken -AsPlainText -Force
-            $Script:CWAServer = ("https://" + $Server)
-            $Script:CWAToken = $AutomateToken
-            If ($Credential) {
-                $Script:CWACredentials = $Credential
-            }
-            If ($PSCmdlet.ParameterSetName -ne 'verify') {
-                $AutomateAPITokenResult.PSObject.properties.remove('AccessToken')
-                $Script:CWATokenInfo = $AutomateAPITokenResult
-            }
-            Write-Verbose "Token retrieved: $AuthorizationToken, expiration is $($Script:CWATokenInfo.ExpirationDate)"
-    
-            If (!$Quiet) {
-                Write-Host -BackgroundColor Green -ForegroundColor Black "Successfully tested and connected to the Automate REST API. Token will expire at $($Script:CWATokenInfo.ExpirationDate)"
-            }
-            Else {
-                Return $True
-            }
-        }
-    }
-}
-
-function Get-AutomateAPIGeneric {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $false, ParameterSetName = "Page")]
-        [ValidateRange(1, 1000)]
-        [int]
-        $PageSize = 1000,
-
-        [Parameter(Mandatory = $true, ParameterSetName = "Page")]
-        [ValidateRange(1, 65535)]
-        [int]
-        $Page,
-
-        [Parameter(Mandatory = $false, ParameterSetName = "AllResults")]
-        [switch]
-        $AllResults,
-
-        [Parameter(Mandatory = $true)]
-        [string]
-        $Endpoint,
-
-        [Parameter(Mandatory = $false)]
-        [string]
-        $OrderBy,
-
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Condition,
-
-        [Parameter(Mandatory = $false)]
-        [string]
-        $IncludeFields,
-
-        [Parameter(Mandatory = $false)]
-        [string]
-        $ExcludeFields,
-
-        [Parameter(Mandatory = $false)]
-        [string]
-        $IDs,
-
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Expand
-    )
-    
-    begin {
-        #Build the URL to hit
-        $url = ($Script:CWAServer + '/cwa/api/v1/' + $EndPoint)
-
-        #Build the Body Up
-        $Body = @{ }
-
-        #Put the page size in
-        $Body.Add("pagesize", "$PageSize")
-
-        if ($page) {
-            
-        }
-
-        #Put the condition in
-        if ($Condition) {
-            $Body.Add("condition", "$condition")
-        }
-
-        #Put the orderby in
-        if ($OrderBy) {
-            $Body.Add("orderby", "$orderby")
-        }
-
-        #Include only these fields
-        if ($IncludeFields) {
-            $Body.Add("includefields", "$IncludeFields")
-        }
-
-        #Exclude only these fields
-        if ($ExcludeFields) {
-            $Body.Add("excludefields", "$ExcludeFields")
-        }
-
-        #Include only these IDs
-        if ($IDs) {
-            $Body.Add("ids", "$IDs")
-        }
-
-        #Expands in the returned object
-        if ($Expand) {
-            $Body.Add("expand", "$Expand")
-        }
-    }
-    
-    process {
-        if ($AllResults) {
-            $ReturnedResults = @()
-            [System.Collections.ArrayList]$ReturnedResults
-            $i = 0
-            DO {
-                [int]$i += 1
-                $URLNew = "$($url)?page=$($i)"
-                try {
-                    $return = Invoke-RestMethod -Uri $URLNew -Headers $script:CWAToken -ContentType "application/json" -Body $Body
-                }
-                catch {
-                    Write-Error "Failed to perform Invoke-RestMethod to Automate API with error $_.Exception.Message"
-                }
-
-                $ReturnedResults += ($return)
-            }
-            WHILE ($return.count -gt 0)
-        }
-
-        if ($Page) {
-            $ReturnedResults = @()
-            [System.Collections.ArrayList]$ReturnedResults
-            $URLNew = "$($url)?page=$($Page)"
-            try {
-                $return = Invoke-RestMethod -Uri $URLNew -Headers $script:CWAToken -ContentType "application/json" -Body $Body
-            }
-            catch {
-                Write-Error "Failed to perform Invoke-RestMethod to Automate API with error $_.Exception.Message"
-            }
-
-            $ReturnedResults += ($return)
-        }
-
-    }
-    
-    end {
-        return $ReturnedResults
-    }
-}
-
 Function Invoke-Automate_Install {
     #Install Command
     $RunLog = "$ScriptPath\logs\Automate_Install.txt"
@@ -2486,9 +2151,49 @@ function Start-QiInstaller {
                     $Script:LocationID = "545"
                     $TechInstaller.Text = [System.String] "Tech Installer (Markham, Dylan)"
                 }
+                "kmazanek" {
+                    $Script:LocationID = "454"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Mazanek, Katie)"
+                }
+                "mmccoy" {
+                    $Script:LocationID = "482"
+                    $TechInstaller.Text = [System.String] "Tech Installer (McCoy, Mathew)"
+                }
+                "cmcdougal"{
+                    $Script:LocationID = "439"
+                    $TechInstaller.Text = [System.String] "Tech Installer (McDougal, Cole)"
+                }
                 "cmehl" {
                     $Script:LocationID = "440"
                     $TechInstaller.Text = [System.String] "Tech Installer (Mehlmann, Christian)"
+                }
+                "cminnick"{
+                    $Script:LocationID = "632"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Minnick, Cody)"
+                }
+                "wesp"{
+                    $Script:LocationID = "469"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Powell, Wes)"
+                }
+                "troyp"{
+                    $Script:LocationID = "468"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Prough, Troy)"
+                }
+                "broth"{
+                    $Script:LocationID = "524"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Roth, Brandon)"
+                }
+                "csabolek"{
+                    $Script:LocationID = "622"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Sabolek, Charlie)"
+                }
+                "steves"{
+                    $Script:LocationID = "467"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Schlosnagle, Steve)"
+                }
+                "aselzer" {
+                    $Script:LocationID = "631"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Selzer, Andrew)"
                 }
                 "csingh"{
                     $Script:LocationID = "599"
@@ -2497,6 +2202,34 @@ function Start-QiInstaller {
                 "pskilton" {
                     $Script:LocationID = "460"
                     $TechInstaller.Text = [System.String] "Tech Installer (Skilton, Patrick)"
+                }
+                "asmith"{
+                    $Script:LocationID = "626"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Smith, Angela)"
+                }
+                "csoska"{
+                    $Script:LocationID = "442"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Soska, Chris)"
+                }
+                "bstecker"{
+                    $Script:LocationID = "634"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Stecker, Butch)"
+                }
+                "bsullivan" {
+                    $Script:LocationID = "514"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Sullivan, Brandon)"
+                }
+                "bsvoboda"{
+                    $Script:LocationID = "588"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Svoboda, Bruce)"
+                }
+                "mvanriper"{
+                    $Script:LocationID = "457"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Van Riper, Mae)"
+                }
+                "nzwickphillips"{
+                    $Script:LocationID = "602"
+                    $TechInstaller.Text = [System.String] "Tech Installer (Zwick-Phillips, Nicole)"
                 }
             }
             if (!($null -eq $LocationID)) {
