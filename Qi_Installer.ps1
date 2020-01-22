@@ -2419,8 +2419,7 @@ function Start-QiInstaller {
                     $TechInstaller.Text = [System.String] "Tech Installer (Skilton, Patrick)"
                 }
             }
-            if (!($null -eq $Location.ID)) {
-                Update-LogBox 'Credentials Verified' -Color 'Green'
+            if (!($null -eq $LocationID)) {
                 $AuthPanel.Visible = $false
             }
             
