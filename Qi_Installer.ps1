@@ -2412,12 +2412,9 @@ function Start-QiInstaller {
                 $QiCreds = New-Object System.Management.Automation.PSCredential ('QiSupportAuth', $QiPass)
 
                 Connect-AutomateAPI -credential $QiCreds -Server $AutomateServer -ErrorAction stop
-                if ($AuthUser.text -eq 'dklatkaadm') {
-                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq 'QualityIP' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
-                }
-                else {
-                    $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
-                }
+                
+                $Script:Location = (Get-AutomateAPIGeneric -page 1 -Condition "client.name eq '1_Technician Catchall' and ScriptExtra1 eq '$($AuthUser.text)'" -Endpoint "locations")
+                
                 $TechInstaller.Text = [System.String]"Tech Installer ($($Location.name))"
         
                 if (!($null -eq $Location.ID)) {
