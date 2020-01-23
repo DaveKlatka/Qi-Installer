@@ -2163,10 +2163,6 @@ function Start-QiInstaller {
                     $Script:LocationID = "482"
                     $TechInstaller.Text = [System.String] "Tech Installer (McCoy, Mathew)"
                 }
-                "cmcdougal"{
-                    $Script:LocationID = "439"
-                    $TechInstaller.Text = [System.String] "Tech Installer (McDougal, Cole)"
-                }
                 "cmehl" {
                     $Script:LocationID = "440"
                     $TechInstaller.Text = [System.String] "Tech Installer (Mehlmann, Christian)"
